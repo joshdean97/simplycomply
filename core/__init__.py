@@ -30,11 +30,12 @@ def create_app():
     migrate.init_app(app, db)
     
     # Import routes
-    @app.route('/test/')
-    def test():
-        return "Hello, World!"
+    from .views import views
+    from .auth import auth
     
     # Register routes
+    app.register_blueprint(views)
+    app.register_blueprint(auth)
     
     # Error handling
     @app.errorhandler(404)
