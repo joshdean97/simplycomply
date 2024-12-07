@@ -1,0 +1,12 @@
+/* Default horizontal navigation (large screens) */
+.navbar-nav .nav-link {
+    padding: 0 3rem; /* Padding on the sides */
+}
+
+/* Collapsible navigation (small screens) */
+@media (max-width: 991px) { /* Matches Bootstrap's navbar-collapse breakpoint */
+    .navbar-nav .nav-link {
+        padding: 0.5rem 0; /* Padding on top and bottom */
+        text-align: center; /* Optional: Center the text for smaller screens */
+    }
+}

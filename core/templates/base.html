@@ -15,26 +15,42 @@
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       crossorigin="anonymous"
     />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <!-- Logo with tick icon -->
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-check-circle"></i> Simply Comply
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbar">
+        <div class="collapse navbar-collapse justify-content-end" id="navbar"> <!-- Align links to the right -->
             <div class="navbar-nav">
                 {% if current_user.is_authenticated %}
-                <a href="/" class="nav-item nav-link" id="home">Home</a>
-                <a href="{{ url_for('auth.logout') }}" class="nav-item nav-link" id="logout">Logout</a>
+                <a href="/" class="nav-item nav-link" style='padding: .5rem 2rem' id="home">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="{{ url_for('auth.logout') }}" class="nav-item nav-link" style='padding: .5rem 2rem' id="logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
                 {% else %}
-                <a href="{{ url_for('auth.login') }}" class="nav-item nav-link" id="login">Login</a>
-                <a href="{{ url_for('auth.register') }}" class="nav-item nav-link" id="signUp">Sign Up</a>
+                <a href="{{ url_for('auth.login') }}" class="nav-item nav-link" style='padding: .5rem 2rem' id="login">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a href="{{ url_for('auth.register') }}" class="nav-item nav-link" style='padding: .5rem 2rem' id="signUp">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </a>
+                <a href="{{ url_for('auth.register') }}" class="nav-item nav-link" style='padding: .5rem 2rem' id="pricing">
+                    <i class="fas fa-tags"></i> Pricing
+                </a>
                 {% endif %}
-                
             </div>
         </div>
     </nav>
-    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
     {% for category, message in messages %}
     {% if category == 'error' %}
     <div class="alert alert-danger alert-dismissable fade show" role="alert">
