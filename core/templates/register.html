@@ -1,5 +1,56 @@
 {% extends "base.html" %}
 {% block title %}Register{% endblock %}
 {% block content %}
-
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 85vh;">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white text-center">
+                <h3>Register</h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('auth.register') }}">
+                    <!-- First Name Field -->
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" name="first_name" id="first_name" class="form-control form-control-lg" placeholder="Enter your first name" required>
+                    </div>
+                    
+                    <!-- Last Name Field -->
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" name="last_name" id="last_name" class="form-control form-control-lg" placeholder="Enter your last name" required>
+                    </div>
+                    
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" id="password" class="form-control form-control-lg" placeholder="Enter your password" required>
+                    </div>
+                    
+                    <!-- Confirm Password Field -->
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password</label>
+                        <input type="password" name="confirm_password" id="confirm_password" class="form-control form-control-lg" placeholder="Confirm your password" required>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>
+                    </div>
+                    
+                    <!-- Extra Links -->
+                    <div class="text-center">
+                        <a href="{{ url_for('auth.login') }}">Already have an account? Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
