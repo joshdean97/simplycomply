@@ -22,4 +22,4 @@ def dashboard():
 
 @views.route('/pricing/')
 def pricing():
-    return 'pricing'
+    return render_template('pricing.html')
