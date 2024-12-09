@@ -20,37 +20,36 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <!-- Logo with tick icon -->
         <a class="navbar-brand" href="#">
-            <i class="fas fa-check-circle"></i> Simply Comply
+            <i class="fas fa-check-circle" aria-label="Logo"></i> Simply Comply
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbar"> <!-- Align links to the right -->
+        <div class="collapse navbar-collapse justify-content-end" id="navbar">
             <div class="navbar-nav">
                 {% if current_user.is_authenticated %}
-                <a href="/" class="nav-item nav-link" style='padding: .5rem 2rem' id="home">
-                    <i class="fas fa-home"></i> Home
-                </a>
-                <a href="{{ url_for('auth.logout') }}" class="nav-item nav-link" style='padding: .5rem 2rem' id="logout">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
+                    <a href="/" class="nav-item nav-link {% if request.endpoint == 'home' %}active{% endif %}" style="padding: .5rem 2rem" id="home">
+                        <i class="fas fa-home" aria-label="Home"></i> Home
+                    </a>
+                    <a href="{{ url_for('auth.logout') }}" class="nav-item nav-link" style="padding: .5rem 2rem" id="logout">
+                        <i class="fas fa-sign-out-alt" aria-label="Logout"></i> Logout
+                    </a>
                 {% else %}
-                <a href="{{ url_for('auth.login') }}" class="nav-item nav-link" style='padding: .5rem 2rem' id="login">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </a>
-                <a href="{{ url_for('auth.register') }}" class="nav-item nav-link" style='padding: .5rem 2rem' id="signUp">
-                    <i class="fas fa-user-plus"></i> Sign Up
-                </a>
-                <a href="{{ url_for('auth.register') }}" class="nav-item nav-link" style='padding: .5rem 2rem' id="pricing">
-                    <i class="fas fa-tags"></i> Pricing
-                </a>
+                    <a href="{{ url_for('auth.login') }}" class="nav-item nav-link {% if request.endpoint == 'auth.login' %}active{% endif %}" style="padding: .5rem 2rem" id="login">
+                        <i class="fas fa-sign-in-alt" aria-label="Login"></i> Login
+                    </a>
+                    <a href="{{ url_for('auth.register') }}" class="nav-item nav-link {% if request.endpoint == 'auth.register' %}active{% endif %}" style="padding: .5rem 2rem" id="signUp">
+                        <i class="fas fa-user-plus" aria-label="Sign Up"></i> Sign Up
+                    </a>
+                    <a href="{{ url_for('views.pricing') }}" class="nav-item nav-link {% if request.endpoint == 'views.pricing' %}active{% endif %}" style="padding: .5rem 2rem" id="pricing">
+                        <i class="fas fa-tags" aria-label="Pricing"></i> Pricing
+                    </a>
                 {% endif %}
             </div>
         </div>
     </nav>
-        {% with messages = get_flashed_messages(with_categories=true) %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
     {% for category, message in messages %}
     {% if category == 'error' %}
     <div class="alert alert-danger alert-dismissable fade show" role="alert">

@@ -19,3 +19,7 @@ def dashboard():
     }
     
     return render_template('dashboard.html', **context)
+
+@views.route('/pricing/')
+def pricing():
+    return 'pricing'

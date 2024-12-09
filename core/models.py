@@ -60,3 +60,8 @@ class Document(db.Model):
     due_date = db.Column(db.DateTime, nullable=True)
     status = db.Column(db.String(20), default='active')  # e.g., 'active', 'expired'
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)  # Associated restaurant
+    
+    __table_args__ = (
+        db.Index('ix_document_category', 'category'),
+    )
+
