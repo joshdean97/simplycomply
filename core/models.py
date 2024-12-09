@@ -1,33 +1,51 @@
+from flask_sqlalchemy import SQLAlchemy
 from .extensions import db
-from sqlalchemy.sql import func
 
+
+# User Model (Admins and Sub-users)
 class User(db.Model):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(55))
-    last_name = db.Column(db.String(55))
-    email = db.Column(db.String(255), unique=True)
-    password = db.Column(db.String(255))
-    restaurants = db.relationship('Restaurant', backref='user')  # Add backref for bidirectional relationship
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)  # Use Werkzeug for hashing
+    role = db.Column(db.String(10), nullable=False)  # 'admin' or 'sub-user'
     
+    # Relationships
+    restaurants = db.relationship('Restaurant', backref='admin', lazy=True)  # For Admin's Restaurants
+    assignments = db.relationship('UserRestaurant', back_populates='user', lazy=True)  # Sub-user assignments
+
+# Restaurant Model
 class Restaurant(db.Model):
+    __tablename__ = 'restaurants'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255), unique=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Foreign key linking to User
-    subusers = db.relationship('Subuser', backref='restaurant')
-    documents = db.relationship('Document', backref='restaurant')  
+    name = db.Column(db.String(100), nullable=False)
+    address = db.Column(db.String(200), nullable=True)
+    admin_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Admin who owns this restaurant
     
-class Subuser(db.Model):
+    # Relationships
+    documents = db.relationship('Document', backref='restaurant', lazy=True)  # Documents for the restaurant
+    subusers = db.relationship('UserRestaurant', back_populates='restaurant', lazy=True)  # Sub-users assigned here
+
+# UserRestaurant Association Table (For Sub-user Assignments)
+class UserRestaurant(db.Model):
+    __tablename__ = 'user_restaurant'
     id = db.Column(db.Integer, primary_key=True)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id')) 
-    email = db.Column(db.String(255), unique=True)
-    password = db.Column(db.String(255))
-    first_name = db.Column(db.String(55))
-    last_name = db.Column(db.String(55))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)
+    role = db.Column(db.String(50), nullable=True)  # Optional (e.g., 'viewer', 'editor')
     
+    # Relationships
+    user = db.relationship('User', back_populates='assignments')
+    restaurant = db.relationship('Restaurant', back_populates='subusers')
+
+# Document Model (Compliance Documents)
 class Document(db.Model):
+    __tablename__ = 'documents'
     id = db.Column(db.Integer, primary_key=True)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
-    type = db.Column(db.String(255), default=None)
-    title = db.Column(db.String(255))
-    created_at = db.Column(db.DateTime(timezone=True), default=func.now())
-    expiry_date = db.Column(db.DateTime(timezone=True), default=None)
+    name = db.Column(db.String(100), nullable=False)
+    file_path = db.Column(db.String(200), nullable=False)  # Path to the stored document
+    uploaded_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    due_date = db.Column(db.DateTime, nullable=True)
+    status = db.Column(db.String(20), default='active')  # e.g., 'active', 'expired'
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)  # Associated restaurant
