@@ -5,5 +5,17 @@ views = Blueprint('views', __name__)
 
 @views.route('/')
 def index():
-    return render_template('index.html', current_user=current_user)
+    
+    context = {
+        'current_user': current_user,
+    }
+    return render_template('index.html', **context)
 
+@views.route('/dashboard/')
+@login_required
+def dashboard():
+    context = {
+        'current_user': current_user
+    }
+    
+    return render_template('dashboard.html', **context)
