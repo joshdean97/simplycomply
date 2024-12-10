@@ -2,10 +2,11 @@ from .extensions import db
 from sqlalchemy.types import Enum
 
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask_login import UserMixin
 
 
 # User Model (Admins and Sub-users)
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
