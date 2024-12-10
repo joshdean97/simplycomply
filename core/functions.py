@@ -29,10 +29,10 @@ def check_password_strength(password):
     
     # Return feedback
     if score == 5:
-        return "Strong password! Your password is secure."
+        return True
     elif score == 4:
-        return "Good password, but you could add more variety for added strength."
+        return True
     elif score == 3:
-        return "Weak password. Consider adding more characters, numbers, or special characters."
+        return False
     else:
-        return "Very weak password! Consider using a longer password with a mix of letters, numbers, and special characters."
+        return False

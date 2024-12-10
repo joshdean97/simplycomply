@@ -30,7 +30,13 @@
                     <!-- Password Field -->
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" name="password" id="password" class="form-control form-control-lg" placeholder="Enter your password" required>
+                        <input type="password" id="password" name="password" class="form-control" required oninput="checkPasswordStrength(this.value)">
+                        <div id="password-strength" class="mt-2">
+                            <span>Password Strength: <strong id="strength-label">Weak</strong></span>
+                            <div class="progress">
+                                <div id="strength-bar" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+                            </div>
+                        </div>
                     </div>
                     
                     <!-- Confirm Password Field -->
