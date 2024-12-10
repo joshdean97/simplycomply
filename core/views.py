@@ -18,7 +18,7 @@ def dashboard():
         'current_user': current_user
     }
     
-    return render_template('dashboard.html', **context)
+    return 'dashboard'
 
 @views.route('/pricing/')
 def pricing():

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, url_for, flash, redirect
-from flask_login import current_user
-from werkzeug.security import generate_password_hash
+from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from .models import User
 from .extensions import db
@@ -11,8 +11,22 @@ auth = Blueprint('auth', __name__, url_prefix='/auth')
 
 @auth.route('/login/', methods=['POST', 'GET'])
 def login():
-    # handle login logic
-    
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        # Query user by email
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            flash('Email does not exist.', 'error')
+        elif not check_password_hash(user.password_hash, password):
+            flash('Incorrect password.', 'error')
+        else:
+            # Log in the user
+            login_user(user, remember=True)
+            flash(f'Welcome back, {user.name}!', 'success')
+            return redirect(url_for('views.dashboard'))  # Redirect to a protected page (adjust URL as needed)
     context = {
         'current_user': current_user
     }
@@ -62,7 +76,10 @@ def register():
     return render_template('register.html', **context)
 
 @auth.route('/logout/')
+@login_required
 def logout():
-    # handle logout logic
-    return "Logout Page"
+    user = current_user
+    
+    logout_user()
+    return redirect(url_for('auth.login'))
 
