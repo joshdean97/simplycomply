@@ -18,8 +18,19 @@ def dashboard():
         'current_user': current_user
     }
     
-    return 'dashboard'
+    return render_template('dashboard.html', **context)
 
 @views.route('/pricing/')
 def pricing():
     return render_template('pricing.html')
+
+@views.route('/upload/')
+@login_required
+def upload():
+    return 'Upload'
+
+@views.route('/settings/')
+
+@login_required
+def settings():
+    return 'settings'
