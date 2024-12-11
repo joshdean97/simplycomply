@@ -43,17 +43,17 @@ def pricing():
 @views.route('/upload/', methods=['POST', 'GET'])
 @login_required
 def upload():
-    # allowed docuument extensions
-    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-        
+    # allowed docuument extensions        
     if request.method == 'POST':
         uploaded_file = request.files['file']
         
         # create new string from random chars and append filetype to end
         new_filename = uuid.uuid4().hex + '.' + uploaded_file.filename.rsplit('.', 1)[1].lower()    
         
-        if not allowed_file(uploaded_file.filename):
-                return "File not allowed"
+        if 'file' not in request.files or request.files['file'].filename == '':
+            flash('No file selected', 'warning')
+            return redirect(url_for('views.upload'))
+
         
         s3 = boto3.resource('s3')
         bucket_name = os.environ.get('BUCKET_NAME')
