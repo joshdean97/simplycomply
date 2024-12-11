@@ -1,14 +1,21 @@
+# flask imports
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import current_user, login_required
 
+# Other library imports
 import boto3 
 import uuid
+import os
 
+# Local imports
 from .models import Document
 from .extensions import db
+from .functions import allowed_file
 
+# Blueprint setup
 views = Blueprint('views', __name__)
 
+# index route for landing page 
 @views.route('/')
 def index():
     
@@ -17,6 +24,7 @@ def index():
     }
     return render_template('index.html', **context)
 
+# dashboard route - methods: get; returns user dashboard with compliance document data
 @views.route('/dashboard/')
 @login_required
 def dashboard():
@@ -26,28 +34,29 @@ def dashboard():
     
     return render_template('dashboard.html', **context)
 
+# pricing route - methods: get; returns pricing page with information about our services
 @views.route('/pricing/')
 def pricing():
     return render_template('pricing.html')
 
+# upload route - methods: post; handles file upload, saves it to S3, and adds a Document model entry in the database
 @views.route('/upload/', methods=['POST', 'GET'])
 @login_required
 def upload():
+    # allowed docuument extensions
     ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-    
-    def allowed_file(filename):
-        return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-    
-    
+        
     if request.method == 'POST':
         uploaded_file = request.files['file']
+        
+        # create new string from random chars and append filetype to end
         new_filename = uuid.uuid4().hex + '.' + uploaded_file.filename.rsplit('.', 1)[1].lower()    
         
         if not allowed_file(uploaded_file.filename):
                 return "File not allowed"
         
         s3 = boto3.resource('s3')
-        bucket_name = 'simply-comply'
+        bucket_name = os.environ.get('BUCKET_NAME')
         
         s3.Bucket(bucket_name).upload_fileobj(uploaded_file, new_filename)
         

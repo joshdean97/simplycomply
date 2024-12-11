@@ -36,3 +36,6 @@ def check_password_strength(password):
         return False
     else:
         return False
+
+def allowed_file(filename):
+        return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
