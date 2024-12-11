@@ -57,7 +57,18 @@ class Document(db.Model):
     file_path = db.Column(db.String(200), nullable=False)  # Path to the stored document
     uploaded_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     uploaded_by = db.Column(db.String(100), nullable=False)
-    category = db.Column(Enum('Hygiene', 'Health & Safety', 'Training', 'Licenses', name='doc_category'), nullable=False)
+    category = db.Column(Enum(
+        'Hygiene', 
+        'Health & Safety', 
+        'Training', 
+        'Licenses', 
+        'Compliance', 
+        'Documentation', 
+        'Cleaning Records', 
+        'inspection Records', 
+        'Staff Records', 
+        name='doc_category'
+        ), nullable=False)
     due_date = db.Column(db.DateTime, nullable=True)
     status = db.Column(db.String(20), default='active')  # e.g., 'active', 'expired'
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)  # Associated restaurant

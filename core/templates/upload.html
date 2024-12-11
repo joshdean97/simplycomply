@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0">Upload File</h4>
+                </div>
+                <div class="card-body">
+                    <form action="/upload" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Choose a file</label>
+                            <input type="file" class="form-control" id="file" name="file" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="title" class="form-label">File Title</label>
+                            <input type="text" class="form-control" id="title" name="title" placeholder="Enter a title for the file" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <select class="form-select w-100 text-center" id="category" name="category" required>
+                                <option value="">Select a category</option>
+                                <option value="Hygiene">Hygiene</option>
+                                <option value="Health &amp; Safety">Health &amp; Safety</option>
+                                <option value="Training">Training</option>
+                                <option value="Licenses">Licenses</option>
+                                <option value="Compliance">Compliance</option>
+                                <option value="Documentation">Documentation</option>
+                                <option value="Cleaning Records">Cleaning Records</option>
+                                <option value="Inspection Reports">Inspection Reports</option>
+                                <option value="Staff Records">Staff Records</option>
+                            </select>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

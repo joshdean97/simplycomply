@@ -27,7 +27,11 @@ def pricing():
 @views.route('/upload/')
 @login_required
 def upload():
-    return 'Upload'
+    
+    context = {
+        'current_user': current_user
+    }
+    return render_template('upload.html', **context)
 
 @views.route('/settings/')
 
