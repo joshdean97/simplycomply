@@ -8,7 +8,7 @@ import uuid
 import os
 
 # Local imports
-from .models import Document
+from .models import Document, Restaurant
 from .extensions import db
 from .functions import allowed_file
 
@@ -28,11 +28,42 @@ def index():
 @views.route('/dashboard/')
 @login_required
 def dashboard():
+    # Check if the user has a restaurant
+    if not current_user.restaurants:
+        flash("Please create a restaurant to continue.", "warning")
+        return redirect(url_for('views.create_restaurant'))
+
     context = {
-        'current_user': current_user
+        'current_user': current_user,
+        'restaurant': current_user.restaurants,
     }
-    
     return render_template('dashboard.html', **context)
+
+    
+@views.route('/create-restaurant/', methods=['GET', 'POST'])
+@login_required
+def create_restaurant():
+    if request.method == 'POST':
+        restaurant_name = request.form.get('restaurant_name')
+
+        # Validate restaurant creation
+        if not restaurant_name:
+            flash("Restaurant name is required.", "danger")
+            return redirect(url_for('views.create_restaurant'))
+
+        if Restaurant.query.filter_by(name=restaurant_name).first():
+            flash("A restaurant with this name already exists.", "danger")
+            return redirect(url_for('views.create_restaurant'))
+
+        # Create restaurant and assign it to the current user
+        new_restaurant = Restaurant(name=restaurant_name, admin_id=current_user.id)
+        db.session.add(new_restaurant)
+        db.session.commit()
+
+        flash("Restaurant created successfully!", "success")
+        return redirect(url_for('views.dashboard'))
+
+    return render_template('create_restaurant.html')
 
 # pricing route - methods: get; returns pricing page with information about our services
 @views.route('/pricing/')
