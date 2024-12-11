@@ -8,7 +8,7 @@ from os import path
 import os
 
 from .extensions import migrate, db
-from .models import User, Restaurant
+from .models import User, Restaurant, UserRestaurant
 
 # find .env in filesystem
 find_dotenv()
@@ -69,7 +69,7 @@ def create_app():
     return app
 
 def create_database(app):
-    if not path.exists('core/' + DB_NAME):
+    if not path.exists('core/database.db'):
         with app.app_context():
             db.create_all()
-        print('Database created successfully')
+        print("Database created successfully")

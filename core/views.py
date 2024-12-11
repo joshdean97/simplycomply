@@ -29,13 +29,12 @@ def index():
 @login_required
 def dashboard():
     # Check if the user has a restaurant
-    if not current_user.restaurants:
+    if not current_user.restaurant:
         flash("Please create a restaurant to continue.", "warning")
         return redirect(url_for('views.create_restaurant'))
 
     context = {
         'current_user': current_user,
-        'restaurant': current_user.restaurants,
     }
     return render_template('dashboard.html', **context)
 
@@ -97,8 +96,7 @@ def upload():
             uploaded_by = current_user.name,
             category = request.form.get('category'),
             # due_date = request.form.get('due_date'),
-            # restaurant_id = current_user.restaurant_id  # Assuming restaurant_id is a foreign key in the User model.
-            restaurant_id = 1
+            restaurant_id = request.form.get('restaurant')  # Assuming restaurant_id is a foreign key in the User model.
         )
         
         db.session.add(new_file)
