@@ -30,6 +30,11 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbar">
             <div class="navbar-nav">
+                {% if current_user.role == 'admin' %}
+                    <a href="{{ url_for('admin.admin_dashboard') }}" class="nav-item nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}" style="padding:.5rem 2rem" id="adminDashboard">
+                        <i class="fas fa-user-shield" aria-label="Admin Dashboard"></i> Admin Dashboard
+                    </a>
+                {% endif %}
                 {% if current_user.is_authenticated %}
                     <a href="{{ url_for('views.dashboard') }}" class="nav-item nav-link {% if request.endpoint == 'home' %}active{% endif %}" style="padding: .5rem 2rem" id="home">
                         <i class="fas fa-home" aria-label="Home"></i> Home

@@ -35,10 +35,12 @@ def create_app():
     # Import routes
     from .views import views
     from .auth import auth
+    from .admin import admin
     
     # Register routes
     app.register_blueprint(views)
     app.register_blueprint(auth)
+    app.register_blueprint(admin)
     
     # Error handling
     @app.errorhandler(404)
@@ -64,8 +66,6 @@ def create_app():
     def load_user(user_id):
         return User.query.get(int(user_id))
     
-
-
     return app
 
 def create_database(app):

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Admin Dashboard</h1>
+
+    <div class="row">
+        <!-- Users Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>Users</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in managed_users %}
+                            <tr>
+                                <td>{{ user.name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.role }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="3" class="text-center">No users found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <a href="{{ url_for('admin.add_user') }}" class="btn btn-success w-100 mt-2">Add New User</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Restaurants Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>Restaurants</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Address</th>
+                            </tr>
+                                
+                        </thead>
+                        <tbody>
+                            {% for restaurant in current_user.restaurants %}
+                            <tr>
+                                <td><a href="{{ url_for('admin.edit_restaurant', restaurant_id=restaurant.id) }}">{{ restaurant.name }}</a></td>
+                                <td>{{ restaurant.address }}</td>
+                                
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="3" class="text-center">No restaurants found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <a href="{{ url_for('admin.add_restaurant') }}" class="btn btn-success w-100 mt-2">Add New Restaurant</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -17,15 +17,18 @@ def login():
 
         # Query user by email
         user = User.query.filter_by(email=email).first()
+        # sub_user = Subuser.query.filter_by(email=email).first()
 
         if not user:
             flash('Email does not exist.', 'error')
-        elif not check_password_hash(user.password_hash, password):
-            flash('Incorrect password.', 'error')
         else:
             # Log in the user
-            login_user(user, remember=True)
-            flash(f'Welcome back, {user.name}!', 'success')
+            if user:
+                if not check_password_hash(user.password_hash, password):
+                    flash('Incorrect password.', 'error')
+                login_user(user, remember=True)
+                flash(f'Welcome back, {user.name}!', 'success')
+            print(current_user.name, current_user.role)
             return redirect(url_for('views.dashboard'))  # Redirect to a protected page (adjust URL as needed)
     context = {
         'current_user': current_user
@@ -62,7 +65,8 @@ def register():
                 name=f"{first_name} {last_name}",
                 email=email,
                 password_hash=hashed_password,
-                role='admin'  # Default to 'admin' role; adjust as needed
+                role='admin',  # Default to 'admin' role; adjust as needed
+                manager_id = None,
             )
             db.session.add(new_user)
             db.session.commit()

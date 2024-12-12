@@ -1,0 +1,90 @@
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask_login import login_required, current_user
+
+from werkzeug.security import generate_password_hash
+
+from .extensions import db
+from .models import User, Restaurant
+
+# Blueprint initialization
+admin = Blueprint('admin', __name__, url_prefix='/admin')
+
+@admin.route('/panel/', methods=["GET", "POST"])
+def admin_dashboard():
+    context = {
+        'current_user': current_user,
+        'managed_users': User.query.filter(User.manager_id == current_user.id)
+    }
+    return render_template('admin/admin_panel.html', **context)
+
+# Route to add a new user
+@admin.route('/add-user/', methods=['GET', 'POST'])
+@login_required
+def add_user():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        role = request.form.get('role')
+
+        # Check if user already exists
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            flash('User with this email already exists.', 'danger')
+            return redirect(url_for('admin.add_user'))
+
+        else: 
+            new_user = User(
+                name=name, 
+                email=email, 
+                password_hash=generate_password_hash(password), 
+                role=role,
+                manager_id=current_user.id
+            )
+
+        db.session.add(new_user)
+        db.session.commit()
+        flash('User added successfully!', 'success')
+        return redirect(url_for('admin.admin_dashboard'))
+
+    # Pass all admins for selection
+    admins = User.query.filter_by(role='admin').all()
+    return render_template('admin/add_user.html', admins=admins)
+
+# Route to add a new restaurant
+@admin.route('/add-restaurant/', methods=['GET', 'POST'])
+@login_required
+def add_restaurant():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        address = request.form.get('address')
+        admin_id = request.form.get('admin_id')
+
+        # Check if restaurant already exists
+        existing_restaurant = Restaurant.query.filter_by(name=name).first()
+        if existing_restaurant:
+            flash('Restaurant with this name already exists.', 'danger')
+            return redirect(url_for('admin.add_restaurant'))
+
+        # Create and save new restaurant
+        new_restaurant = Restaurant(
+            name=name, 
+            address=address, 
+            admin_id=admin_id
+        )
+        db.session.add(new_restaurant)
+        db.session.commit()
+        flash('Restaurant added successfully!', 'success')
+        return redirect(url_for('admin.admin_dashboard'))
+
+    # Get all admins for selection
+    context = {
+        'current_user': current_user,
+        'admins': User.query.filter_by(role='admin').all()
+    }
+    return render_template('admin/add_restaurant.html', **context)
+
+@admin.route('edit-restaurant/', methods=['POST', 'GET'])
+@login_required
+def edit_restaurant():
+    pass

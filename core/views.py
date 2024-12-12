@@ -1,6 +1,7 @@
 # flask imports
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from flask_login import current_user, login_required
+from werkzeug.security import generate_password_hash
 
 # Other library imports
 import boto3 
@@ -25,19 +26,42 @@ def index():
     return render_template('index.html', **context)
 
 # dashboard route - methods: get; returns user dashboard with compliance document data
-@views.route('/dashboard/')
+@views.route('/dashboard/', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    # Check if the user has a restaurant
-    if not current_user.restaurant:
-        flash("Please create a restaurant to continue.", "warning")
+    # Handle POST request for restaurant selection
+    if request.method == 'POST':
+        restaurant_id = request.form.get('restaurant_id')
+        
+        # Ensure the selected restaurant belongs to the current user
+        selected_restaurant = Restaurant.query.filter_by(
+            id=restaurant_id, admin_id=current_user.id
+        ).first()
+
+        if not selected_restaurant:
+            flash("Invalid restaurant selection.", "danger")
+            return redirect(url_for('views.dashboard'))
+        
+        # Store selection in session
+        session['selected_restaurant_id'] = selected_restaurant.id
+        flash(f"Switched to {selected_restaurant.name}.", "success")
+        return redirect(url_for('views.dashboard'))
+
+    # Handle GET request
+    if len(current_user.restaurants) > 0:
+        selected_restaurant_id = session.get('selected_restaurant_id')
+        selected_restaurant = Restaurant.query.filter_by(
+            id=selected_restaurant_id, admin_id=current_user.id
+        ).first() or current_user.restaurants[0]
+
+        return render_template(
+            'dashboard.html',
+            selected_restaurant=selected_restaurant,
+            selected_restaurant_id=selected_restaurant.id
+        )
+    else:
+        flash("You haven't assigned a restaurant yet.", "info")
         return redirect(url_for('views.create_restaurant'))
-
-    context = {
-        'current_user': current_user,
-    }
-    return render_template('dashboard.html', **context)
-
     
 @views.route('/create-restaurant/', methods=['GET', 'POST'])
 @login_required
@@ -73,42 +97,95 @@ def pricing():
 @views.route('/upload/', methods=['POST', 'GET'])
 @login_required
 def upload():
-    # allowed docuument extensions        
+    # Allowed document extensions
+    ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'docx'}
+
+    def allowed_file(filename):
+        return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
     if request.method == 'POST':
-        uploaded_file = request.files['file']
-        
-        # create new string from random chars and append filetype to end
-        new_filename = uuid.uuid4().hex + '.' + uploaded_file.filename.rsplit('.', 1)[1].lower()    
-        
-        if 'file' not in request.files or request.files['file'].filename == '':
+        uploaded_file = request.files.get('file')
+
+        if not uploaded_file or uploaded_file.filename == '':
             flash('No file selected', 'warning')
             return redirect(url_for('views.upload'))
 
-        
+        if not allowed_file(uploaded_file.filename):
+            flash('File type not allowed', 'danger')
+            return redirect(url_for('views.upload'))
+
+        # Generate a unique filename
+        new_filename = f"{uuid.uuid4().hex}.{uploaded_file.filename.rsplit('.', 1)[1].lower()}"
+
+        # Connect to S3
         s3 = boto3.resource('s3')
         bucket_name = os.environ.get('BUCKET_NAME')
-        
-        s3.Bucket(bucket_name).upload_fileobj(uploaded_file, new_filename)
-        
-        new_file = Document(
-            name = uploaded_file.filename,
-            file_path ='s3://{}/{}'.format(bucket_name, new_filename),
-            uploaded_by = current_user.name,
-            category = request.form.get('category'),
-            # due_date = request.form.get('due_date'),
-            restaurant_id = request.form.get('restaurant')  # Assuming restaurant_id is a foreign key in the User model.
-        )
-        
-        db.session.add(new_file)
-        db.session.commit()
-        flash('File uploaded successfully', 'success')
-        return redirect(url_for('views.dashboard'))
-            
-    
+
+        # Build file key and file path
+        restaurant_id = request.form.get('restaurant')
+        category = request.form.get('category')
+        file_key = f"restaurant_{restaurant_id}/uploads/{category}/{new_filename}"
+        file_path = f"https://{bucket_name}.s3.eu-west-1.amazonaws.com/{file_key}"
+
+        try:
+            # Upload to S3
+            s3.Bucket(bucket_name).upload_fileobj(uploaded_file, file_key)
+
+            # Save the file record in the database
+            new_file = Document(
+                name=request.form.get('title'),
+                file_path=file_path,
+                uploaded_by=current_user.name,
+                category=category,
+                restaurant_id=restaurant_id
+            )
+
+            db.session.add(new_file)
+            db.session.commit()
+            flash('File uploaded successfully', 'success')
+            return redirect(url_for('views.dashboard'))
+
+        except Exception as e:
+            flash(f"Upload failed: {str(e)}", 'danger')
+            return redirect(url_for('views.upload'))
+
+    # Render form for GET requests
     context = {
         'current_user': current_user
     }
     return render_template('upload.html', **context)
+
+@views.route('/profile/', methods=['GET', 'POST'])
+@login_required
+def profile():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        # Validate form data
+        if not name or not email:
+            flash('Name and Email are required.', 'danger')
+            return redirect(url_for('views.profile'))
+
+        # Update current user details
+        current_user.name = name
+        current_user.email = email
+
+        if password:
+            current_user.password_hash = generate_password_hash(password)
+
+        # Commit changes to the database
+        try:
+            db.session.commit()
+            flash('Profile updated successfully!', 'success')
+        except Exception as e:
+            flash(f'Error updating profile: {str(e)}', 'danger')
+            db.session.rollback()
+
+        return redirect(url_for('views.profile'))
+
+    return render_template('profile.html')
 
 @views.route('/settings/')
 

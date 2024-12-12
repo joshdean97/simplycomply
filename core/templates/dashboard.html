@@ -1,108 +1,50 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<div class="container my-5 100vh">
-    <div class="row">
-        <!-- Sidebar 
-        <div class="col-md-3">
-            <div class="card bg-light shadow-sm menu-card">
-                <div class="card-body">
-                    <h5 class="card-title">Dashboard Menu</h5>
-                    <ul class="list-unstyled">
-                        <li>
-                            <a href="#" class="text-decoration-none d-flex align-items-center py-2">
-                                <i class="bi bi-house me-2"></i> Overview
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for('views.upload') }}" class="text-decoration-none d-flex align-items-center py-2">
-                                <i class="bi bi-cloud-upload me-2"></i> Upload Documents
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for('views.settings') }}" class="text-decoration-none d-flex align-items-center py-2">
-                                <i class="bi bi-gear me-2"></i> Settings
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for('auth.logout') }}" class="text-decoration-none d-flex align-items-center py-2 text-danger">
-                                <i class="bi bi-box-arrow-right me-2"></i> Logout
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div> -->
+<div class="container mt-5">
+    <h2>Dashboard</h2>
 
-        <!-- Main Content -->
-        <div class="col-md-9">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5>Welcome, {{ current_user.first_name }}!</h5>
-                </div>
-                <div class="card-body">
-                    <p class="mb-4">Here’s an overview of your activity and documents.</p>
-                    
-                    <!-- Example Statistics -->
-                    <div class="row text-center">
-                        <div class="col-md-4 mb-3">
-                            <div class="card bg-light shadow-sm">
-                                <div class="card-body">
-                                    <h5 class="card-title">Uploaded </h5>2
-                                    <!-- <p class="card-text display-4">{{ uploaded_documents_count }}</p> -->
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="card bg-light shadow-sm">
-                                <div class="card-body">
-                                    <h5 class="card-title">Pending Approvals</h5>
-                                    2<!-- <p class="card-text display-4">{{ pending_approvals_count }}</p> -->
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="card bg-light shadow-sm">
-                                <div class="card-body">
-                                    <h5 class="card-title">Users Managed</h5>2
-                                    <!-- <p class="card-text display-4">{{ managed_users_count }}</p> -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Placeholder for Recent Activity -->
-                    <h5 class="mt-4">Recent Activity</h5>
-                    <ul class="list-group">
-                        <!-- {% for activity in recent_activities %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            {{ activity.message }}
-                            <span class="badge bg-secondary">{{ activity.timestamp }}</span>
-                        </li>
-                        {% else %}
-                        <li class="list-group-item">No recent activity.</li>
-                        {% endfor %} -->
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Example activity
-                            <span class="badge bg-secondary">10 minutes ago</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Example activity
-                            <span class="badge bg-secondary">10 minutes ago</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Example activity
-                            <span class="badge bg-secondary">10 minutes ago</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Example activity
-                            <span class="badge bg-secondary">10 minutes ago</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+    <!-- Form for selecting restaurant -->
+    <form method="POST" action="{{ url_for('views.dashboard') }}">
+        <div class="mb-3">
+            <label for="restaurantSelect" class="form-label">Select Restaurant</label>
+            <select id="restaurantSelect" name="restaurant_id" class="form-select form-select-lg mb-3" required>
+                {% for restaurant in current_user.restaurants %}
+                <option value="{{ restaurant.id }}" {% if restaurant.id == selected_restaurant_id %}selected{% endif %}>
+                    {{ restaurant.name }}
+                </option>
+                {% endfor %}
+            </select>
         </div>
+        <button type="submit" class="btn btn-primary">Switch</button>
+    </form>
+
+    <!-- Example Data Display -->
+    <div class="mt-5">
+        <h3>Uploaded Files for {{ selected_restaurant.name }}</h3>
+        
+        <!-- Group documents by categories -->
+        {% set grouped_documents = selected_restaurant.documents | groupby('category') %}
+
+        {% for category, docs in grouped_documents %}
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Category: {{ category }}</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for document in docs %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{{ document.file_path }}" target="_blank">{{ document.name }}</a>
+                    <span class="badge bg-secondary">{{ document.uploaded_at.strftime('%Y-%m-%d') }}</span>
+                </li>
+                {% else %}
+                <li class="list-group-item">No files found in this category.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% else %}
+        <div class="alert alert-warning">No documents found for this restaurant.</div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}
