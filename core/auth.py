@@ -17,7 +17,6 @@ def login():
 
         # Query user by email
         user = User.query.filter_by(email=email).first()
-        # sub_user = Subuser.query.filter_by(email=email).first()
 
         if not user:
             flash('Email does not exist.', 'error')
@@ -65,7 +64,7 @@ def register():
                 name=f"{first_name} {last_name}",
                 email=email,
                 password_hash=hashed_password,
-                role='admin',  # Default to 'admin' role; adjust as needed
+                role='admin',  # Default to 'admin' role; 
                 manager_id = None,
             )
             db.session.add(new_user)

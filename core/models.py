@@ -40,13 +40,6 @@ class User(db.Model, UserMixin):
         nullable=False
     )
 
-    # Corrected Relationships
-    # subusers = db.relationship(
-    #     'Subuser',
-    #     back_populates='manager',
-    #     foreign_keys='Subuser.manager_id'
-    # )
-
     assignments = db.relationship(
         'UserRestaurant',
         back_populates='user'
@@ -57,6 +50,7 @@ class User(db.Model, UserMixin):
         foreign_keys='Restaurant.admin_id'
     )
     manager_id = db.Column(db.String(15), nullable=True)
+    restaurant_id = db.Column(db.String(15), nullable=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -64,33 +58,6 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
     
-# class Subuser(db.Model, UserMixin):
-#     __tablename__ = 'subusers'
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(100), nullable=False)
-#     email = db.Column(db.String(100), unique=True, nullable=False)
-#     password_hash = db.Column(db.String(200), nullable=False)
-#     role = db.Column(
-#         db.Enum('sub-user', 'viewer', 'editor', name='user_roles'),
-#         nullable=False
-#     )
-
-    # Foreign Key with Named Constraint
-    # manager_id = db.Column(
-    #     db.Integer, 
-    #     db.ForeignKey(
-    #         'users.id', 
-    #         name='fk_subuser_manager', 
-    #         ondelete="CASCADE"
-    #     ), 
-    #     nullable=False
-    # )
-
-    # Corrected Relationship
-    # manager = db.relationship(
-    #     'User',
-    #     back_populates='subusers'
-    # )
 
 # Restaurant Model
 class Restaurant(db.Model):

@@ -17,7 +17,9 @@ def admin_dashboard():
     }
     return render_template('admin/admin_panel.html', **context)
 
-# Route to add a new user
+# ---------------------------------------------------------------------------- #
+#                            Route to add a new user                           #
+# ---------------------------------------------------------------------------- #
 @admin.route('/add-user/', methods=['GET', 'POST'])
 @login_required
 def add_user():
@@ -26,6 +28,7 @@ def add_user():
         email = request.form.get('email')
         password = request.form.get('password')
         role = request.form.get('role')
+        restaurant = request.form.get('restaurant')
 
         # Check if user already exists
         existing_user = User.query.filter_by(email=email).first()
@@ -39,8 +42,10 @@ def add_user():
                 email=email, 
                 password_hash=generate_password_hash(password), 
                 role=role,
-                manager_id=current_user.id
+                manager_id=current_user.id,
+                restaurant_id = restaurant
             )
+            
 
         db.session.add(new_user)
         db.session.commit()
@@ -51,7 +56,36 @@ def add_user():
     admins = User.query.filter_by(role='admin').all()
     return render_template('admin/add_user.html', admins=admins)
 
-# Route to add a new restaurant
+# edit user
+
+@admin.route('/edit-user/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def edit_user(user_id):
+    user = User.query.get_or_404(user_id)
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        role = request.form.get('role')
+        restaurant = request.form.get('restaurant')
+        
+        # Update user information
+        user.name = name
+        user.email = email
+        user.role = role
+        user.restaurant_id = restaurant
+        
+        db.session.commit()
+        flash('User updated successfully!', 'success')
+        return redirect(url_for('admin.admin_dashboard'))
+    
+    # Get all admins for selection
+    admins = User.query.filter_by(role='admin').all()
+    return render_template('admin/edit_user.html', user=user, admins=admins)
+
+
+# ---------------------------------------------------------------------------- #
+#                         Route to add a new restaurant                        #
+# ---------------------------------------------------------------------------- #
 @admin.route('/add-restaurant/', methods=['GET', 'POST'])
 @login_required
 def add_restaurant():
