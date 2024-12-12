@@ -1,4 +1,7 @@
 import re
+from functools import wraps
+from flask_login import current_user
+from flask import flash, redirect, url_for
 
 def check_password_strength(password):
     """
@@ -40,3 +43,12 @@ def check_password_strength(password):
 def allowed_file(filename):
         ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated or current_user.role != 'admin':
+            flash('Access denied: Admins only.', 'danger')
+            return redirect(url_for('views.dashboard'))
+        return f(*args, **kwargs)
+    return decorated_function

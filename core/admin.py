@@ -5,11 +5,14 @@ from werkzeug.security import generate_password_hash
 
 from .extensions import db
 from .models import User, Restaurant
+from .functions import admin_required
 
 # Blueprint initialization
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
 @admin.route('/panel/', methods=["GET", "POST"])
+@login_required
+@admin_required
 def admin_dashboard():
     context = {
         'current_user': current_user,
@@ -22,6 +25,7 @@ def admin_dashboard():
 # ---------------------------------------------------------------------------- #
 @admin.route('/add-user/', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def add_user():
     if request.method == 'POST':
         name = request.form.get('name')
@@ -60,6 +64,7 @@ def add_user():
 
 @admin.route('/edit-user/<int:user_id>', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def edit_user(user_id):
     user = User.query.get_or_404(user_id)
     if request.method == 'POST':
@@ -88,6 +93,7 @@ def edit_user(user_id):
 # ---------------------------------------------------------------------------- #
 @admin.route('/add-restaurant/', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def add_restaurant():
     if request.method == 'POST':
         name = request.form.get('name')
