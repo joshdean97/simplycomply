@@ -2,9 +2,9 @@ from flask import Blueprint, render_template, request, url_for, flash, redirect
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from .models import User
-from .extensions import db
-from .functions import check_password_strength
+from ..models import User
+from ..extensions import db
+from ..functions import check_password_strength
 
 # auth blueprint
 auth = Blueprint('auth', __name__, url_prefix='/auth')

@@ -37,9 +37,9 @@ def create_app():
     
     
     # Import routes
-    from .views import views
-    from .auth import auth
-    from .admin import admin
+    from .views.views import views
+    from .views.auth import auth
+    from .views.admin import admin
     
     # Register routes
     app.register_blueprint(views)

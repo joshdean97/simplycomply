@@ -9,9 +9,9 @@ import uuid
 import os
 
 # Local imports
-from .models import Document, Restaurant
-from .extensions import db
-from .functions import allowed_file
+from ..models import Document, Restaurant
+from ..extensions import db
+from ..functions import allowed_file
 
 # Blueprint setup
 views = Blueprint('views', __name__)

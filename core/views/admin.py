@@ -3,9 +3,9 @@ from flask_login import login_required, current_user
 
 from werkzeug.security import generate_password_hash
 
-from .extensions import db
-from .models import User, Restaurant
-from .functions import admin_required
+from ..extensions import db
+from ..models import User, Restaurant
+from ..functions import admin_required
 
 # Blueprint initialization
 admin = Blueprint('admin', __name__, url_prefix='/admin')
