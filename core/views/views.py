@@ -116,6 +116,9 @@ def upload():
 
         # Generate a unique filename
         new_filename = f"{uuid.uuid4().hex}.{uploaded_file.filename.rsplit('.', 1)[1].lower()}"
+        
+        file_size = len(uploaded_file.read()) # GET FILE SIZE IN BYTES
+        uploaded_file.seek(0) #reset file pointer after reading
 
         # Connect to S3
         s3 = boto3.resource('s3')
@@ -137,11 +140,13 @@ def upload():
                 file_path=file_path,
                 uploaded_by=current_user.name,
                 category=category,
+                file_size = file_size,
                 restaurant_id=restaurant_id
             )
 
             db.session.add(new_file)
             db.session.commit()
+            print(new_file.file_size + " bytes")
             flash('File uploaded successfully', 'success')
             return redirect(url_for('views.dashboard'))
 
