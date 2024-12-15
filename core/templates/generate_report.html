@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Generate Report {% endblock %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('views.generate_report') }}">
+    <div class="mb-3">
+        <label for="category" class="form-label">Select Category</label>
+        <select id="category" name="category" class="form-select">
+            <option value="">All Categories</option>
+            <option value="Hygiene">Hygiene</option>
+            <option value="Health & Safety">Health & Safety</option>
+            <option value="Training">Training</option>
+            <!-- Add more categories as needed -->
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="date_range" class="form-label">Select Date Range</label>
+        <input type="date" name="start_date" class="form-control" required>
+        <input type="date" name="end_date" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Generate Report</button>
+</form>
+{% endblock %}
