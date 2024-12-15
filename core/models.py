@@ -106,3 +106,11 @@ class Document(db.Model):
         db.ForeignKey('restaurants.id', name='fk_document_restaurant'), 
         nullable=False
     )
+    
+class Template(db.Model):
+    __tablename__ = 'templates'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    template_path = db.Column(db.String(200), nullable=False)
+    download_count = db.Column(db.Integer)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())

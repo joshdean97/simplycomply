@@ -192,6 +192,11 @@ def profile():
 
     return render_template('profile.html')
 
+@views.route('/templates/')
+@login_required
+def templates():
+    return render_template('templates.html')
+
 @views.route('/settings/')
 
 @login_required
