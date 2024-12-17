@@ -61,8 +61,8 @@ def register():
             # Add new user to the database
             hashed_password = generate_password_hash(password)
             new_user = User(
-                name=f"{first_name} {last_name}",
-                email=email,
+                name=f"{first_name.title()} {last_name}.title()",
+                email=email.lower(),
                 password_hash=hashed_password,
                 role='admin',  # Default to 'admin' role; 
                 manager_id = None,
