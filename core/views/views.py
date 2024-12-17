@@ -1,5 +1,5 @@
 # flask imports
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session, send_file
 from flask_login import current_user, login_required
 from werkzeug.security import generate_password_hash
 
@@ -7,11 +7,19 @@ from werkzeug.security import generate_password_hash
 import boto3 
 import uuid
 import os
+from io import BytesIO
+from datetime import datetime
 
 # Local imports
 from ..models import Document, Restaurant
 from ..extensions import db
 from ..functions import allowed_file
+
+# reportlab imports
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib import colors
+
 
 # Blueprint setup
 views = Blueprint('views', __name__)
@@ -160,6 +168,11 @@ def upload():
     }
     return render_template('upload.html', **context)
 
+@views.route('/create/', methods=['GET', 'POST'])
+@login_required  # Ensure that only authenticated users can access this route
+def create_compliance():
+    return '<h1>Create</h1>'
+
 @views.route('/profile/', methods=['GET', 'POST'])
 @login_required
 def profile():
@@ -191,6 +204,69 @@ def profile():
         return redirect(url_for('views.profile'))
 
     return render_template('profile.html')
+
+@views.route('/generate-report/', methods=['POST'])
+@login_required
+def generate_report():
+    category = request.form.get('category')
+    start_date = request.form.get('start_date')
+    end_date = request.form.get('end_date')
+
+    # Query documents
+    query = Document.query.filter(
+        Document.restaurant_id == current_user.restaurant_id,
+        Document.uploaded_at.between(start_date, end_date)
+    )
+
+    if category:
+        query = query.filter(Document.category == category)
+
+    documents = query.all()
+
+    if not documents:
+        flash("No documents found for the selected criteria.", "warning")
+        return redirect(url_for('views.dashboard'))
+
+    # Generate PDF report
+    buffer = BytesIO()
+    pdf = SimpleDocTemplate(buffer, pagesize=letter)
+    elements = []
+
+    # Add table header
+    data = [["Name", "Category", "Uploaded By", "Uploaded At"]]
+    for doc in documents:
+        data.append([
+            doc.name, 
+            doc.category, 
+            doc.uploaded_by, 
+            doc.uploaded_at.strftime("%Y-%m-%d")
+        ])
+
+    # Define table style
+    table = Table(data)
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('BOX', (0, 0), (-1, -1), 1, colors.black),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+    ]))
+
+    elements.append(table)
+    pdf.build(elements)
+
+    buffer.seek(0)
+
+    # Send the generated file
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name=f"Report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
+        mimetype='application/pdf'
+    )
 
 @views.route('/templates/')
 @login_required

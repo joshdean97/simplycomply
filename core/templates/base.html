@@ -48,8 +48,11 @@
                     <a href="{{ url_for('auth.logout') }}" class="nav-item nav-link" style="padding: .5rem 2rem" id="logout">
                         <i class="fas fa-sign-out-alt" aria-label="Logout"></i> Logout
                     </a>
-                    <a href="{{ url_for('views.upload') }}" class="nav-item nav-link d-flex align-items-center justify-content-center bg-white text-primary rounded-pill px-3 py-2" id="upload">
-                        <i class="fas fa-plus me-1 ms-1"></i> Upload
+                    <a href="{{ url_for('views.upload') }}" class="nav-item nav-link d-flex align-items-center justify-content-center bg-white text-primary rounded-pill px-3 py-2 mx-1" id="upload">
+                        <i class="fas fa-plus mx-1"></i> Upload
+                    </a>
+                    <a href="{{ url_for('views.create_compliance') }}" class="nav-item nav-link d-flex align-items-center justify-content-center bg-white text-primary rounded-pill px-3 py-2 mx-1" id="upload">
+                        <i class="fa-solid fa-arrow-right mx-1"></i> Create
                     </a>
                 {% else %}
                     <a href="{{ url_for('auth.login') }}" class="nav-item nav-link {% if request.endpoint == 'auth.login' %}active{% endif %}" style="padding: .5rem 2rem" id="login">
@@ -106,6 +109,7 @@
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="{{url_for('static', filename='index.js')}}"></script>
 </body>
 </html>
