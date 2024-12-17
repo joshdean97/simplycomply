@@ -12,7 +12,7 @@ auth = Blueprint('auth', __name__, url_prefix='/auth')
 @auth.route('/login/', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        email = request.form.get('email')
+        email = request.form.get('email').lower().strip()
         password = request.form.get('password')
 
         # Query user by email
@@ -61,8 +61,8 @@ def register():
             # Add new user to the database
             hashed_password = generate_password_hash(password)
             new_user = User(
-                name=f"{first_name.title()} {last_name}.title()",
-                email=email.lower(),
+                name=f"{first_name.title().strip()} {last_name.title().strip()}",
+                email=email.lower().strip(),
                 password_hash=hashed_password,
                 role='admin',  # Default to 'admin' role; 
                 manager_id = None,
