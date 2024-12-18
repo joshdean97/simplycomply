@@ -1,10 +1,19 @@
 # flask imports
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session, send_file
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    flash,
+    redirect,
+    url_for,
+    session,
+    send_file,
+)
 from flask_login import current_user, login_required
 from werkzeug.security import generate_password_hash
 
 # Other library imports
-import boto3 
+import boto3
 import uuid
 import os
 from io import BytesIO
@@ -19,25 +28,27 @@ from PyPDF2 import PdfMerger
 
 
 # Blueprint setup
-views = Blueprint('views', __name__)
+views = Blueprint("views", __name__)
 
-# index route for landing page 
-@views.route('/')
+
+# index route for landing page
+@views.route("/")
 def index():
-    
+
     context = {
-        'current_user': current_user,
+        "current_user": current_user,
     }
-    return render_template('index.html', **context)
+    return render_template("index.html", **context)
+
 
 # dashboard route - methods: get; returns user dashboard with compliance document data
-@views.route('/dashboard/', methods=['GET', 'POST'])
+@views.route("/dashboard/", methods=["GET", "POST"])
 @login_required
 def dashboard():
     # Handle POST request for restaurant selection
-    if request.method == 'POST':
-        restaurant_id = request.form.get('restaurant_id')
-        
+    if request.method == "POST":
+        restaurant_id = request.form.get("restaurant_id")
+
         # Ensure the selected restaurant belongs to the current user
         selected_restaurant = Restaurant.query.filter_by(
             id=restaurant_id, admin_id=current_user.id
@@ -45,49 +56,50 @@ def dashboard():
 
         if not selected_restaurant:
             flash("Invalid restaurant selection.", "danger")
-            return redirect(url_for('views.dashboard'))
-        
+            return redirect(url_for("views.dashboard"))
+
         # Store selection in session
-        session['selected_restaurant_id'] = selected_restaurant.id
+        session["selected_restaurant_id"] = selected_restaurant.id
         flash(f"Switched to {selected_restaurant.name}.", "success")
-        return redirect(url_for('views.dashboard'))
+        return redirect(url_for("views.dashboard"))
 
     # Handle GET request
     if len(current_user.restaurants) > 0:
-        selected_restaurant_id = session.get('selected_restaurant_id')
-        selected_restaurant = Restaurant.query.filter_by(
-            id=selected_restaurant_id, admin_id=current_user.id
-        ).first() or current_user.restaurants[0]
-        
+        selected_restaurant_id = session.get("selected_restaurant_id")
+        selected_restaurant = (
+            Restaurant.query.filter_by(
+                id=selected_restaurant_id, admin_id=current_user.id
+            ).first()
+            or current_user.restaurants[0]
+        )
+
         context = {
-            'selected_restaurant': selected_restaurant,
-            'selected_restaurant_id': selected_restaurant.id,
-            'categories': CATEGORIES,
-            'title': 'Dashboard'
+            "selected_restaurant": selected_restaurant,
+            "selected_restaurant_id": selected_restaurant.id,
+            "categories": CATEGORIES,
+            "title": "Dashboard",
         }
 
-        return render_template(
-            'dashboard.html',
-            **context
-        )
+        return render_template("dashboard.html", **context)
     else:
         flash("You haven't assigned a restaurant yet.", "info")
-        return redirect(url_for('views.create_restaurant'))
-    
-@views.route('/create-restaurant/', methods=['GET', 'POST'])
+        return redirect(url_for("views.create_restaurant"))
+
+
+@views.route("/create-restaurant/", methods=["GET", "POST"])
 @login_required
 def create_restaurant():
-    if request.method == 'POST':
-        restaurant_name = request.form.get('restaurant_name')
+    if request.method == "POST":
+        restaurant_name = request.form.get("restaurant_name")
 
         # Validate restaurant creation
         if not restaurant_name:
             flash("Restaurant name is required.", "danger")
-            return redirect(url_for('views.create_restaurant'))
+            return redirect(url_for("views.create_restaurant"))
 
         if Restaurant.query.filter_by(name=restaurant_name).first():
             flash("A restaurant with this name already exists.", "danger")
-            return redirect(url_for('views.create_restaurant'))
+            return redirect(url_for("views.create_restaurant"))
 
         # Create restaurant and assign it to the current user
         new_restaurant = Restaurant(name=restaurant_name, admin_id=current_user.id)
@@ -95,49 +107,55 @@ def create_restaurant():
         db.session.commit()
 
         flash("Restaurant created successfully!", "success")
-        return redirect(url_for('views.dashboard'))
+        return redirect(url_for("views.dashboard"))
 
-    return render_template('create_restaurant.html')
+    return render_template("create_restaurant.html")
+
 
 # pricing route - methods: get; returns pricing page with information about our services
-@views.route('/pricing/')
+@views.route("/pricing/")
 def pricing():
-    return render_template('pricing.html')
+    return render_template("pricing.html")
+
 
 # upload route - methods: post; handles file upload, saves it to S3, and adds a Document model entry in the database
-@views.route('/upload/', methods=['POST', 'GET'])
+@views.route("/upload/", methods=["POST", "GET"])
 @login_required
 def upload():
     # Allowed document extensions
-    ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'docx'}
+    ALLOWED_EXTENSIONS = {"pdf", "png", "jpg", "jpeg", "docx"}
 
     def allowed_file(filename):
-        return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        return (
+            "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+        )
 
-    if request.method == 'POST':
-        uploaded_file = request.files.get('file')
+    if request.method == "POST":
+        uploaded_file = request.files.get("file")
 
-        if not uploaded_file or uploaded_file.filename == '':
-            flash('No file selected', 'warning')
-            return redirect(url_for('views.upload'))
+        if not uploaded_file or uploaded_file.filename == "":
+            flash("No file selected", "warning")
+            return redirect(url_for("views.upload"))
 
         if not allowed_file(uploaded_file.filename):
-            flash('File type not allowed', 'danger')
-            return redirect(url_for('views.upload'))
+            flash("File type not allowed", "danger")
+            return redirect(url_for("views.upload"))
 
         # Generate a unique filename
-        new_filename = f"{uuid.uuid4().hex}.{uploaded_file.filename.rsplit('.', 1)[1].lower()}"
-        
-        file_size = len(uploaded_file.read()) # GET FILE SIZE IN BYTES
-        uploaded_file.seek(0) #reset file pointer after reading
+        new_filename = (
+            f"{uuid.uuid4().hex}.{uploaded_file.filename.rsplit('.', 1)[1].lower()}"
+        )
+
+        file_size = len(uploaded_file.read())  # GET FILE SIZE IN BYTES
+        uploaded_file.seek(0)  # reset file pointer after reading
 
         # Connect to S3
-        s3 = boto3.resource('s3')
-        bucket_name = os.environ.get('BUCKET_NAME')
+        s3 = boto3.resource("s3")
+        bucket_name = os.environ.get("BUCKET_NAME")
 
         # Build file key and file path
-        restaurant_id = request.form.get('restaurant')
-        category = request.form.get('category')
+        restaurant_id = request.form.get("restaurant")
+        category = request.form.get("category")
         file_key = f"restaurant_{restaurant_id}/uploads/{category}/{new_filename}"
         file_path = f"https://{bucket_name}.s3.eu-west-1.amazonaws.com/{file_key}"
 
@@ -147,48 +165,72 @@ def upload():
 
             # Save the file record in the database
             new_file = Document(
-                name=request.form.get('title'),
+                name=request.form.get("title"),
                 file_path=file_path,
                 uploaded_by=current_user.name,
                 category=category,
-                file_size = file_size,
-                restaurant_id=restaurant_id
+                file_size=file_size,
+                restaurant_id=restaurant_id,
             )
 
             db.session.add(new_file)
             db.session.commit()
             print(new_file.file_size + " bytes")
-            flash('File uploaded successfully', 'success')
-            return redirect(url_for('views.dashboard'))
+            flash("File uploaded successfully", "success")
+            return redirect(url_for("views.dashboard"))
 
         except Exception as e:
-            flash(f"Upload failed: {str(e)}", 'danger')
-            return redirect(url_for('views.upload'))
+            flash(f"Upload failed: {str(e)}", "danger")
+            return redirect(url_for("views.upload"))
 
     # Render form for GET requests
-    context = {
-        'current_user': current_user,
-        'categories': CATEGORIES
-    }
-    return render_template('upload.html', **context)
+    context = {"current_user": current_user, "categories": CATEGORIES}
+    return render_template("upload.html", **context)
 
-@views.route('/create/', methods=['GET', 'POST'])
+
+@views.route("/delete_document/<int:document_id>", methods=["POST"])
+@login_required
+def delete_document(document_id):
+    document = Document.query.get_or_404(document_id)
+
+    # Delete the file from S3
+    try:
+        s3 = boto3.client("s3")
+        bucket_name = os.environ.get("BUCKET_NAME")
+        file_key = document.file_path.split(
+            f"https://{bucket_name}.s3.eu-west-1.amazonaws.com/"
+        )[1]
+        s3.delete_object(Bucket=bucket_name, Key=file_key)
+    except Exception as e:
+        flash(f"Error deleting file from S3: {str(e)}", "danger")
+        return redirect(url_for("views.dashboard"))
+
+    # Delete the document from the database
+    db.session.delete(document)
+    db.session.commit()
+
+    flash("Document deleted successfully.", "success")
+    return redirect(url_for("views.dashboard"))
+
+
+@views.route("/create/", methods=["GET", "POST"])
 @login_required  # Ensure that only authenticated users can access this route
 def create_compliance():
-    return '<h1>Create</h1>'
+    return "<h1>Create</h1>"
 
-@views.route('/profile/', methods=['GET', 'POST'])
+
+@views.route("/profile/", methods=["GET", "POST"])
 @login_required
 def profile():
-    if request.method == 'POST':
-        name = request.form.get('name')
-        email = request.form.get('email')
-        password = request.form.get('password')
+    if request.method == "POST":
+        name = request.form.get("name")
+        email = request.form.get("email")
+        password = request.form.get("password")
 
         # Validate form data
         if not name or not email:
-            flash('Name and Email are required.', 'danger')
-            return redirect(url_for('views.profile'))
+            flash("Name and Email are required.", "danger")
+            return redirect(url_for("views.profile"))
 
         # Update current user details
         current_user.name = name
@@ -200,53 +242,56 @@ def profile():
         # Commit changes to the database
         try:
             db.session.commit()
-            flash('Profile updated successfully!', 'success')
+            flash("Profile updated successfully!", "success")
         except Exception as e:
-            flash(f'Error updating profile: {str(e)}', 'danger')
+            flash(f"Error updating profile: {str(e)}", "danger")
             db.session.rollback()
 
-        return redirect(url_for('views.profile'))
+        return redirect(url_for("views.profile"))
 
-    return render_template('profile.html')
+    return render_template("profile.html")
 
-@views.route('/generate-report/', methods=['POST', 'GET'])
+
+@views.route("/generate-report/", methods=["POST", "GET"])
 @login_required
 def generate_report():
-    if request.method == 'POST':
+    if request.method == "POST":
         # get selected restaurant from session
-        selected_restaurant_id = session.get('selected_restaurant_id')
-        selected_categories = request.form.getlist('categories')
-        start_date = request.form.get('start_date')
-        end_date = request.form.get('end_date')
-                
+        selected_restaurant_id = session.get("selected_restaurant_id")
+        selected_categories = request.form.getlist("categories")
+        start_date = request.form.get("start_date")
+        end_date = request.form.get("end_date")
+
         print(selected_categories)
 
         # Query documents
         query = Document.query.filter(
             Document.restaurant_id == selected_restaurant_id,
             Document.uploaded_at.between(start_date, end_date),
-            Document.category.in_(selected_categories)
+            Document.category.in_(selected_categories),
         )
-        
-        documents = Document.query.all()
-        
-        for document in documents: print(document.name)
 
+        documents = Document.query.all()
+
+        for document in documents:
+            print(document.name)
 
         if not documents:
             flash("No documents found for the selected criteria.", "warning")
-            return redirect(url_for('views.dashboard'))
-    
-     # Initialize PDF merger
+            return redirect(url_for("views.dashboard"))
+
+    # Initialize PDF merger
     merger = PdfMerger()
-    s3 = boto3.client('s3')
+    s3 = boto3.client("s3")
 
     for doc in documents:
-        if doc.file_path.lower().endswith('.pdf'):
+        if doc.file_path.lower().endswith(".pdf"):
             try:
                 # Extract bucket and key from S3 URL
-                bucket_name = 'simply-comply'
-                file_key = doc.file_path.split(f'https://{bucket_name}.s3.eu-west-1.amazonaws.com/')[1]
+                bucket_name = "simply-comply"
+                file_key = doc.file_path.split(
+                    f"https://{bucket_name}.s3.eu-west-1.amazonaws.com/"
+                )[1]
 
                 # Download file from S3
                 file_stream = BytesIO()
@@ -269,23 +314,24 @@ def generate_report():
         output_file,
         as_attachment=True,
         download_name=f"Collated_Report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
-        mimetype='application/pdf'
+        mimetype="application/pdf",
     )
 
     categories = CATEGORIES
     context = {
-        'current_user': current_user,
-        'categories': categories,
+        "current_user": current_user,
+        "categories": categories,
     }
-    return redirect(url_for('views.dashboard'))
+    return redirect(url_for("views.dashboard"))
 
-@views.route('/templates/')
+
+@views.route("/templates/")
 @login_required
 def templates():
-    return render_template('templates.html')
+    return render_template("templates.html")
 
-@views.route('/settings/')
 
+@views.route("/settings/")
 @login_required
 def settings():
-    return 'settings'
+    return "settings"

@@ -1,7 +1,8 @@
-<div class="container mt-5">
-    <h2>{{ title }}</h2>
+<div class="container mt-5 d-flex flex-row justify-content-between flex-wrap text-center" id="banner_wrapper">
+    <div class="banner_title d-flex align-items-center justify-content-center">
+        <h2>{{ title }}</h2>
+    </div>
         <!-- Form for selecting restaurant -->
-        <div class="row flex-column align-items-center justify-content-space-between mb-3">
     <form method="POST" action="{{ url_for('views.dashboard') }}" class="px-4">
             <label for="restaurantSelect" class="form-label">Select Restaurant</label> </br>
             <select id="restaurantSelect" name="restaurant_id" class="form-select form-select-lg" required>
