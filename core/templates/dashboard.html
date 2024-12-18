@@ -1,25 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <h2>Dashboard</h2>
-        <!-- Form for selecting restaurant -->
-        <div class="row flex-column align-items-center justify-content-space-between mb-3">
-    <form method="POST" action="{{ url_for('views.dashboard') }}" class="px-4">
-            <label for="restaurantSelect" class="form-label">Select Restaurant</label> </br>
-            <select id="restaurantSelect" name="restaurant_id" class="form-select form-select-lg" required>
-                {% for restaurant in current_user.restaurants %}
-                <option value="{{ restaurant.id }}" {% if restaurant.id == selected_restaurant_id %}selected{% endif %}>
-                    {{ restaurant.name }}
-                </option>
-                {% endfor %}
-            </select>
-        
-        <button type="submit" class="btn btn-primary">Switch</button>
-    </form>
-</div>
-
-    {% include "generate_report.html" %}
+{% include "includes/banner.html" %}
+    {% include "includes/generate_report.html" %}
     <!-- Example Data Display -->
     <div class="mt-5">
         <h3>Uploaded Files for {{ selected_restaurant.name }}</h3>

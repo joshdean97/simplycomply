@@ -1,75 +1,85 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block title %} Simply Comply | Pricing {% endblock
+%} {% block content %}
+<div
+  class="d-flex align-items-center justify-content-center"
+  style="height: 85vh"
+>
+  <div class="container text-center">
+    <h1 class="mb-4">Our Pricing Plans</h1>
+    <p class="text-muted mb-5">
+      Choose the plan that works best for your business. Cancel anytime.
+    </p>
 
-{% block title %}
-Simply Comply | Pricing
-{% endblock %}
-
-{% block content %}
-<div class="d-flex align-items-center justify-content-center" style="height: 85vh;">
-    <div class="container text-center">
-        <h1 class="mb-4">Our Pricing Plans</h1>
-        <p class="text-muted mb-5">
-            Choose the plan that works best for your business. Cancel anytime.
-        </p>
-
-        <div class="row">
-            <!-- Basic Plan -->
-            <div class="col-md-4">
-                <div class="card text-center shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h3>Basic</h3>
-                    </div>
-                    <div class="card-body">
-                        <h2 class="card-title">£25<span class="small">/month</span></h2>
-                        <ul class="list-unstyled mt-3 mb-4">
-                            <li>Up to 1 Restaurant</li>
-                            <li>50 Document Uploads</li>
-                            <li>Email Notifications</li>
-                            <li>Basic Support</li>
-                        </ul>
-                        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-block">Get Started</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Standard Plan -->
-            <div class="col-md-4">
-                <div class="card text-center shadow-sm">
-                    <div class="card-header bg-success text-white">
-                        <h3>Standard</h3>
-                    </div>
-                    <div class="card-body">
-                        <h2 class="card-title">£100<span class="small">/month</span></h2>
-                        <ul class="list-unstyled mt-3 mb-4">
-                            <li>Up to 3 Restaurants</li>
-                            <li>Unlimited Document Uploads</li>
-                            <li>Customizable Categories</li>
-                            <li>Priority Support</li>
-                        </ul>
-                        <a href="{{ url_for('auth.register') }}" class="btn btn-success btn-block">Get Started</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Premium Plan -->
-            <div class="col-md-4">
-                <div class="card text-center shadow-sm">
-                    <div class="card-header bg-warning text-dark">
-                        <h3>Premium</h3>
-                    </div>
-                    <div class="card-body">
-                        <h2 class="card-title">£300<span class="small">/month</span></h2>
-                        <ul class="list-unstyled mt-3 mb-4">
-                            <li>Unlimited Restaurants</li>
-                            <li>Unlimited Document Uploads</li>
-                            <li>Advanced Reporting</li>
-                            <li>24/7 Support</li>
-                        </ul>
-                        <a href="{{ url_for('auth.register') }}" class="btn btn-warning btn-block">Get Started</a>
-                    </div>
-                </div>
-            </div>
+    <div class="row">
+      <!-- Basic Plan -->
+      <div class="col-md-4">
+        <div class="card text-center shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h3>Basic</h3>
+          </div>
+          <div class="card-body">
+            <h2 class="card-title">£25<span class="small">/month</span></h2>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>Up to 1 Restaurant</li>
+              <li>50 Document Uploads</li>
+              <li>Email Notifications</li>
+              <li>Basic Support</li>
+            </ul>
+            <a
+              href="{{ url_for('auth.register') }}"
+              class="btn btn-primary btn-block"
+              >Get Started</a
+            >
+          </div>
         </div>
+      </div>
+
+      <!-- Standard Plan -->
+      <div class="col-md-4">
+        <div class="card text-center shadow-sm">
+          <div class="card-header bg-success text-white">
+            <h3>Standard</h3>
+          </div>
+          <div class="card-body">
+            <h2 class="card-title">£100<span class="small">/month</span></h2>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>Up to 3 Restaurants</li>
+              <li>Unlimited Document Uploads</li>
+              <li>Customizable Categories</li>
+              <li>Priority Support</li>
+            </ul>
+            <a
+              href="{{ url_for('auth.register') }}"
+              class="btn btn-success btn-block"
+              >Get Started</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Premium Plan -->
+      <div class="col-md-4">
+        <div class="card text-center shadow-sm">
+          <div class="card-header bg-warning text-dark">
+            <h3>Premium</h3>
+          </div>
+          <div class="card-body">
+            <h2 class="card-title">£300<span class="small">/month</span></h2>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>Unlimited Restaurants</li>
+              <li>Unlimited Document Uploads</li>
+              <li>Advanced Reporting</li>
+              <li>24/7 Support</li>
+            </ul>
+            <a
+              href="{{ url_for('auth.register') }}"
+              class="btn btn-warning btn-block"
+              >Get Started</a
+            >
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}

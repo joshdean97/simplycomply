@@ -13,14 +13,7 @@ from datetime import datetime
 # Local imports
 from ..models import Document, Restaurant
 from ..extensions import db
-from ..functions import allowed_file
 from ..const import CATEGORIES
-
-# reportlab imports
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib import colors
 
 from PyPDF2 import PdfMerger
 
@@ -69,7 +62,8 @@ def dashboard():
         context = {
             'selected_restaurant': selected_restaurant,
             'selected_restaurant_id': selected_restaurant.id,
-            'categories': CATEGORIES
+            'categories': CATEGORIES,
+            'title': 'Dashboard'
         }
 
         return render_template(
