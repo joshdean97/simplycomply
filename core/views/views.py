@@ -14,6 +14,7 @@ from datetime import datetime
 from ..models import Document, Restaurant
 from ..extensions import db
 from ..functions import allowed_file
+from ..const import CATEGORIES
 
 # reportlab imports
 from reportlab.lib.pagesizes import letter
@@ -61,11 +62,16 @@ def dashboard():
         selected_restaurant = Restaurant.query.filter_by(
             id=selected_restaurant_id, admin_id=current_user.id
         ).first() or current_user.restaurants[0]
+        
+        context = {
+            'selected_restaurant': selected_restaurant,
+            'selected_restaurant_id': selected_restaurant.id,
+            'categories': CATEGORIES
+        }
 
         return render_template(
             'dashboard.html',
-            selected_restaurant=selected_restaurant,
-            selected_restaurant_id=selected_restaurant.id
+            **context
         )
     else:
         flash("You haven't assigned a restaurant yet.", "info")
@@ -164,7 +170,8 @@ def upload():
 
     # Render form for GET requests
     context = {
-        'current_user': current_user
+        'current_user': current_user,
+        'categories': CATEGORIES
     }
     return render_template('upload.html', **context)
 

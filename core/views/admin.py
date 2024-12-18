@@ -28,8 +28,8 @@ def admin_dashboard():
 @admin_required
 def add_user():
     if request.method == 'POST':
-        name = request.form.get('name')
-        email = request.form.get('email')
+        name = request.form.get('name').title().strip()
+        email = request.form.get('email').lower().strip()
         password = request.form.get('password')
         role = request.form.get('role')
         restaurant = request.form.get('restaurant')
@@ -68,8 +68,8 @@ def add_user():
 def edit_user(user_id):
     user = User.query.get_or_404(user_id)
     if request.method == 'POST':
-        name = request.form.get('name')
-        email = request.form.get('email')
+        name = request.form.get('name').title().strip()
+        email = request.form.get('email').lower().strip()
         role = request.form.get('role')
         restaurant = request.form.get('restaurant')
         

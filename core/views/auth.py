@@ -43,6 +43,7 @@ def register():
         email = request.form.get('email')
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
+        
 
         # Validate inputs
         if len(first_name) < 2:

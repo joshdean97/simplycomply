@@ -22,8 +22,8 @@
                             <label for="category" class="form-label">Category</label>
                             <select class="form-select w-100 text-center" id="category" name="category" required>
                                 <option value="">Select a category</option>
-                                {% for category in current_user.categories %}
-                                <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% for category in categories %}
+                                <option value="{{ category }}">{{ category }}</option>
                                 {% endfor %}
                             </select>
                         </div>

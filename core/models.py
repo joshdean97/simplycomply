@@ -5,41 +5,29 @@ from flask_login import UserMixin
 
 
 # Association Table for Sub-user Assignments
-# class UserRestaurant(db.Model):
-#     __tablename__ = 'user_restaurant'
-#     id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.Column(
-#         db.Integer, 
-#         db.ForeignKey('users.id', name='fk_userrestaurant_user'), 
-#         nullable=False
-#     )
-#     restaurant_id = db.Column(
-#         db.Integer, 
-#         db.ForeignKey('restaurants.id', name='fk_userrestaurant_restaurant'), 
-#         nullable=False
-#     )
-#     role = db.Column(
-#         db.Enum('admin', 'sub-user', 'viewer', 'editor', name='user_roles'),
-#         nullable=False
-#     )
-
-#     # Relationships
-#     user = db.relationship('User', back_populates='assignments')
-#     restaurant = db.relationship('Restaurant', back_populates='subusers')
-
-
-user_categories = db.Table(
-    'document_categories',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
-    db.Column('category_id', db.Integer, db.ForeignKey('category.id'))
-)
-
-class Category(db.Model):
+class UserRestaurant(db.Model):
+    __tablename__ = 'user_restaurant'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
-    
-    def __repr__(self):
-        return f'<Category: {self.name}>'
+    user_id = db.Column(
+        db.Integer, 
+        db.ForeignKey('users.id', name='fk_userrestaurant_user'), 
+        nullable=False
+    )
+    restaurant_id = db.Column(
+        db.Integer, 
+        db.ForeignKey('restaurants.id', name='fk_userrestaurant_restaurant'), 
+        nullable=False
+    )
+    role = db.Column(
+        db.Enum('admin', 'sub-user', 'viewer', 'editor', name='user_roles'),
+        nullable=False
+    )
+
+    # Relationships
+    user = db.relationship('User', back_populates='assignments')
+    restaurant = db.relationship('Restaurant', back_populates='subusers')
+
+
 
 # User Model
 class User(db.Model, UserMixin):
@@ -49,7 +37,6 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
     subscription_plan = db.Column(db.String(255), default="basic", nullable=False)
-    categories = db.relationship('Category', secondary=user_categories, backref='categories')
 
     role = db.Column(
         db.Enum('admin', 'sub-user', 'viewer', 'editor', name='user_roles'),
@@ -87,6 +74,7 @@ class Restaurant(db.Model):
         nullable=False
     )
 
+
     # Relationships
     owner = db.relationship('User', back_populates='restaurants', foreign_keys=[admin_id])
     subusers = db.relationship('UserRestaurant', back_populates='restaurant')
@@ -100,15 +88,16 @@ class Document(db.Model):
     name = db.Column(db.String(255), nullable=False)
     category = db.Column(
         db.Enum(
-            'Hygiene', 
             'Health & Safety', 
-            'Training', 
-            'Licenses', 
-            'Compliance',
-            'Documentation',
+            'Accident Reports', 
+            'Fire Safety', 
+            'HACCP', 
+            'Allergen Information',
+            'Temperature Control Logs',
             'Cleaning Records',
-            'Inspection Reports',
+            'Licenses and Permits',
             'Staff Records',
+            'Operational Policies',
             name='doc_category'
         ),
         nullable=False

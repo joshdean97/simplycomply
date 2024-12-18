@@ -8,7 +8,7 @@ from os import path
 import os
 
 from .extensions import migrate, db
-from .models import User, Restaurant, Category, Document, Template
+from .models import User, Restaurant, Document, Template, UserRestaurant
 
 # find .env in filesystem
 find_dotenv()

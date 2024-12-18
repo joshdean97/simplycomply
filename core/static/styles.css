@@ -10,3 +10,8 @@
         text-align: center; /* Optional: Center the text for smaller screens */
     }
 }
+
+select#restaurantSelect {
+    height: 38px;
+    vertical-align: middle;
+}
