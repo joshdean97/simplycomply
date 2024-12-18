@@ -18,8 +18,11 @@ from ..const import CATEGORIES
 
 # reportlab imports
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib import colors
+
+from PyPDF2 import PdfMerger
 
 
 # Blueprint setup
@@ -212,68 +215,75 @@ def profile():
 
     return render_template('profile.html')
 
-@views.route('/generate-report/', methods=['POST'])
+@views.route('/generate-report/', methods=['POST', 'GET'])
 @login_required
 def generate_report():
-    category = request.form.get('category')
-    start_date = request.form.get('start_date')
-    end_date = request.form.get('end_date')
+    if request.method == 'POST':
+        # get selected restaurant from session
+        selected_restaurant_id = session.get('selected_restaurant_id')
+        selected_categories = request.form.getlist('categories')
+        start_date = request.form.get('start_date')
+        end_date = request.form.get('end_date')
+                
+        print(selected_categories)
 
-    # Query documents
-    query = Document.query.filter(
-        Document.restaurant_id == current_user.restaurant_id,
-        Document.uploaded_at.between(start_date, end_date)
-    )
+        # Query documents
+        query = Document.query.filter(
+            Document.restaurant_id == selected_restaurant_id,
+            Document.uploaded_at.between(start_date, end_date),
+            Document.category.in_(selected_categories)
+        )
+        
+        documents = Document.query.all()
+        
+        for document in documents: print(document.name)
 
-    if category:
-        query = query.filter(Document.category == category)
 
-    documents = query.all()
+        if not documents:
+            flash("No documents found for the selected criteria.", "warning")
+            return redirect(url_for('views.dashboard'))
+    
+     # Initialize PDF merger
+    merger = PdfMerger()
+    s3 = boto3.client('s3')
 
-    if not documents:
-        flash("No documents found for the selected criteria.", "warning")
-        return redirect(url_for('views.dashboard'))
-
-    # Generate PDF report
-    buffer = BytesIO()
-    pdf = SimpleDocTemplate(buffer, pagesize=letter)
-    elements = []
-
-    # Add table header
-    data = [["Name", "Category", "Uploaded By", "Uploaded At"]]
     for doc in documents:
-        data.append([
-            doc.name, 
-            doc.category, 
-            doc.uploaded_by, 
-            doc.uploaded_at.strftime("%Y-%m-%d")
-        ])
+        if doc.file_path.lower().endswith('.pdf'):
+            try:
+                # Extract bucket and key from S3 URL
+                bucket_name = 'simply-comply'
+                file_key = doc.file_path.split(f'https://{bucket_name}.s3.eu-west-1.amazonaws.com/')[1]
 
-    # Define table style
-    table = Table(data)
-    table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-        ('BOX', (0, 0), (-1, -1), 1, colors.black),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black),
-    ]))
+                # Download file from S3
+                file_stream = BytesIO()
+                s3.download_fileobj(bucket_name, file_key, file_stream)
+                file_stream.seek(0)
 
-    elements.append(table)
-    pdf.build(elements)
+                # Append file to the merger
+                merger.append(file_stream)
+            except Exception as e:
+                flash(f"Error processing {doc.name}: {str(e)}", "danger")
 
-    buffer.seek(0)
+    # Generate merged file
+    output_file = BytesIO()
+    merger.write(output_file)
+    merger.close()
 
-    # Send the generated file
+    output_file.seek(0)
+
     return send_file(
-        buffer,
+        output_file,
         as_attachment=True,
-        download_name=f"Report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
+        download_name=f"Collated_Report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
         mimetype='application/pdf'
     )
+
+    categories = CATEGORIES
+    context = {
+        'current_user': current_user,
+        'categories': categories,
+    }
+    return redirect(url_for('views.dashboard'))
 
 @views.route('/templates/')
 @login_required
