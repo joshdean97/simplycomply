@@ -126,7 +126,36 @@ def add_restaurant():
     return render_template("admin/add_restaurant.html", **context)
 
 
-@admin.route("edit-restaurant/", methods=["POST", "GET"])
+@admin.route("edit-restaurant/<int:restaurant_id>", methods=["POST", "GET"])
 @login_required
-def edit_restaurant():
-    pass
+def edit_restaurant(restaurant_id):
+    restaurant = Restaurant.query.get_or_404(restaurant_id)
+    if request.method == "POST":
+        name = request.form.get("name")
+        address = request.form.get("address")
+
+        # Update restaurant information
+        restaurant.name = name
+        restaurant.address = address
+
+        db.session.commit()
+        flash("Restaurant updated successfully!", "success")
+        return redirect(url_for("admin.admin_dashboard"))
+
+    context = {
+        "restaurant": Restaurant.query.filter(Restaurant.id == restaurant_id).first(),
+        "admins": User.query.filter_by(role="admin").all(),
+        "user": current_user,
+    }
+    return render_template("admin/edit_restaurant.html", **context)
+
+
+@admin.route("/delete-restaurant/<int:restaurant_id>", methods=["POST"])
+@login_required
+@admin_required
+def delete_restaurant(restaurant_id):
+    restaurant = Restaurant.query.get_or_404(restaurant_id)
+    db.session.delete(restaurant)
+    db.session.commit()
+    flash("Restaurant deleted successfully!", "success")
+    return redirect(url_for("admin.admin_dashboard"))

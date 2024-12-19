@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Edit Restaurant{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Edit Restaurant</h2>
+    <form method="POST" action="{{ url_for('admin.edit_restaurant', restaurant_id=restaurant.id) }}">
+        <div class="mb-3">
+            <label for="name" class="form-label">Restaurant Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{restaurant.name}}"  required>
+        </div>
+
+        <div class="mb-3">
+            <label for="address" class="form-label">Address</label>
+            <input type="address" class="form-control" id="address" value="{{restaurant.address}}" name="address"required>
+        </div>
+
+
+        <button type="submit" class="btn btn-success">Edit User</button>
+        <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script>
+    document.getElementById('role').addEventListener('change', function() {
+        const managerSelection = document.getElementById('manager-selection');
+        if (['sub-user', 'viewer', 'editor'].includes(this.value)) {
+            managerSelection.style.display = 'block';
+        } else {
+            managerSelection.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}
