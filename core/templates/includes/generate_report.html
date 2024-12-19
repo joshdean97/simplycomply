@@ -1,12 +1,12 @@
 <form
   method="POST"
   action="{{ url_for('views.generate_report') }}"
-  class="d-flex flex-column align-items-center"
+  class="d-flex flex-column align-items-center justify-content-center"
 >
-  <div class="mb-3 px-3 w-100">
-    <h4 class="text-center">Generate Report</h4>
+  <div class="mb-3 px-2 w-100">
+    <h4 class="text-center mb-3">Generate Report</h4>
 
-    <div class="row">
+    <div class="row d-flex flex-wrap align-items-center justify-content-around">
       {% for category in categories %}
       <div class="col-md-4">
         <div class="form-check py-1">
@@ -39,5 +39,5 @@
     </div>
   </div>
 
-  <button type="submit" class="btn btn-primary mt-3">Generate Report</button>
+  <button type="submit" class="btn_main">Generate Report</button>
 </form>

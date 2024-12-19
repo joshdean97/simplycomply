@@ -1,7 +1,7 @@
-<div class="container mt-5 d-flex flex-row justify-content-between flex-wrap text-center" id="banner_wrapper">
-    <div class="banner_title d-flex align-items-center justify-content-center">
+<div class="container my-5 d-flex flex-conumn justify-content-around flex-wrap text-center" id="banner_wrapper">
+    <!-- <div class="banner_title d-flex align-items-center justify-content-center">
         <h2>{{ title }}</h2>
-    </div>
+    </div> -->
         <!-- Form for selecting restaurant -->
     <form method="POST" action="{{ url_for('views.dashboard') }}" class="px-4">
             <label for="restaurantSelect" class="form-label">Select Restaurant</label> </br>
@@ -13,6 +13,6 @@
                 {% endfor %}
             </select>
         
-        <button type="submit" class="btn btn-primary">Switch</button>
+        <button type="submit" class="btn_main">Switch</button>
     </form>
 </div>
