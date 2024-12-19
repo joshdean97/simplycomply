@@ -47,7 +47,7 @@ select#restaurantSelect {
 
 select {
     width: 100%;
-    padding: .5rem 2rem;
+    padding: .5rem;
     margin: .5rem 0;
     display: inline-block;
     border: 1px solid #ccc;

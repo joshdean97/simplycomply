@@ -20,7 +20,7 @@ from io import BytesIO
 from datetime import datetime
 
 # Local imports
-from ..models import Document, Restaurant
+from ..models import Document, Restaurant, Template
 from ..extensions import db
 from ..const import CATEGORIES
 
@@ -328,7 +328,40 @@ def generate_report():
 @views.route("/templates/")
 @login_required
 def templates():
-    return render_template("templates.html")
+    if request.method == "POST":
+        template_file = request.form.get("template_file")
+        template_name = request.form.get("template_name")
+        restaurant_id = request.form.get("restaurant_id")
+        category = request.form.get("category")
+
+        s3 = boto3.client("s3")
+        bucket_name = os.environ.get("BUCKET_NAME")
+
+        # Upload the template file to S3
+        file_key = f"restaurant_{restaurant_id}/templates/{template_file}"
+        s3.upload_fileobj(template_file, bucket_name, file_key)
+
+        # Save the template record in the database
+        new_template = Template(
+            name=template_name,
+            file_path=f"https://{bucket_name}.s3.eu-west-1.amazonaws.com/{file_key}",
+            restaurant_id=restaurant_id,
+            category=category,
+            created_by=current_user.name,
+            uploaded_at=datetime.now(),
+        )
+        db.session.add(new_template)
+        db.session.commit()
+        flash("Successfully created", "success")
+
+        return redirect(url_for("views.templates"))
+
+    context = {
+        "categories": CATEGORIES,
+        "current_user": current_user,
+        "templates": Template.query.all(),
+    }
+    return render_template("templates.html", **context)
 
 
 @views.route("/settings/")
