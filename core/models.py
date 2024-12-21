@@ -46,8 +46,8 @@ class User(db.Model, UserMixin):
     restaurants = db.relationship(
         "Restaurant", back_populates="owner", foreign_keys="Restaurant.admin_id"
     )
-    manager_id = db.Column(db.String(15), nullable=True)
-    restaurant_id = db.Column(db.String(15), nullable=True)
+    manager_id = db.Column(db.Integer, nullable=True)
+    restaurant_id = db.Column(db.Integer, nullable=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -133,3 +133,31 @@ class Template(db.Model):
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     created_by = db.Column(db.String(255))
     restaurant_id = db.Column(db.Integer)
+
+
+alert_recipients = db.Table(
+    "alert_recipients",
+    db.Column("alert_id", db.Integer, db.ForeignKey("alerts.id"), primary_key=True),
+    db.Column("user_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
+)
+
+
+class Alert(db.Model):
+    __tablename__ = "alerts"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=db.func.now(), nullable=False)
+    restaurant_id = db.Column(
+        db.Integer, db.ForeignKey("restaurants.id"), nullable=False
+    )
+
+    # Relationships
+    restaurant = db.relationship("Restaurant", backref=db.backref("alerts", lazy=True))
+    recipients = db.relationship(
+        "User", secondary=alert_recipients, backref=db.backref("alerts", lazy=True)
+    )
+
+    def __repr__(self):
+        return f"<Alert {self.title} for Restaurant {self.restaurant_id}>"

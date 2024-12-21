@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Create Alert{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-10">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="mb-0">Create Reminder Alert</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('create.create_alerts') }}">
+                        
+                        <!-- Alert Title -->
+                        <div class="mb-4">
+                            <label for="title" class="form-label fw-bold">Alert Title</label>
+                            <input type="text" class="form-control" id="title" name="title" 
+                                   placeholder="Enter alert title" required>
+                        </div>
+
+                        <!-- Alert Message -->
+                        <div class="mb-4">
+                            <label for="message" class="form-label fw-bold">Message</label>
+                            <textarea class="form-control" id="message" name="message" 
+                                      rows="4" placeholder="Enter alert message" required></textarea>
+                        </div>
+
+                        <!-- Date Field -->
+                        <div class="mb-4">
+                            <label for="date" class="form-label fw-bold">Date</label>
+                            <input type="date" class="form-control" id="date" name="date" required>
+                        </div>
+
+                        <!-- Time Field -->
+                        <div class="mb-4">
+                            <label for="time" class="form-label fw-bold">Time</label>
+                            <input type="time" class="form-control" id="time" name="time" required>
+                        </div>
+
+                        <!-- Recipients (Multi-Select) -->
+                        <div class="mb-4">
+                            <label for="recipients" class="form-label fw-bold">Recipients</label>
+                            <select class="form-select" id="recipients" name="recipients" multiple required>
+                                {% for user in managed_users %}
+                                    <option value="{{ user.id }}">{{ user.name }} ({{ user.email }})</option>
+                                {% endfor %}
+                            </select>
+                            <small class="text-muted">Hold CTRL (Windows) or CMD (Mac) to select multiple recipients.</small>
+                        </div>
+
+                        <!-- Repeat Frequency -->
+                        <div class="mb-4">
+                            <label for="repeat" class="form-label fw-bold">Repeat</label>
+                            <select class="form-select" id="repeat" name="repeat" required>
+                                <option value="" selected>Select repeat frequency</option>
+                                <option value="everyday">Every Day</option>
+                                <option value="every_week">Every Week</option>
+                                <option value="every_2_weeks">Every 2 Weeks</option>
+                                <option value="every_month">Every Month</option>
+                                <option value="every_6_months">Every 6 Months</option>
+                            </select>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary fw-bold">Create Alert</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
