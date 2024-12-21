@@ -1,26 +1,47 @@
 {% extends 'base.html' %}
 {% block title %}Profile{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <h2>Profile</h2>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-10">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="mb-0">Profile</h3>
+                </div>
 
-    <form method="POST" action="{{ url_for('views.profile') }}">
-        <div class="mb-3">
-            <label for="name" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{ current_user.name }}" required>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('views.profile') }}">
+                        
+                        <!-- Full Name Field -->
+                        <div class="mb-4">
+                            <label for="name" class="form-label fw-bold">Full Name</label>
+                            <input type="text" class="form-control" id="name" name="name" 
+                                   value="{{ current_user.name }}" required>
+                        </div>
+
+                        <!-- Email Field -->
+                        <div class="mb-4">
+                            <label for="email" class="form-label fw-bold">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   value="{{ current_user.email }}" required>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="mb-4">
+                            <label for="password" class="form-label fw-bold">New Password 
+                                <small class="text-muted">(Leave blank to keep current)</small>
+                            </label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="********">
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary fw-bold">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" value="{{ current_user.email }}" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="password" class="form-label">New Password (leave blank to keep current)</label>
-            <input type="password" class="form-control" id="password" name="password">
-        </div>
-
-        <button type="submit" class="btn btn-primary">Update Profile</button>
-    </form>
+    </div>
 </div>
 {% endblock %}

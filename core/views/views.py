@@ -213,12 +213,6 @@ def delete_document(document_id):
     return redirect(url_for("views.dashboard"))
 
 
-@views.route("/create/", methods=["GET", "POST"])
-@login_required  # Ensure that only authenticated users can access this route
-def create_compliance():
-    return "<h1>Create</h1>"
-
-
 @views.route("/profile/", methods=["GET", "POST"])
 @login_required
 def profile():
