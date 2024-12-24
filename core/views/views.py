@@ -270,6 +270,14 @@ def generate_report():
         start_date = request.form.get("start_date")
         end_date = request.form.get("end_date")
 
+        # Validate date format
+        try:
+            start_date = datetime.strptime(start_date, "%Y-%m-%d")
+            end_date = datetime.strptime(end_date, "%Y-%m-%d")
+        except ValueError:
+            flash("Invalid date format. Please use YYYY-MM-DD.", "danger")
+            return redirect(url_for("views.dashboard"))
+
         print(selected_categories)
 
         # Query documents
@@ -281,9 +289,7 @@ def generate_report():
 
         documents = Document.query.all()
 
-        for document in documents:
-            print(document.name)
-
+        # Check if any documents were found
         if not documents:
             flash("No documents found for the selected criteria.", "warning")
             return redirect(url_for("views.dashboard"))
