@@ -3,6 +3,8 @@ from sqlalchemy.types import Enum
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import UserMixin
 
+from datetime import datetime
+
 
 # Association Table for Sub-user Assignments
 class UserRestaurant(db.Model):
@@ -130,7 +132,7 @@ class Template(db.Model):
         ),
         nullable=False,
     )
-    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    created_at = db.Column(db.DateTime, default=datetime.now())
     created_by = db.Column(db.String(255))
     restaurant_id = db.Column(db.Integer)
 
@@ -148,10 +150,14 @@ class Alert(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     message = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=db.func.now(), nullable=False)
+    created_at = db.Column(
+        db.DateTime, default=db.func.current_timestamp(), nullable=False
+    )
     restaurant_id = db.Column(
         db.Integer, db.ForeignKey("restaurants.id"), nullable=False
     )
+    alert_time = db.Column(db.DateTime, nullable=False)
+    repeat = db.Column(db.String(20))
 
     # Relationships
     restaurant = db.relationship("Restaurant", backref=db.backref("alerts", lazy=True))

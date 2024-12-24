@@ -116,6 +116,7 @@ def create_alerts():
         repeat = request.form.get("repeat")
         date = request.form.get("date")  # Extract the selected date
         time = request.form.get("time")  # Extract the selected time
+        restaurant_id = request.form.get("restaurant_id")
 
         # Validation
         if (
@@ -140,9 +141,9 @@ def create_alerts():
         new_alert = Alert(
             title=title,
             message=message,
-            restaurant_id=current_user.restaurant_id,
             repeat=repeat,
             alert_time=alert_datetime,  # Save the combined datetime
+            restaurant_id=restaurant_id,
         )
 
         # Add recipients

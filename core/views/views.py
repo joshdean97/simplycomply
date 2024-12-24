@@ -20,7 +20,7 @@ from io import BytesIO
 from datetime import datetime
 
 # Local imports
-from ..models import Document, Restaurant, Template
+from ..models import Document, Restaurant, Template, Alert
 from ..extensions import db
 from ..const import CATEGORIES
 
@@ -41,10 +41,20 @@ def index():
     return render_template("index.html", **context)
 
 
+@views.route("/select-restaurant", methods=["POST"])
+@login_required
+def select_restaurant():
+    restaurant_id = request.form.get("restaurant_id")
+    if restaurant_id:
+        session["selected_restaurant"] = restaurant_id
+    return redirect(url_for("views.dashboard"))
+
+
 # dashboard route - methods: get; returns user dashboard with compliance document data
 @views.route("/dashboard/", methods=["GET", "POST"])
 @login_required
 def dashboard():
+    now = datetime.now()
     # Handle POST request for restaurant selection
     if request.method == "POST":
         restaurant_id = request.form.get("restaurant_id")
@@ -67,10 +77,13 @@ def dashboard():
     if len(current_user.restaurants) > 0:
         selected_restaurant_id = session.get("selected_restaurant_id")
         selected_restaurant = (
-            Restaurant.query.filter_by(
-                id=selected_restaurant_id, admin_id=current_user.id
-            ).first()
+            Restaurant.query.filter_by(id=selected_restaurant_id).first()
             or current_user.restaurants[0]
+        )
+        alerts = (
+            Alert.query.filter(Alert.restaurant_id == current_user.id)
+            .order_by(Alert.alert_time)
+            .all()
         )
 
         context = {
@@ -78,6 +91,7 @@ def dashboard():
             "selected_restaurant_id": selected_restaurant.id,
             "categories": CATEGORIES,
             "title": "Dashboard",
+            "alerts": alerts,
         }
 
         return render_template("dashboard.html", **context)
@@ -356,9 +370,3 @@ def templates():
         "templates": Template.query.all(),
     }
     return render_template("templates.html", **context)
-
-
-@views.route("/settings/")
-@login_required
-def settings():
-    return "settings"

@@ -57,6 +57,12 @@ def create_app():
     def server_error(e):
         return "500 Server Error", 500
 
+    from datetime import datetime
+
+    @app.context_processor
+    def inject_year():
+        return {"current_year": datetime.now().year}
+
     # create database if one doesn't exist
     create_database(app)
 

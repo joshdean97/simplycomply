@@ -1,0 +1,29 @@
+<div class="container my-4">
+    <h4 class="mb-3">Upcoming Events</h4>
+    <div class="list-group">
+        {% for alert in alerts %}
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1">{{ alert.title }}</h5>
+                <p class="mb-1 text-muted">{{ alert.message }}</p>
+            </div>
+            <div>
+                {% set days_left = (alert.alert_time - now).days %}
+                {% if days_left > 7 %}
+                <span class="badge bg-success rounded-pill">In {{ days_left }} days</span>
+                {% elif 3 <= days_left <= 7 %}
+                <span class="badge bg-warning rounded-pill">In {{ days_left }} days</span>
+                {% elif days_left >= 0 %}
+                <span class="badge bg-danger rounded-pill">In {{ days_left }} days</span>
+                {% else %}
+                <span class="badge bg-secondary rounded-pill">Overdue</span>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="list-group-item text-center">
+            <p class="text-muted">No upcoming events.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
