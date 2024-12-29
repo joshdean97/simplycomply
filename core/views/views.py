@@ -54,7 +54,7 @@ def select_restaurant():
 @views.route("/dashboard/", methods=["GET", "POST"])
 @login_required
 def dashboard():
-    now = datetime.now()
+    print(session.get("selected_restaurant"))
     # Handle POST request for restaurant selection
     if request.method == "POST":
         restaurant_id = request.form.get("restaurant_id")
@@ -87,6 +87,7 @@ def dashboard():
         )
 
         context = {
+            "now": datetime.now(),
             "selected_restaurant": selected_restaurant,
             "selected_restaurant_id": selected_restaurant.id,
             "categories": CATEGORIES,

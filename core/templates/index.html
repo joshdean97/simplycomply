@@ -2,93 +2,68 @@
 {% block title %}Welcome to Simply Comply{% endblock %}
 {% block content %}
 
-<!-- Hero Section -->
-<div class="container-fluid bg-primary text-white py-5 my-4">
-  <div class="container text-center py-5">
-    <h1 class="display-4 fw-bold">Welcome to Simply Comply</h1>
-    <p class="lead">
-      Simplifying compliance for your business with seamless document
-      management and reminders.
-    </p>
-    <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg mt-3">
-      <i class="fas fa-user-plus"></i> Get Started
-    </a>
-  </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simply Comply</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(90deg, #cdffd8, #94b9ff);
+            color: #1a679f;
+            text-align: center;
+        }
+        .header {
+            padding: 20px;
+            background: #1fa8da;
+            color: white;
+        }
+        .main-section {
+            padding: 50px 20px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            color: white;
+            background: #1a679f;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background: #145b85;
+        }
+        footer {
+            padding: 10px;
+            background: #000;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Simply Comply</h1>
+        <p>The Next Era of Food Safety</p>
+    </header>
 
-<!-- Features Section -->
-<div class="container py-5">
-  <h2 class="text-center mb-5">Why Choose Simply Comply?</h2>
-  <div class="row text-center">
-    <div class="col-md-4">
-      <i class="fas fa-folder-open fa-3x text-primary mb-3"></i>
-      <h5 class="fw-bold">Centralized Document Management</h5>
-      <p>Store, manage, and access all your compliance documents in one place.</p>
-    </div>
-    <div class="col-md-4">
-      <i class="fas fa-bell fa-3x text-primary mb-3"></i>
-      <h5 class="fw-bold">Automated Alerts</h5>
-      <p>Receive timely reminders for deadlines and important tasks.</p>
-    </div>
-    <div class="col-md-4">
-      <i class="fas fa-users fa-3x text-primary mb-3"></i>
-      <h5 class="fw-bold">Team Collaboration</h5>
-      <p>Assign roles, manage responsibilities, and track progress easily.</p>
-    </div>
-  </div>
-</div>
+    <main class="main-section">
+        <img src="https://simplycomply.my.canva.site/media/8de5569a8c32ed0338eec565f2824846.jpg" alt="Food Safety Image" style="max-width: 100%; height: auto; border-radius: 15px;">
+        <div>
+            <button class="button">Explore Plans</button>
+            <button class="button" style="opacity: 0.8;">Learn More</button>
+        </div>
+    </main>
 
-<!-- Testimonials Section -->
-<div class="container-fluid bg-light py-5">
-  <div class="container">
-    <h2 class="text-center mb-5">What Our Users Say</h2>
-    <div class="row">
-      <div class="col-md-4">
-        <div class="card border-0 shadow-sm">
-          <div class="card-body">
-            <p class="text-muted">
-              "Simply Comply has revolutionized how we handle compliance. It's
-              a lifesaver!"
-            </p>
-            <h6 class="fw-bold">- John Doe, CEO</h6>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card border-0 shadow-sm">
-          <div class="card-body">
-            <p class="text-muted">
-              "The automated alerts ensure we never miss a deadline. Highly
-              recommend!"
-            </p>
-            <h6 class="fw-bold">- Jane Smith, Manager</h6>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card border-0 shadow-sm">
-          <div class="card-body">
-            <p class="text-muted">
-              "Easy to use and incredibly effective. Our team loves it!"
-            </p>
-            <h6 class="fw-bold">- Emily Brown, Director</h6>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Call to Action Section -->
-<div class="container text-center py-5">
-  <h2 class="fw-bold">Ready to Simplify Compliance?</h2>
-  <p class="text-muted">
-    Join hundreds of businesses using Simply Comply to stay organized and
-    compliant.
-  </p>
-  <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">
-    <i class="fas fa-arrow-right"></i> Get Started Now
-  </a>
-</div>
+    <footer>
+        <p>Designed with <a href="https://www.canva.com" target="_blank" style="color: #00C4CC; text-decoration: none;">Canva</a></p>
+    </footer>
+</body>
+</html>
 
 {% endblock %}
