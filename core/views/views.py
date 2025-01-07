@@ -11,6 +11,7 @@ from flask import (
 )
 from flask_login import current_user, login_required
 from werkzeug.security import generate_password_hash
+from flask_mailman import EmailMessage
 
 # Other library imports
 import boto3
@@ -34,11 +35,13 @@ views = Blueprint("views", __name__)
 # index route for landing page
 @views.route("/")
 def index():
-
-    context = {
-        "current_user": current_user,
-    }
-    return render_template("index.html", **context)
+    if current_user.is_authenticated:
+        return redirect(url_for("views.dashboard"))
+    else:
+        context = {
+            "current_user": current_user,
+        }
+        return render_template("index.html", **context)
 
 
 @views.route("/select-restaurant", methods=["POST"])
@@ -54,7 +57,6 @@ def select_restaurant():
 @views.route("/dashboard/", methods=["GET", "POST"])
 @login_required
 def dashboard():
-    print(session.get("selected_restaurant"))
     # Handle POST request for restaurant selection
     if request.method == "POST":
         restaurant_id = request.form.get("restaurant_id")

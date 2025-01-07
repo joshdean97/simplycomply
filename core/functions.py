@@ -3,10 +3,11 @@ from functools import wraps
 from flask_login import current_user
 from flask import flash, redirect, url_for
 
+
 def check_password_strength(password):
     """
     Checks the strength of a password and returns a message with its rating.
-    
+
     Criteria:
     - At least 8 characters
     - At least one uppercase letter
@@ -16,20 +17,22 @@ def check_password_strength(password):
     """
     # Define strength criteria
     length_criteria = len(password) >= 8
-    uppercase_criteria = bool(re.search(r'[A-Z]', password))
-    lowercase_criteria = bool(re.search(r'[a-z]', password))
-    digit_criteria = bool(re.search(r'\d', password))
-    special_character_criteria = bool(re.search(r'[!@#$%^&*()\-_=+]', password))
-    
+    uppercase_criteria = bool(re.search(r"[A-Z]", password))
+    lowercase_criteria = bool(re.search(r"[a-z]", password))
+    digit_criteria = bool(re.search(r"\d", password))
+    special_character_criteria = bool(re.search(r"[!@#$%^&*()\-_=+]", password))
+
     # Evaluate strength
-    score = sum([
-        length_criteria,
-        uppercase_criteria,
-        lowercase_criteria,
-        digit_criteria,
-        special_character_criteria
-    ])
-    
+    score = sum(
+        [
+            length_criteria,
+            uppercase_criteria,
+            lowercase_criteria,
+            digit_criteria,
+            special_character_criteria,
+        ]
+    )
+
     # Return feedback
     if score == 5:
         return True
@@ -40,15 +43,40 @@ def check_password_strength(password):
     else:
         return False
 
+
 def allowed_file(filename):
-        ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-        return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-    
+    ALLOWED_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif"}
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if not current_user.is_authenticated or current_user.role != 'admin':
-            flash('Access denied: Admins only.', 'danger')
-            return redirect(url_for('views.dashboard'))
+        if not current_user.is_authenticated or current_user.role != "admin":
+            flash("Access denied: Admins only.", "danger")
+            return redirect(url_for("views.dashboard"))
         return f(*args, **kwargs)
+
     return decorated_function
+
+
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
+
+def send_email():
+    message = Mail(
+        from_email="admin@simplycomply.co",
+        to_emails="joshuashepherd877@gmail.com",
+        subject="Test Email",
+        html_content="<strong>This is a test email.</strong>",
+    )
+    try:
+        sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(e)

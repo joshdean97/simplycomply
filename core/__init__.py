@@ -1,5 +1,5 @@
 # flask imports
-from flask import Flask
+from flask import Flask, request, redirect, url_for, render_template, flash
 from flask_login import LoginManager
 
 # filesystem imports
@@ -9,9 +9,10 @@ import os
 
 from .extensions import migrate, db
 from .models import User, Restaurant, Document, Template, UserRestaurant
+from .functions import send_email
 
 # find .env in filesystem
-find_dotenv()
+dotenv_path = find_dotenv()
 # Load environment variables from.env file
 load_dotenv()
 
@@ -28,7 +29,10 @@ def create_app():
 
     # app configuration
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DB_URI")
+    db_uri = os.environ.get("DB_URI")
+    if not db_uri:
+        raise ValueError("No DB_URI environment variable set")
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     app.config["SQLALCHEMY_POOL_RECYCLE"] = 3600
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -47,6 +51,33 @@ def create_app():
     app.register_blueprint(auth)
     app.register_blueprint(admin)
     app.register_blueprint(create)
+
+    # contact form post route
+    @app.route("/contact", methods=["GET", "POST"])
+    def contact():
+        if request.method == "POST":
+            # Handle form submission
+            name = request.form.get("name")
+            email = request.form.get("email")
+            subject = request.form.get("subject")
+            message = request.form.get("message")
+
+            # add email logic
+
+            return redirect(url_for("views.index"))
+
+        # Render the contact form for GET requests
+        return render_template("contact.html")
+
+    @app.route("/thank-you")
+    def thank_you():
+        return "Thank you for your message!"
+
+    @app.route("/test-email")
+    def test_email():
+        send_email()
+
+        return "sent"
 
     # Error handling
     @app.errorhandler(404)

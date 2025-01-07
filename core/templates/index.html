@@ -1,69 +1,206 @@
-{% extends "base.html" %}
-{% block title %}Welcome to Simply Comply{% endblock %}
-{% block content %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simply Comply</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(90deg, #cdffd8, #94b9ff);
-            color: #1a679f;
-            text-align: center;
-        }
-        .header {
-            padding: 20px;
-            background: #1fa8da;
-            color: white;
-        }
-        .main-section {
-            padding: 50px 20px;
-        }
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 10px;
-            font-size: 16px;
-            color: white;
-            background: #1a679f;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-        }
-        .button:hover {
-            background: #145b85;
-        }
-        footer {
-            padding: 10px;
-            background: #000;
-            color: #fff;
-        }
-    </style>
+    <title>Simply Comply | Next Gen Compliance Software</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
 </head>
 <body>
-    <header class="header">
-        <h1>Simply Comply</h1>
-        <p>The Next Era of Food Safety</p>
-    </header>
-
-    <main class="main-section">
-        <img src="https://simplycomply.my.canva.site/media/8de5569a8c32ed0338eec565f2824846.jpg" alt="Food Safety Image" style="max-width: 100%; height: auto; border-radius: 15px;">
-        <div>
-            <button class="button">Explore Plans</button>
-            <button class="button" style="opacity: 0.8;">Learn More</button>
+    <nav class="navbar">
+        <div class="logo">
+            <h1>Simply Comply</h1>
         </div>
-    </main>
-
-    <footer>
-        <p>Designed with <a href="https://www.canva.com" target="_blank" style="color: #00C4CC; text-decoration: none;">Canva</a></p>
+        <div class="menu-toggle" id="menu-toggle">
+            <i class="fas fa-bars" id="menu-toggle-icon"></i>
+        </div>
+        <ul class="nav-list" id="nav-list">
+            <li class="nav-item"><a href="#">Home</a></li>
+            <li class="nav-item"><a href="#features-section">Features</a></li>
+            <li class="nav-item"><a href="#pricing-section">Pricing</a></li>
+            <li class="nav-item"><a href="#contact-section">Contact</a></li>
+            <li class="auth-link"><a href="{{ url_for('auth.login') }}">Login</a></li>
+            <li class="auth-link"><a href="{{ url_for('auth.register') }}">Sign Up</a></li>
+        </ul>
+    </nav>
+    <nav class="mobile-nav hidden">
+        <ul class="mobile-nav-list">
+            <li class="mobile-nav-item"><a href="#">Home</a></li>
+            <li class="mobile-nav-item"><a href="#features-section">Features</a></li>
+            <li class="mobile-nav-item"><a href="#pricing-section">Pricing</a></li>
+            <li class="mobile-nav-item"><a href="#contact-section">Contact</a></li>
+            <li class="mobile-nav-item"><a href="{{ url_for('auth.login') }}">Login</a></li>
+            <li class="mobile-nav-item"><a href="{{ url_for('auth.register') }}">Sign Up</a></li>   
+        </ul>
+    </nav>
+                <section class="hero">
+        <div class="hero-left">
+            <h1>Next Gen Compliance Software</h1>
+            <p>Simply Comply is the easiest way to manage your compliance requirements.</p>
+            <button>Get Started</button>
+        </div>
+        <div class="hero-right">
+            <img src="{{ url_for('static', filename='/images/hero-img.png') }}" alt="Hero Image">
+        </div>
+    </section>
+    <section class="features" id="features-section">
+        <div class="features-container">
+            <h2>Features Designed for Simplicity</h2>
+            <p>Discover how Simply Comply makes compliance effortless with these powerful features:</p>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-cogs"></i>
+                    <h3>Easy Setup</h3>
+                    <p>Get started in minutes with our user-friendly interface and step-by-step guides.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Intuitive Dashboard</h3>
+                    <p>Stay on top of your compliance requirements with a clean, organized dashboard.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-bell"></i>
+                    <h3>Smart Alerts</h3>
+                    <p>Never miss a deadline with automated reminders and real-time notifications.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>Comprehensive Reports</h3>
+                    <p>Generate detailed compliance reports with just a few clicks.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+        
+    <section class="pricing" id="pricing-section">
+        <div class="pricing-container">
+            <h1>Our Pricing</h1>
+            <div class="pricing-grid">
+                <div class="pricing-item">
+                    <h2>Basic Plan</h2>
+                    <p class="price">£25/month</p>
+                    <ul class="features-list">
+                        <li><i class="fas fa-check-circle"></i>Access to basic features</li>
+                        <li><i class="fas fa-check-circle"></i>Email support</li>
+                        <li><i class="fas fa-check-circle"></i>Single user</li>
+                    </ul>
+                    <button>Choose Plan</button>
+                </div>
+                <div class="pricing-item">
+                    <h2>Standard Plan</h2>
+                    <p class="price">£50/month</p>
+                    <ul class="features-list">
+                        <li><i class="fas fa-check-circle"></i>Everything in Basic</li>
+                        <li><i class="fas fa-check-circle"></i>Team collaboration</li>
+                        <li><i class="fas fa-check-circle"></i>Priority support</li>
+                    </ul>
+                    <button>Choose Plan</button>
+                </div>
+                <div class="pricing-item">
+                    <h2>Premium Plan</h2>
+                    <p class="price">£100/month</p>
+                    <ul class="features-list">
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i><span>Unlimited Users</span></li>
+                            <li><i class="fas fa-check-circle"></i><span>Custom Dashboards</span></li>
+                            <li><i class="fas fa-check-circle"></i><span>24/7 Support</span></li>
+                            <li><i class="fas fa-check-circle"></i><span>Daily Backups</span></li>
+                        </ul>
+                        
+                    </ul>
+                    <button>Choose Plan</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="contact" id="contact-section">
+        <div class="contact-container">
+            <h1>Contact Us</h1>
+            <p>We'd love to hear from you! Fill out the form below or email us at <a href="mailto:support@simplycomply.co">support@simplycomply.co</a>.</p>
+            <form class="contact-form" method="POST" action="{{ url_for('contact') }}">
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+                </div>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-logo">
+                    <h1>Simply Comply</h1>
+                    <p>Your trusted compliance partner.</p>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="https://simplycomply.co/privacy" target="_blank">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Simply Comply. All rights reserved.</p>
+                <ul class="social-icons">
+                    <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                    <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                </ul>
+            </div>
+        </div>
     </footer>
+                        <script>
+            // Function to check if an element is in the viewport
+            function isInViewport(element) {
+                const rect = element.getBoundingClientRect();
+                return (
+                    rect.top >= 0 &&
+                    rect.left >= 0 &&
+                    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                );
+            }
+        
+            // Animate feature cards on scroll
+            const featureItems = document.querySelectorAll('.feature-item');
+        
+            function handleScroll() {
+                featureItems.forEach(item => {
+                    if (isInViewport(item)) {
+                        item.classList.add('in-view');
+                    }
+                });
+            }
+        
+            // Listen for scroll events
+            window.addEventListener('scroll', handleScroll);
+        
+            // Trigger animation for items already in view on page load
+            handleScroll();
+        </script>
+        <script>
+            const menuToggle = document.getElementById('menu-toggle');
+            const navList = document.getElementById('nav-list');
+            const closeMenu = document.getElementById('close-menu');
+            const mobileNav = document.querySelector('.mobile-nav');
+            const menuToggleIcon = document.getElementById('menu-toggle-icon');
+
+            menuToggle.addEventListener('click', () => {
+                mobileNav.classList.toggle('hidden');
+                menuToggleIcon.classList.toggle('fa-bars');
+                menuToggleIcon.classList.toggle('fa-times');
+            });
+            
+        
+        </script>
+                                
 </body>
 </html>
-
-{% endblock %}
