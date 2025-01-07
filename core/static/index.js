@@ -1,4 +1,8 @@
 function checkPasswordStrength(password) {
+  if (password == null) {
+    console.error("Password is null or undefined");
+    return;
+  }
   const strengthLabel = document.getElementById("strength-label");
   const strengthBar = document.getElementById("strength-bar");
   const passwordStrengthContainer =
@@ -14,7 +18,7 @@ function checkPasswordStrength(password) {
 
   // Criteria for password strength
   const criteria = {
-    length: password.length >= 8,
+    specialChar: /[!@#$%^&*()\-_=+\[\]{};:'",.<>?\\|`~]/.test(password),
     uppercase: /[A-Z]/.test(password),
     lowercase: /[a-z]/.test(password),
     digit: /\d/.test(password),
@@ -42,16 +46,20 @@ function checkPasswordStrength(password) {
   // Update the strength label and progress bar
   strengthLabel.textContent = strength;
   strengthBar.style.width = `${strengthPercentage}%`;
-  strengthBar.className = `progress-bar ${
-    strength === "Strong"
-      ? "bg-success"
-      : strength === "Moderate"
-      ? "bg-warning"
-      : "bg-danger"
-  }`;
+  strengthBar.className = `progress-bar ${getStrengthClass(strength)}`;
 }
 
-// Hide the password strength container by default
+// Function to get the class name based on strength
+function getStrengthClass(strength) {
+  switch (strength) {
+    case "Strong":
+      return "bg-success";
+    case "Moderate":
+      return "bg-warning";
+    default:
+      return "bg-danger";
+  }
+}
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("password-strength").style.display = "none";
 });
@@ -79,13 +87,25 @@ function handleScroll() {
   });
 }
 
-// Listen for scroll events
-window.addEventListener("scroll", handleScroll);
+// Debounce function to limit the rate at which a function can fire
+function debounce(func, wait) {
+  let timeout;
+  return function (...args) {
+    const context = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), wait);
+  };
+}
 
-// Trigger animation for items already in view on page load
-handleScroll();
-
-const menuToggle = document.getElementById("menu-toggle");
+// Listen for scroll events with debounce
+window.addEventListener("scroll", debounce(handleScroll, 100));
+menuToggle.addEventListener("click", () => {
+  if (mobileNav && menuToggleIcon) {
+    mobileNav.classList.toggle("hidden");
+    menuToggleIcon.classList.toggle("fa-bars");
+    menuToggleIcon.classList.toggle("fa-times");
+  }
+});
 const navList = document.getElementById("nav-list");
 const closeMenu = document.getElementById("close-menu");
 const mobileNav = document.querySelector(".mobile-nav");
