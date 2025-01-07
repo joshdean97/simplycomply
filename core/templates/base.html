@@ -1,37 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-      crossorigin="anonymous"
-    />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='styles.css')}}"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    {% include "includes/nav.html" %} {% with messages =
-    get_flashed_messages(with_categories=true) %} {% for category, message in
-    messages %} {% if category == 'error' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" href="url_for('static', filename='index.css')">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  {% with messages = get_flashed_messages(with_categories=true) %} 
+  {% for category, message in messages %} 
+  {% if category == 'error' %}
     <div class="alert alert-danger alert-dismissable fade show" role="alert">
       {{ message }}
       <button
@@ -56,25 +36,37 @@
       </button>
     </div>
     {% endif %} {% endfor %} {% endwith %}
-    <div class="container">{% block content %} {% endblock %}</div>
+
+    <nav class="navbar">
+        <div class="logo">
+            <h1>Simply Comply</h1>
+        </div>
+        <div class="menu-toggle" id="menu-toggle">
+            <i class="fas fa-bars" id="menu-toggle-icon"></i>
+        </div>
+        <ul class="nav-list" id="nav-list">
+            <li class="nav-item"><a href="#">Home</a></li>
+            <li class="nav-item"><a href="#features-section">Features</a></li>
+            <li class="nav-item"><a href="#pricing-section">Pricing</a></li>
+            <li class="nav-item"><a href="#contact-section">Contact</a></li>
+            <li class="auth-link"><a href="{{ url_for('auth.login') }}">Login</a></li>
+            <li class="auth-link"><a href="{{ url_for('auth.register') }}">Sign Up</a></li>
+        </ul>
+    </nav>
+    <nav class="mobile-nav hidden">
+        <ul class="mobile-nav-list">
+            <li class="mobile-nav-item"><a href="#">Home</a></li>
+            <li class="mobile-nav-item"><a href="#features-section">Features</a></li>
+            <li class="mobile-nav-item"><a href="#pricing-section">Pricing</a></li>
+            <li class="mobile-nav-item"><a href="#contact-section">Contact</a></li>
+            <li class="mobile-nav-item"><a href="{{ url_for('auth.login') }}">Login</a></li>
+            <li class="mobile-nav-item"><a href="{{ url_for('auth.register') }}">Sign Up</a></li>   
+        </ul>
+    </nav>
+    {% block content %}
+    {% endblock %}
     {% include "includes/footer.html" %}
     <!-- script -->
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script
       type="text/javascript"
       src="{{url_for('static', filename='index.js')}}"
