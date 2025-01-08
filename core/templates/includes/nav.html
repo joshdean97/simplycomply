@@ -1,142 +1,55 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a class="navbar-brand" href="#">
-    <i class="fas fa-check-circle" aria-label="Logo"></i> Simply Comply
-  </a>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbar"
-    aria-controls="navbar"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse justify-content-end" id="navbar">
-    <div class="navbar-nav">
-      {% if current_user.is_authenticated %}
-      <!-- Home Link -->
-      <a
-        href="{{ url_for('views.dashboard') }}"
-        class="nav-item nav-link {% if request.endpoint == 'views.dashboard' %}active{% endif %}"
-        style="padding: 0.5rem 2rem"
-        id="home"
-      >
-        <i class="fas fa-home" aria-label="Home"></i> Home
-      </a>
-
-      <!-- Templates Link -->
-      <a
-        href="{{ url_for('views.templates') }}"
-        class="nav-item nav-link {% if request.endpoint == 'views.templates' %}active{% endif %}"
-        style="padding: 0.5rem 2rem"
-        id="templates"
-      >
-        <i class="fa-solid fa-pen" aria-label="Templates"></i> Templates
-      </a>
-
-      <!-- Admin Dashboard Link -->
-      {% if current_user.role == 'admin' %}
-      <a
-        href="{{ url_for('admin.admin_dashboard') }}"
-        class="nav-item nav-link {% if request.endpoint == 'admin.admin_dashboard' %}active{% endif %}"
-        style="padding: 0.5rem 2rem"
-        id="adminDashboard"
-      >
-        <i class="fas fa-user-shield" aria-label="Admin Dashboard"></i> Admin Dashboard
-      </a>
-      {% endif %}
-
-      <!-- Profile Link -->
-      <a
-        href="{{ url_for('views.profile') }}"
-        class="nav-item nav-link {% if request.endpoint == 'views.profile' %}active{% endif %}"
-        style="padding: 0.5rem 2rem"
-        id="profile"
-      >
-        <i class="bi bi-person-circle" aria-label="Profile"></i> Profile
-      </a>
-
-      <!-- Logout Link -->
-      <a
-        href="{{ url_for('auth.logout') }}"
-        class="nav-item nav-link"
-        style="padding: 0.5rem 2rem"
-        id="logout"
-      >
-        <i class="fas fa-sign-out-alt" aria-label="Logout"></i> Logout
-      </a>
-
-    
-      <!-- Upload Link -->
-      <a
-        href="{{ url_for('views.upload') }}"
-        class="nav-item nav-link d-flex align-items-center justify-content-center bg-white text-primary rounded-pill px-3 py-2 mx-1"
-        id="upload"
-      >
-        <i class="fas fa-plus mx-1"></i> Upload
-      </a>
-
-      <!-- Create Link -->
-      <a
-        href="{{ url_for('create.create_index') }}"
-        class="nav-item nav-link d-flex align-items-center justify-content-center bg-white text-primary rounded-pill px-3 py-2 mx-1"
-        id="create"
-      >
-        <i class="fa-solid fa-arrow-right mx-1"></i> Create
-      </a>
-
-            <!-- Restaurant Select -->
-            <form
-            class="nav-item d-flex align-items-center mx-3"
-            method="POST"
-            action="{{ url_for('views.select_restaurant') }}"
-            style="min-width: 200px;"
-          >
-            <select
-              class="form-select form-select-sm bg-light border-0 shadow-sm"
-              id="restaurant"
-              name="restaurant_id"
-              onchange="this.form.submit()"
-              style="border-radius: 20px; min-width: 150px;"
-            >
-              {% for restaurant in current_user.restaurants %}
-              <option value="{{ restaurant.id }}" {% if loop.index == 1 %}selected{% endif %}>
-                {{ restaurant.name }}
-              </option>
-              {% endfor %}
-            </select>
-          </form>
-      
-      {% else %}
-      <!-- Login/SignUp Links for Unauthenticated Users -->
-      <a
-        href="{{ url_for('auth.login') }}"
-        class="nav-item nav-link {% if request.endpoint == 'auth.login' %}active{% endif %}"
-        style="padding: 0.5rem 2rem"
-        id="login"
-      >
-        <i class="fas fa-sign-in-alt" aria-label="Login"></i> Login
-      </a>
-      <a
-        href="{{ url_for('auth.register') }}"
-        class="nav-item nav-link {% if request.endpoint == 'auth.register' %}active{% endif %}"
-        style="padding: 0.5rem 2rem"
-        id="signUp"
-      >
-        <i class="fas fa-user-plus" aria-label="Sign Up"></i> Sign Up
-      </a>
-      <a
-        href="{{ url_for('views.pricing') }}"
-        class="nav-item nav-link {% if request.endpoint == 'views.pricing' %}active{% endif %}"
-        style="padding: 0.5rem 2rem"
-        id="pricing"
-      >
-        <i class="fas fa-tags" aria-label="Pricing"></i> Pricing
-      </a>
-      {% endif %}
-    </div>
+<nav class="navbar">
+  <div class="logo">
+    <h1>Simply Comply</h1>
   </div>
+  <div class="menu-toggle" id="menu-toggle">
+    <i class="fas fa-bars" id="menu-toggle-icon"></i>
+  </div>
+  <ul class="nav-list" id="nav-list">
+    {% if current_user.is_authenticated %}
+    <li class="nav-item"><a href="{{ url_for('views.index') }}">Home</a></li>
+    <li class="nav-item"><a href="{{ url_for('views.templates') }}">Templates</a></li>
+    {% if current_user.role == 'admin' %}
+    <li class="nav-item"><a href="{{ url_for('admin.admin_dashboard') }}">Admin</a></li>
+    {% endif %}
+    <li class="nav-item"><a href="{{ url_for('views.profile') }}">Profile</a></li>
+    <li class="nav-item"><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+    <li class="nav-item"><a href="{{ url_for('views.upload') }}">Upload</a></li>
+    <li class="nav-item"><a href="{{ url_for('create.create_index') }}">Create</a></li>
+    {% else %}
+    <li class="nav-item"><a href="{{ url_for('views.index') }}">Home</a></li>
+    <li class="nav-item"><a href="#features-section">Features</a></li>
+    <li class="nav-item"><a href="#pricing-section">Pricing</a></li>
+    <li class="nav-item"><a href="#contact-section">Contact</a></li>
+    <li class="auth-link"><a href="{{ url_for('auth.login') }}">Login</a></li>
+    <li class="auth-link"><a href="{{ url_for('auth.register') }}">Sign Up</a></li>
+    {% endif %}
+  </ul>
 </nav>
-```
+
+<!-- Mobile Navigation -->
+<nav class="mobile-nav hidden" id="mobile-nav">
+  <div class="mobile-close" id="mobile-close">
+    <i class="fas fa-times"></i>
+  </div>
+  <ul class="mobile-nav-list">
+    {% if current_user.is_authenticated %}
+    <li class="mobile-nav-item"><a href="{{ url_for('views.index') }}">Home</a></li>
+    <li class="mobile-nav-item"><a href="{{ url_for('views.templates') }}">Templates</a></li>
+    {% if current_user.role == 'admin' %}
+    <li class="mobile-nav-item"><a href="{{ url_for('admin.admin_dashboard') }}">Admin</a></li>
+    {% endif %}
+    <li class="mobile-nav-item"><a href="{{ url_for('views.profile') }}">Profile</a></li>
+    <li class="mobile-nav-item"><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+    <li class="mobile-nav-item"><a href="{{ url_for('views.upload') }}">Upload</a></li>
+    <li class="mobile-nav-item"><a href="{{ url_for('create.create_index') }}">Create</a></li>
+    {% else %}
+    <li class="mobile-nav-item"><a href="{{ url_for('views.index') }}">Home</a></li>
+    <li class="mobile-nav-item"><a href="#features-section">Features</a></li>
+    <li class="mobile-nav-item"><a href="#pricing-section">Pricing</a></li>
+    <li class="mobile-nav-item"><a href="#contact-section">Contact</a></li>
+    <li class="mobile-nav-item"><a href="{{ url_for('auth.login') }}">Login</a></li>
+    <li class="mobile-nav-item"><a href="{{ url_for('auth.register') }}">Sign Up</a></li>
+    {% endif %}
+  </ul>
+</nav>

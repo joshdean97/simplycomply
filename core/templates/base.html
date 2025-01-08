@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+  {% include "includes/nav.html" %}
   {% with messages = get_flashed_messages(with_categories=true) %} 
   {% for category, message in messages %} 
   {% if category == 'error' %}
@@ -36,32 +37,6 @@
     </div>
     {% endif %} {% endfor %} {% endwith %}
 
-    <nav class="navbar">
-        <div class="logo">
-            <h1>Simply Comply</h1>
-        </div>
-        <div class="menu-toggle" id="menu-toggle">
-            <i class="fas fa-bars" id="menu-toggle-icon"></i>
-        </div>
-        <ul class="nav-list" id="nav-list">
-            <li class="nav-item"><a href="{{url_for('views.index')}}">Home</a></li>
-            <li class="nav-item"><a href="#features-section">Features</a></li>
-            <li class="nav-item"><a href="#pricing-section">Pricing</a></li>
-            <li class="nav-item"><a href="#contact-section">Contact</a></li>
-            <li class="auth-link"><a href="{{ url_for('auth.login') }}">Login</a></li>
-            <li class="auth-link"><a href="{{ url_for('auth.register') }}">Sign Up</a></li>
-        </ul>
-    </nav>
-    <nav class="mobile-nav hidden">
-        <ul class="mobile-nav-list">
-            <li class="mobile-nav-item"><a href="#">Home</a></li>
-            <li class="mobile-nav-item"><a href="#features-section">Features</a></li>
-            <li class="mobile-nav-item"><a href="#pricing-section">Pricing</a></li>
-            <li class="mobile-nav-item"><a href="#contact-section">Contact</a></li>
-            <li class="mobile-nav-item"><a href="{{ url_for('auth.login') }}">Login</a></li>
-            <li class="mobile-nav-item"><a href="{{ url_for('auth.register') }}">Sign Up</a></li>   
-        </ul>
-    </nav>
     {% block content %}
     {% endblock %}
     {% include "includes/footer.html" %}

@@ -1,0 +1,111 @@
+// Variables
+$primary-color: #007bff;
+$dark-color: #343a40;
+$white-color: #ffffff;
+$gray-color: #6c757d;
+$border-radius: 10px;
+$box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+$transition-speed: 0.3s;
+
+// Report Form Styling
+.report-form {
+    padding: 2rem;
+    background-color: $white-color;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+
+    .form-header {
+        margin-bottom: 1.5rem;
+
+        .form-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: $dark-color;
+            text-align: center;
+        }
+    }
+
+    .form-categories-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+        padding: 3rem 1rem;
+
+        .form-category-item {
+            .form-check {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .form-check-input {
+                    margin-right: 0.5rem;
+                    accent-color: $primary-color;
+                    cursor: pointer;
+                }
+
+                .form-check-label {
+                    font-size: 1rem;
+                    color: $dark-color;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+    @media screen and (min-width: 768px) {
+        .form-categories-grid {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        
+    }
+
+    .form-date-range {
+        margin-bottom: 2rem;
+
+        .date-range-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: $dark-color;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .date-range-inputs {
+            display: flex;
+            gap: 1rem;
+
+            .date-input {
+                flex: 1;
+
+                .form-control {
+                    width: 100%;
+                    padding: 0.5rem;
+                    font-size: 1rem;
+                    border: 1px solid $gray-color;
+                    border-radius: $border-radius;
+                }
+            }
+        }
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: center;
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            color: $white-color;
+            background-color: $primary-color;
+            border: none;
+            border-radius: $border-radius;
+            cursor: pointer;
+            transition: background-color $transition-speed ease;
+
+            &:hover {
+                background-color: darken($primary-color, 10%);
+            }
+        }
+    }
+}

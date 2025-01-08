@@ -1,0 +1,213 @@
+@import '../variables.scss';
+
+$light-color: #f8f9fa;
+$dark-color: #343a40;
+$gray-color: #6c757d;
+$white-color: #ffffff;
+$primary-color: #007bff;
+$gray-light: #dee2e6;
+$danger-color: #dc3545;
+$gray-dark-color: #343a40;
+$success-color: #28a745;
+$warning-color: #ffc107;
+
+.dashboard-container {
+    padding: 2rem;
+    background-color: $light-color;
+  
+    .data-display {
+      margin-top: 2rem;
+    }
+  
+    .section-title {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: $dark-color;
+    }
+  
+    .category-section {
+      margin-bottom: 2rem;
+      border: 1px solid $gray-color;
+      border-radius: 10px;
+      padding: 1.5rem;
+      background-color: $white-color;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  
+    .category-header {
+      border-bottom: 1px solid $gray-color;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+  
+      .category-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: $primary-color;
+      }
+    }
+  
+    .document-list {
+      list-style: none;
+      padding: 0;
+  
+      .document-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid $gray-light;
+        transition: background-color 0.3s ease;
+  
+        &:hover {
+          background-color: $light-color;
+        }
+  
+        .document-link {
+          text-decoration: none;
+          font-size: 1rem;
+          color: $dark-color;
+          font-weight: 500;
+  
+          &:hover {
+            color: $primary-color;
+            text-decoration: underline;
+          }
+        }
+  
+        .document-date {
+          font-size: 0.9rem;
+          color: $gray-color;
+          margin-right: 1rem;
+        }
+  
+        .delete-form {
+          margin: 0;
+  
+          .delete-button {
+            background: none;
+            border: none;
+            color: $danger-color;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+  
+            &:hover {
+              color: $dark-color;
+            }
+          }
+        }
+      }
+  
+      .no-documents {
+        text-align: center;
+        font-size: 1rem;
+        color: $gray-color;
+      }
+    }
+  
+    .no-categories {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: $gray-dark-color;
+      margin-top: 2rem;
+    }
+  }
+
+  .events-container {
+    margin: 2rem 0;
+    padding: 1rem;
+    background-color: $white-color;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+    .events-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: $dark-color;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+  
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+  
+      .event-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border: 1px solid $gray-color;
+        border-radius: 8px;
+        background-color: $light-color;
+        transition: background-color 0.3s ease;
+  
+        &:hover {
+          background-color: $white-color;
+        }
+  
+        .event-details {
+          display: flex;
+          flex-direction: column;
+  
+          .event-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: $primary-color;
+          }
+  
+          .event-message {
+            font-size: 1rem;
+            color: $gray-dark-color;
+          }
+        }
+  
+        .event-badge {
+          .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+  
+            &.badge-success {
+              background-color: $success-color;
+              color: $white-color;
+            }
+  
+            &.badge-warning {
+              background-color: $warning-color;
+              color: $dark-color;
+            }
+  
+            &.badge-danger {
+              background-color: $danger-color;
+              color: $white-color;
+            }
+  
+            &.badge-secondary {
+              background-color: $gray-color;
+              color: $white-color;
+            }
+          }
+        }
+      }
+  
+      .no-events {
+        text-align: center;
+        padding: 1rem;
+        background-color: $light-color;
+        border: 1px solid $gray-color;
+        border-radius: 8px;
+  
+        .no-events-message {
+          font-size: 1rem;
+          color: $gray-dark-color;
+        }
+      }
+    }
+  }

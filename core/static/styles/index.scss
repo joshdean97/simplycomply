@@ -1,10 +1,14 @@
 @import 'navbar';
 @import 'footer';
 @import 'auth';
+// landing page imports
 @import 'landing/hero';
 @import 'landing/features';
 @import 'landing/pricing';
 @import 'landing/contact';
+// app imports
+@import 'app/dashboard';
+@import 'app/generate-report';
 
 * {
     box-sizing: border-box;

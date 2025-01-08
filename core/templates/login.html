@@ -1,53 +1,54 @@
-{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content
-%}
-<div style="min-height: 80vh">
-  <div>
-    <div>
-      <div>
-        <h3>Login</h3>
-      </div>
-      <div>
-        <form method="POST" action="{{ url_for('auth.login') }}">
-          <!-- Email Field -->
-          <div>
-            <label for="email">Email</label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Enter your email"
-              required
-            />
-          </div>
+{% extends "base.html" %} 
+{% block title %}Login{% endblock %} 
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-container">
+    <div class="auth-header">
+      <h3>Login</h3>
+    </div>
+    <div class="auth-body">
+      <form method="POST" action="{{ url_for('auth.login') }}" class="auth-form">
+        <!-- Email Field -->
+        <div class="form-group">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Enter your email"
+            class="form-input"
+            required
+          />
+        </div>
 
-          <!-- Password Field -->
-          <div>
-            <label for="password">Password</label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Enter your password"
-              required
-            />
-          </div>
+        <!-- Password Field -->
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Enter your password"
+            class="form-input"
+            required
+          />
+        </div>
 
-          <!-- Submit Button -->
-          <div>
-            <button type="submit">
-              Login
-            </button>
-          </div>
+        <!-- Submit Button -->
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            Login
+          </button>
+        </div>
 
-          <!-- Extra Links -->
-          <div>
-            <a href="{{ url_for('auth.register') }}"
-              >Don't have an account? Sign up</a
-            ><br />
-            <a href="#">Forgot your password?</a>
-          </div>
-        </form>
-      </div>
+        <!-- Extra Links -->
+        <div class="form-extra">
+          <a href="{{ url_for('auth.register') }}" class="auth-link">
+            Don't have an account? Sign up
+          </a><br />
+          <a href="#" class="link">Forgot your password?</a>
+        </div>
+      </form>
     </div>
   </div>
 </div>

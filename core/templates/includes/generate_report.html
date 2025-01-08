@@ -1,43 +1,41 @@
-<form
-  method="POST"
-  action="{{ url_for('views.generate_report') }}"
-  class="d-flex flex-column align-items-center justify-content-center"
->
-  <div class="mb-3 px-2 w-100">
-    <h4 class="text-center mb-3">Generate Report</h4>
-
-    <div class="row d-flex flex-wrap align-items-center justify-content-around">
-      {% for category in categories %}
-      <div class="col-md-4">
-        <div class="form-check py-1">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            name="categories"
-            value="{{ category }}"
-            id="{{ category }}"
-            checked
-          />
-          <label class="form-check-label" for="{{ category }}">
-            {{ category }}
-          </label>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
+<form method="POST" action="{{ url_for('views.generate_report') }}" class="report-form">
+  <div class="form-header">
+    <h4 class="form-title">Generate Report</h4>
   </div>
 
-  <div class="mb-3 w-100">
-    <label for="date_range" class="form-label">Select Date Range</label>
-    <div class="row">
-      <div class="col-md-6">
+  <div class="form-categories-grid">
+    {% for category in categories %}
+    <div class="form-category-item">
+      <div class="form-check">
+        <input
+          type="checkbox"
+          name="categories"
+          value="{{ category }}"
+          id="{{ category }}"
+          class="form-check-input"
+          checked
+        />
+        <label for="{{ category }}" class="form-check-label">
+          {{ category }}
+        </label>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="form-date-range">
+    <label for="date_range" class="date-range-label">Select Date Range</label>
+    <div class="date-range-inputs">
+      <div class="date-input">
         <input type="date" name="start_date" class="form-control" required />
       </div>
-      <div class="col-md-6">
+      <div class="date-input">
         <input type="date" name="end_date" class="form-control" required />
       </div>
     </div>
   </div>
 
-  <button type="submit" class="btn_main">Generate Report</button>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Generate Report</button>
+  </div>
 </form>
