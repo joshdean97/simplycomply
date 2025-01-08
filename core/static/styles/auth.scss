@@ -1,0 +1,118 @@
+@import 'variables';
+
+// General Wrapper
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: $light-color;
+    padding: 2rem;
+  }
+  
+  // Auth Container
+  .auth-container {
+    max-width: 400px;
+    width: 100%;
+    background: $white-color;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  
+    .auth-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      color: $dark-color;
+    }
+  }
+  
+  // Form Styles
+  .auth-form {
+    .form-group {
+      margin-bottom: 1.5rem;
+  
+      .form-label {
+        display: block;
+        font-size: 1rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        text-align: left;
+        color: $dark-color;
+      }
+  
+      .form-input {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid $secondary-color;
+        border-radius: 5px;
+        font-size: 1rem;
+        color: $dark-color;
+  
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
+          box-shadow: 0 0 5px rgba($primary-color, 0.5);
+        }
+      }
+    }
+  
+    .password-strength {
+      text-align: left;
+      font-size: 0.9rem;
+  
+      .strength-label {
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+  
+      .strength-bar-container {
+        background-color: $light-color;
+        height: 5px;
+        border-radius: 3px;
+        overflow: hidden;
+  
+        .strength-bar {
+          height: 100%;
+          background-color: $success-color;
+          transition: width 0.3s ease;
+        }
+      }
+    }
+  
+    .form-actions {
+      text-align: center;
+  
+      .btn {
+        display: inline-block;
+        padding: 0.8rem 1.5rem;
+        background-color: $primary-color;
+        color: $white-color;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        text-transform: uppercase;
+  
+        &:hover {
+          background-color: darken($primary-color, 10%);
+        }
+      }
+    }
+  
+    .form-extra {
+      margin-top: 1rem;
+  
+      .auth-link {
+        color: $primary-color;
+        text-decoration: none;
+        font-size: 0.9rem;
+  
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }

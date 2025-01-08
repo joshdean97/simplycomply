@@ -1,0 +1,104 @@
+@import '../variables';
+
+$light-color: #f8f9fa;
+$dark-color: #343a40;
+$gray-color: #6c757d;
+$white-color: #ffffff;
+$primary-color: #007bff;
+$gray-dark-color: #343a40;
+$breakpoint-md: 768px;
+
+.features-container {
+    padding: 3rem 2rem;
+    text-align: center;
+    background-color: $light-color;
+}
+
+.features-container h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    line-height: 1.2;
+    color: $dark-color;
+}
+
+.features-container p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 3rem;
+    color: $gray-color;
+}
+
+.features-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 2rem;
+    padding: 0 1rem;
+}
+
+.feature-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: $white-color;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 2rem;
+    width: 300px;
+    height: 400px;
+}
+
+/* Initial state of feature cards */
+.feature-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Class to apply when feature card is in view */
+.feature-item.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.feature-item i {
+    font-size: 3rem;
+    color: $primary-color;
+    margin-bottom: 1rem;
+}
+
+.feature-item h3 {
+    font-size: 1.5rem;
+    color: $dark-color;
+    margin-bottom: 1rem;
+}
+
+.feature-item p {
+    font-size: 1rem;
+    color: $gray-dark-color;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.feature-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    background-color: $light-color;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: $breakpoint-md) {
+    .features-grid {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .feature-item {
+        width: 90%;
+        height: auto;
+    }
+}

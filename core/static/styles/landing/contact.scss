@@ -1,0 +1,101 @@
+@import '../variables.scss';
+
+$light-color: #f8f9fa;
+$dark-color: #343a40;
+$gray-dark-color: #6c757d;
+$primary-color: #007bff;
+$gray-color: #ced4da;
+$white-color: #ffffff;
+
+.contact {
+    padding: 4rem 2rem;
+    background-color: $light-color;
+    text-align: center;
+}
+
+.contact-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.contact h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: $dark-color;
+}
+
+.contact p {
+    font-size: 1.2rem;
+    color: $gray-dark-color;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.contact p a {
+    color: $primary-color;
+    text-decoration: none;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    border: 1px solid $gray-color;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: $primary-color;
+}
+
+.contact-form textarea {
+    resize: none;
+}
+
+.contact-form .btn {
+    background-color: $primary-color;
+    color: $white-color;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.contact-form .btn:hover {
+    background-color: $dark-color;
+    color: $white-color;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .contact {
+        padding: 3rem 1rem;
+    }
+
+    .contact h1 {
+        font-size: 2rem;
+    }
+
+    .contact p {
+        font-size: 1rem;
+    }
+}

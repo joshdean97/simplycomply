@@ -1,0 +1,129 @@
+@import 'variables';
+
+$white-color: #ffffff;
+$light-color: #f0f0f0;
+$primary-color: #007bff;
+$dark-color: #343a40;
+$success-color: #28a745;
+
+nav.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: $white-color;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.mobile-nav ul {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+}
+
+.mobile-nav ul a {
+    margin: 1rem 0;
+}
+
+.mobile-nav ul li:hover {
+    background-color: $light-color;
+    border-radius: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+nav .logo h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: $primary-color;
+    margin: 0;
+}
+
+nav ul {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 1.5rem;
+}
+
+nav ul a {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: $dark-color;
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+nav ul a:hover {
+    color: $primary-color;
+    transform: scale(1.05);
+}
+
+nav ul a.active {
+    color: $primary-color;
+    font-weight: 600;
+    border-bottom: 2px solid $primary-color;
+}
+
+.nav-list li {
+    padding: 0.5rem 0;
+}
+
+.auth-links a {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $white-color;
+    background-color: $primary-color;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.auth-links a:hover {
+    background-color: $dark-color;
+    transform: scale(1.05);
+}
+
+.auth-links a.sign-up {
+    background-color: $success-color;
+}
+
+.auth-links a.sign-up:hover {
+    background-color: $dark-color;
+}
+
+/* Hide the close-menu on larger screens */
+@media (min-width: 769px) {
+    .close-menu {
+        display: none !important;
+    }
+    .menu-toggle {
+        display: none !important;
+    }
+
+    .nav-item a, .auth-link a {
+        font-size: 1rem;
+        text-align: center;
+    }
+}
+
+@media (max-width: 769px) {
+    .nav-list {
+        display: none;
+    }
+    .menu-toggle {
+        display: block;
+        cursor: pointer;
+        color: $primary-color;
+        font-size: 1.5rem;
+    }
+}

@@ -1,0 +1,121 @@
+@import '../variables';
+
+$primary-color: #3498db;
+$light-color: #ecf0f1;
+$white-color: #ffffff;
+$success-color: #2ecc71;
+$dark-color: #2c3e50;
+
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, $primary-color 50%, $light-color 50%);
+    color: $white-color;
+    text-align: left;
+    overflow: hidden;
+}
+
+.hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+    width: 50%;
+    padding: 2rem;
+    text-align: left;
+    color: $white-color;
+}
+
+.hero-left h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.hero-left p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    line-height: 1.8;
+    max-width: 500px;
+    opacity: 0.9;
+}
+
+.hero-left button {
+    background-color: $success-color;
+    color: $white-color;
+    border: none;
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.hero-left button:hover {
+    background-color: $dark-color;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.hero-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 50%;
+    padding: 2rem;
+    position: relative;
+}
+
+.hero-right img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 769px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        background: linear-gradient(180deg, $primary-color 50%, $light-color 50%);
+    }
+
+    .hero-left {
+        align-items: center;
+        text-align: center;
+        width: 100%;
+    }
+
+    .hero-left h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-left p {
+        font-size: 1rem;
+    }
+
+    .hero-right {
+        width: 100%;
+    }
+
+    .hero-right img {
+        max-width: 300px;
+    }
+}

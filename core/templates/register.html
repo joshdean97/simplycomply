@@ -1,62 +1,56 @@
 {% extends "base.html" %}
 {% block title %}Register{% endblock %}
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 85vh;">
-    <div class="col-md-8 col-lg-6">
-        <div class="card shadow-lg">
-            <div class="card-header bg-primary text-white text-center">
-                <h3>Register</h3>
+<div class="auth-wrapper">
+    <div class="auth-container">
+        <h3 class="auth-title">Register</h3>
+        <form method="POST" action="{{ url_for('auth.register') }}" class="auth-form">
+            <!-- First Name Field -->
+            <div class="form-group">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" name="first_name" id="first_name" class="form-input" placeholder="Enter your first name" required>
             </div>
-            <div class="card-body p-4">
-                <form method="POST" action="{{ url_for('auth.register') }}">
-                    <!-- First Name Field -->
-                    <div class="form-group">
-                        <label for="first_name">First Name</label>
-                        <input type="text" name="first_name" id="first_name" class="form-control form-control-lg" placeholder="Enter your first name" required>
-                    </div>
-                    
-                    <!-- Last Name Field -->
-                    <div class="form-group">
-                        <label for="last_name">Last Name</label>
-                        <input type="text" name="last_name" id="last_name" class="form-control form-control-lg" placeholder="Enter your last name" required>
-                    </div>
-                    
-                    <!-- Email Field -->
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Enter your email" required>
-                    </div>
-                    
-                    <!-- Password Field -->
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" class="form-control" required oninput="checkPasswordStrength(this.value)">
-                        <div id="password-strength" class="mt-2">
-                            <span>Password Strength: <strong id="strength-label">Weak</strong></span>
-                            <div class="progress">
-                                <div id="strength-bar" class="progress-bar" role="progressbar" style="width: 0%;"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Confirm Password Field -->
-                    <div class="form-group">
-                        <label for="confirm_password">Confirm Password</label>
-                        <input type="password" name="confirm_password" id="confirm_password" class="form-control form-control-lg" placeholder="Confirm your password" required>
-                    </div>
-                    
-                    <!-- Submit Button -->
-                    <div class="form-group text-center">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>
-                    </div>
-                    
-                    <!-- Extra Links -->
-                    <div class="text-center">
-                        <a href="{{ url_for('auth.login') }}">Already have an account? Login</a>
-                    </div>
-                </form>
+            
+            <!-- Last Name Field -->
+            <div class="form-group">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" name="last_name" id="last_name" class="form-input" placeholder="Enter your last name" required>
             </div>
-        </div>
+            
+            <!-- Email Field -->
+            <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" id="email" class="form-input" placeholder="Enter your email" required>
+            </div>
+            
+            <!-- Password Field -->
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-input" required oninput="checkPasswordStrength(this.value)">
+                <div id="password-strength" class="password-strength">
+                    <span class="strength-label">Password Strength: <strong id="strength-label">Weak</strong></span>
+                    <div class="strength-bar-container">
+                        <div id="strength-bar" class="strength-bar" role="progressbar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Confirm Password Field -->
+            <div class="form-group">
+                <label for="confirm_password" class="form-label">Confirm Password</label>
+                <input type="password" name="confirm_password" id="confirm_password" class="form-input" placeholder="Confirm your password" required>
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+            
+            <!-- Extra Links -->
+            <div class="form-extra">
+                <a href="{{ url_for('auth.login') }}" class="auth-link">Already have an account? Login</a>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}
