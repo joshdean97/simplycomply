@@ -1,49 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
   {% include "includes/nav.html" %}
   {% with messages = get_flashed_messages(with_categories=true) %} 
   {% for category, message in messages %} 
   {% if category == 'error' %}
-    <div class="alert alert-danger alert-dismissable fade show" role="alert">
-      {{ message }}
-      <button
-        type="button"
-        class="close"
-        data-dismiss="alert"
-        aria-label="Close"
-      >
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    {% else %}
-    <div class="alert alert-success alert-dismissable fade show" role="alert">
-      {{ message }}
-      <button
-        type="button"
-        class="close"
-        data-dismiss="alert"
-        aria-label="Close"
-      >
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    {% endif %} {% endfor %} {% endwith %}
+  <div class="alert alert-danger alert-dismissable fade show" role="alert">
+    {{ message }}
+    <button
+    type="button"
+    class="close"
+    data-dismiss="alert"
+    aria-label="Close"
+    >
+    <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% else %}
+  <div class="alert alert-success alert-dismissable fade show" role="alert">
+    {{ message }}
+    <button
+    type="button"
+    class="close"
+    data-dismiss="alert"
+    aria-label="Close"
+    >
+    <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endif %} {% endfor %} {% endwith %}
 
-    {% block content %}
-    {% endblock %}
-    {% include "includes/footer.html" %}
-    <!-- script -->
-    <script
-      type="text/javascript"
-      src="{{url_for('static', filename='index.js')}}"
-    ></script>
+  {% block content %}
+  {% endblock %}
+  {% include "includes/footer.html" %}
+  <!-- script -->
+  <script
+    type="text/javascript"
+    src="{{url_for('static', filename='index.js')}}"
+  ></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var closeButtons = document.querySelectorAll('.alert .close');
+    closeButtons.forEach(function(button) {
+      button.addEventListener('click', function() {
+      var alert = this.parentElement;
+      alert.style.display = 'none';
+      });
+    });
+    });
+  </script>
   </body>
 </html>
