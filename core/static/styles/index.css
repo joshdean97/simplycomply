@@ -1120,6 +1120,85 @@ nav ul a.active {
   background-color: rgb(84.3605150215, 91.3905579399, 97.6394849785);
 }
 
+.admin-panel-container {
+  padding: 2rem;
+}
+.admin-panel-container .admin-panel-heading {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 2rem;
+}
+.admin-panel-container .admin-sections {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+.admin-panel-container .admin-sections .admin-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  min-width: 300px;
+  overflow: hidden;
+}
+.admin-panel-container .admin-sections .admin-card .admin-card-header {
+  background-color: #007bff;
+  color: #fff;
+  padding: 1rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+.admin-panel-container .admin-sections .admin-card .admin-card-body {
+  padding: 1.5rem;
+}
+.admin-panel-container .admin-sections .admin-card .admin-card-body .admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+.admin-panel-container .admin-sections .admin-card .admin-card-body .admin-table th, .admin-panel-container .admin-sections .admin-card .admin-card-body .admin-table td {
+  text-align: left;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+}
+.admin-panel-container .admin-sections .admin-card .admin-card-body .admin-table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+.admin-panel-container .admin-sections .admin-card .admin-card-body .admin-table td {
+  font-size: 1rem;
+}
+.admin-panel-container .admin-sections .admin-card .admin-card-body .admin-table .edit-link {
+  color: #007bff;
+  text-decoration: none;
+}
+.admin-panel-container .admin-sections .admin-card .admin-card-body .admin-table .edit-link:hover {
+  text-decoration: underline;
+}
+.admin-panel-container .admin-sections .admin-card .admin-card-body .admin-table .restaurant-link {
+  color: #28a745;
+  text-decoration: none;
+}
+.admin-panel-container .admin-sections .admin-card .admin-card-body .admin-table .restaurant-link:hover {
+  text-decoration: underline;
+}
+.admin-panel-container .admin-sections .admin-card .admin-card-body .btn {
+  display: inline-block;
+  background-color: #007bff;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+.admin-panel-container .admin-sections .admin-card .admin-card-body .btn:hover {
+  background-color: rgb(0, 98.4, 204);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
