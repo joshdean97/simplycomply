@@ -43,16 +43,6 @@ def index():
         }
         return render_template("index.html", **context)
 
-
-@views.route("/select-restaurant", methods=["POST"])
-@login_required
-def select_restaurant():
-    restaurant_id = request.form.get("restaurant_id")
-    if restaurant_id:
-        session["selected_restaurant"] = restaurant_id
-    return redirect(url_for("views.dashboard"))
-
-
 # dashboard route - methods: get; returns user dashboard with compliance document data
 @views.route("/dashboard/", methods=["GET", "POST"])
 @login_required

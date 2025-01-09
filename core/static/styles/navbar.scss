@@ -101,6 +101,33 @@ nav ul a.active {
     background-color: $dark-color;
 }
 
+.restaurant-select-form {
+    margin: 0;
+    .restaurant-select {
+      border: none;
+      background-color: var(--white-color);
+      color: var(--primary-color);
+      padding: 0.3rem 1rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      appearance: none;
+      transition: all 0.3s;
+
+      &:hover {
+        background-color: var(--light-color);
+      }
+      .dropdown-icon {
+        position: absolute;
+        right: 10px;
+        color: var(--gray-dark-color);
+        pointer-events: none; // Prevents icon from blocking select interaction
+      }
+    }
+  }
+
+
+
 /* Hide the close-menu on larger screens */
 @media (min-width: 769px) {
     .close-menu {
