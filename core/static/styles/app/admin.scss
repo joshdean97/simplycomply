@@ -355,3 +355,119 @@ $success-color: #28a745;
       }
     }
   }
+
+//   edit user
+.edit-user-container {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: $white-color;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  
+    .page-heading {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: $dark-color;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+  
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+  
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+  
+        label {
+          font-size: 1rem;
+          color: $dark-color;
+          font-weight: 600;
+        }
+  
+        .form-input {
+          padding: 0.8rem;
+          font-size: 1rem;
+          border: 1px solid $gray-color;
+          border-radius: 5px;
+          background-color: $light-color;
+          transition: border-color 0.3s ease;
+  
+          &:focus {
+            border-color: $primary-color;
+            outline: none;
+          }
+        }
+      }
+  
+      .restaurant-pill-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+  
+        .restaurant-pill {
+          display: inline-flex;
+          align-items: center;
+          background-color: $primary-color;
+          color: $white-color;
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          font-size: 0.9rem;
+          font-weight: bold;
+  
+          .remove-pill-btn {
+            background: none;
+            border: none;
+            color: $white-color;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-left: 0.5rem;
+            cursor: pointer;
+  
+            &:hover {
+              color: $danger-color;
+            }
+          }
+        }
+      }
+  
+      .form-actions {
+        display: flex;
+        justify-content: space-between;
+  
+        .btn {
+          padding: 0.8rem 1.5rem;
+          font-size: 1rem;
+          font-weight: bold;
+          border-radius: 5px;
+          text-decoration: none;
+          text-align: center;
+          transition: background-color 0.3s ease;
+  
+          &.btn-primary {
+            background-color: $primary-color;
+            color: $white-color;
+            border: none;
+  
+            &:hover {
+              background-color: darken($primary-color, 10%);
+            }
+          }
+  
+          &.btn-secondary {
+            background-color: $gray-color;
+            color: $white-color;
+            border: none;
+  
+            &:hover {
+              background-color: darken($gray-color, 10%);
+            }
+          }
+        }
+      }
+    }
+  }

@@ -1,50 +1,110 @@
 {% extends 'base.html' %}
-{% block title %}Add User{% endblock %}
+{% block title %}Edit User{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <h2>Edit User</h2>
-    <form method="POST" action="{{ url_for('admin.add_user') }}">
-        <div class="mb-3">
-            <label for="name" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{user.name}}"  required>
+<div class="edit-user-container">
+    <h2 class="page-heading">Edit User</h2>
+    <form method="POST" action="{{ url_for('admin.edit_user', user_id=user.id) }}" class="form">
+        <!-- User Information -->
+        <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" value="{{ user.name }}" class="form-input" required>
         </div>
 
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" value="user.email" name="email"required>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}" class="form-input" required>
         </div>
 
-        <div class="mb-3">
-            <label for="role" class="form-label">Role</label>
-            <select id="role" name="role" class="form-select" required>
-                <option value="admin">Admin</option>
-                <option value="sub-user">Sub-User</option>
-                <option value="viewer">Viewer</option>
-                <option value="editor">Editor</option>
+        <div class="form-group">
+            <label for="role">Role</label>
+            <select id="role" name="role" class="form-input" required>
+                <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+                <option value="sub-user" {% if user.role == 'sub-user' %}selected{% endif %}>Sub-User</option>
+                <option value="viewer" {% if user.role == 'viewer' %}selected{% endif %}>Viewer</option>
+                <option value="editor" {% if user.role == 'editor' %}selected{% endif %}>Editor</option>
             </select>
         </div>
-        <div class="mb-3">
-            <label for="restaurant" class="form-label">Restaurant</label>
-            <select id="role" name="role" class="form-select" required>
-                {% for restaurant in current_user.restaurants %}
-                <option value="{{restaurant.id}}">{{restaurant.name}}</option>
+
+        <!-- Restaurant Management -->
+        <div class="form-group">
+            <label for="restaurants">Restaurants</label>
+            <div id="restaurant-list" class="restaurant-pill-container">
+                {% for restaurant in user.restaurants %}
+                <div class="restaurant-pill" data-id="{{ restaurant.id }}">
+                    {{ restaurant.name }}
+                    <button type="button" class="remove-pill-btn" data-id="{{ restaurant.id }}">×</button>
+                    <input type="hidden" name="restaurant_ids" value="{{ restaurant.id }}">
+                </div>
+                {% endfor %}
+            </div>
+            <select id="restaurant-select" class="form-input">
+                <option value="" disabled selected>Select a restaurant to add</option>
+                {% for restaurant in available_restaurants %}
+                <option value="{{ restaurant.id }}">{{ restaurant.name }}</option>
                 {% endfor %}
             </select>
+            <button type="button" id="add-restaurant-btn" class="btn btn-secondary">Add Restaurant</button>
         </div>
-
-        <button type="submit" class="btn btn-success">Edit User</button>
-        <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
+                <!-- Form Actions -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
 </div>
 
 <script>
-    document.getElementById('role').addEventListener('change', function() {
-        const managerSelection = document.getElementById('manager-selection');
-        if (['sub-user', 'viewer', 'editor'].includes(this.value)) {
-            managerSelection.style.display = 'block';
-        } else {
-            managerSelection.style.display = 'none';
-        }
-    });
+    const restaurantList = document.getElementById('restaurant-list');
+    const restaurantSelect = document.getElementById('restaurant-select');
+    const addRestaurantBtn = document.getElementById('add-restaurant-btn');
+
+    // Add Restaurant
+// Add Restaurant
+addRestaurantBtn.addEventListener('click', () => {
+    const selectedOption = restaurantSelect.options[restaurantSelect.selectedIndex];
+    if (!selectedOption || selectedOption.value === '') return;
+
+    // Create a new pill
+    const pill = document.createElement('div');
+    pill.classList.add('restaurant-pill');
+    pill.setAttribute('data-id', selectedOption.value);
+    pill.innerHTML = `
+        ${selectedOption.text}
+        <button type="button" class="remove-pill-btn" data-id="${selectedOption.value}">×</button>
+    `;
+
+    // Create the corresponding hidden input
+    const hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'restaurant_ids';
+    hiddenInput.value = selectedOption.value;
+
+    // Add the pill and hidden input to the list
+    restaurantList.appendChild(pill);
+    restaurantList.appendChild(hiddenInput);
+
+    // Remove the selected option from the dropdown
+    restaurantSelect.remove(restaurantSelect.selectedIndex);
+});
+
+// Remove Restaurant
+restaurantList.addEventListener('click', (event) => {
+    if (event.target.classList.contains('remove-pill-btn')) {
+        const pill = event.target.closest('.restaurant-pill');
+        const restaurantId = pill.getAttribute('data-id');
+        const restaurantName = pill.textContent.trim().slice(0, -1);
+
+        // Remove the pill and corresponding hidden input
+        pill.remove();
+        const hiddenInput = document.querySelector(`input[name="restaurant_ids"][value="${restaurantId}"]`);
+        if (hiddenInput) hiddenInput.remove();
+
+        // Re-add the option to the dropdown
+        const newOption = document.createElement('option');
+        newOption.value = restaurantId;
+        newOption.textContent = restaurantName;
+        restaurantSelect.appendChild(newOption);
+    }
+});
 </script>
 {% endblock %}

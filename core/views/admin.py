@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 
 from ..extensions import db
-from ..models import User, Restaurant
+from ..models import User, Restaurant, UserRestaurant
 from ..functions import admin_required
 
 # Blueprint initialization
@@ -67,33 +67,62 @@ def add_user():
 # edit user
 
 
-@admin.route("/edit-user/<int:user_id>", methods=["GET", "POST"])
+@admin.route('/edit-user/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def edit_user(user_id):
+    # Fetch the user to edit
     user = User.query.get_or_404(user_id)
-    if request.method == "POST":
-        name = request.form.get("name").title().strip()
-        email = request.form.get("email").lower().strip()
-        role = request.form.get("role")
-        restaurant = request.form.get("restaurant")
 
-        # Update user information
-        user.name = name
-        user.email = email
-        user.role = role
-        user.restaurant_id = restaurant
+    # Fetch all restaurants
+    all_restaurants = Restaurant.query.all()
 
-        db.session.commit()
-        flash("User updated successfully!", "success")
-        return redirect(url_for("admin.admin_dashboard"))
+    # Get the user's current restaurants
+    user_restaurant_ids = [ur.restaurant_id for ur in UserRestaurant.query.filter_by(user_id=user.id).all()]
 
-    # Get all admins for selection
-    admins = User.query.filter_by(role="admin").all()
-    return render_template("admin/edit_user.html", user=user, admins=admins)
+    if request.method == 'POST':
+        # Update user details
+        user.name = request.form['name']
+        user.email = request.form['email']
+        user.role = request.form['role']
 
+        # Process restaurant associations
+        new_restaurant_ids = request.form.getlist('restaurant_ids')  # List of selected restaurant IDs
+        new_restaurant_ids = list(map(int, new_restaurant_ids))
+        print(f"Received restaurant IDs: {new_restaurant_ids}")
+ 
 
-# ---------------------------------------------------------------------------- #
+        # Remove associations not in the updated list
+        for ur in UserRestaurant.query.filter_by(user_id=user.id).all():
+            if ur.restaurant_id not in new_restaurant_ids:
+                db.session.delete(ur)
+
+        # Add new associations that are not currently linked
+        for restaurant_id in new_restaurant_ids:
+            if restaurant_id not in user_restaurant_ids:
+                new_association = UserRestaurant(user_id=user.id, restaurant_id=restaurant_id)
+                db.session.add(new_association)
+
+        # Commit the changes to the database
+        try:
+            db.session.commit()
+            flash('User updated successfully!', 'success')
+            return redirect(url_for('admin.admin_dashboard'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'An error occurred while updating the user: {e}', 'danger')
+
+    # Fetch available restaurants for the form
+    available_restaurants = [
+        restaurant for restaurant in all_restaurants if restaurant.id not in user_restaurant_ids
+    ]
+
+    return render_template(
+        'admin/edit_user.html',
+        user=user,
+        available_restaurants=available_restaurants,
+        user_restaurant_ids=user_restaurant_ids
+    )
 #                         Route to add a new restaurant                        #
 # ---------------------------------------------------------------------------- #
 @admin.route("/add-restaurant/", methods=["GET", "POST"])
