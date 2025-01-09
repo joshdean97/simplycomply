@@ -1,26 +1,26 @@
 {% extends 'base.html' %}
 {% block title %}Add User{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <h2>Add New User</h2>
-    <form method="POST" action="{{ url_for('admin.add_user') }}">
-        <div class="mb-3">
-            <label for="name" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+<div class="add-user-container">
+    <h2 class="page-heading">Add New User</h2>
+    <form method="POST" action="{{ url_for('admin.add_user') }}" class="form">
+        <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" class="form-input" required>
         </div>
 
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-input" required>
         </div>
 
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-input" required>
         </div>
 
-        <div class="mb-3">
-            <label for="role" class="form-label">Role</label>
+        <div class="form-group">
+            <label for="role">Role</label>
             <select id="role" name="role" class="form-select" required>
                 <option value="admin">Admin</option>
                 <option value="sub-user">Sub-User</option>
@@ -28,17 +28,20 @@
                 <option value="editor">Editor</option>
             </select>
         </div>
-        <div class="mb-3">
-            <label for="restaurant" class="form-label">Restaurant</label>
-            <select id="role" name="role" class="form-select" required>
+
+        <div class="form-group">
+            <label for="restaurant">Restaurant</label>
+            <select id="restaurant" name="restaurant" class="form-select" required>
                 {% for restaurant in current_user.restaurants %}
                 <option value="{{restaurant.id}}">{{restaurant.name}}</option>
                 {% endfor %}
             </select>
         </div>
 
-        <button type="submit" class="btn btn-success">Add User</button>
-        <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Add User</button>
+            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
 </div>
 
