@@ -1273,6 +1273,80 @@ nav ul a.active {
   background-color: rgb(178.5, 178.5, 178.5);
 }
 
+.add-restaurant-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.add-restaurant-container .page-heading {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.add-restaurant-container .form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.add-restaurant-container .form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.add-restaurant-container .form .form-group label {
+  font-size: 1rem;
+  color: #333;
+  font-weight: 600;
+}
+.add-restaurant-container .form .form-group .form-input,
+.add-restaurant-container .form .form-group .form-select {
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  transition: border-color 0.3s ease;
+}
+.add-restaurant-container .form .form-group .form-input:focus,
+.add-restaurant-container .form .form-group .form-select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+.add-restaurant-container .form .form-actions {
+  display: flex;
+  justify-content: space-between;
+}
+.add-restaurant-container .form .form-actions .btn {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+.add-restaurant-container .form .form-actions .btn.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}
+.add-restaurant-container .form .form-actions .btn.btn-primary:hover {
+  background-color: rgb(0, 98.4, 204);
+}
+.add-restaurant-container .form .form-actions .btn.btn-secondary {
+  background-color: #ccc;
+  color: #fff;
+  border: none;
+}
+.add-restaurant-container .form .form-actions .btn.btn-secondary:hover {
+  background-color: rgb(178.5, 178.5, 178.5);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

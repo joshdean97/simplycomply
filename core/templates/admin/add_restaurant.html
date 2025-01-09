@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
 {% block title %}Add New Restaurant{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <h2>Add New Restaurant</h2>
-    <form method="POST" action="{{ url_for('admin.add_restaurant') }}">
-        <div class="mb-3">
-            <label for="name" class="form-label">Restaurant Name</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+<div class="add-restaurant-container">
+    <h2 class="page-heading">Add New Restaurant</h2>
+    <form method="POST" action="{{ url_for('admin.add_restaurant') }}" class="form">
+        <div class="form-group">
+            <label for="name">Restaurant Name</label>
+            <input type="text" id="name" name="name" class="form-input" required>
         </div>
 
-        <div class="mb-3">
-            <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="address" name="address" required>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address" class="form-input" required>
         </div>
 
-        <div class="mb-3">
-            <label for="admin_id" class="form-label">Assign Admin</label>
+        <div class="form-group">
+            <label for="admin_id">Assign Admin</label>
             <select id="admin_id" name="admin_id" class="form-select" required>
                 <option value="" disabled selected>Select Admin</option>
                 {% for admin in admins %}
@@ -24,8 +24,10 @@
             </select>
         </div>
 
-        <button type="submit" class="btn btn-success">Add Restaurant</button>
-        <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Add Restaurant</button>
+            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
 </div>
 {% endblock %}
