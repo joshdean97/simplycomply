@@ -22,13 +22,14 @@ def login():
             flash('Email does not exist.', 'error')
         else:
             # Log in the user
-            if user:
-                if not check_password_hash(user.password_hash, password):
-                    flash('Incorrect password.', 'error')
+            if user and check_password_hash(user.password_hash, password):
                 login_user(user, remember=True)
                 flash(f'Welcome back, {user.name}!', 'success')
-            print(current_user.name, current_user.role)
-            return redirect(url_for('views.dashboard'))  # Redirect to a protected page (adjust URL as needed)
+            else:
+                flash('Incorrect password.', 'error')
+                if hasattr(current_user, 'name') and hasattr(current_user, 'role'):
+                    print(current_user.name, current_user.role)
+        return redirect(url_for('views.dashboard'))  # Redirect to a protected page (adjust URL as needed)
     context = {
         'current_user': current_user
     }
@@ -85,5 +86,6 @@ def logout():
     user = current_user
     
     logout_user()
+    flash(f'Logged out!', 'success')
     return redirect(url_for('auth.login'))
 
