@@ -1,5 +1,5 @@
 # flask imports
-from flask import Flask, request, redirect, url_for, render_template, flash, session
+from flask import Flask, request, redirect, url_for, render_template, flash, session, g
 from flask_login import LoginManager, login_required, current_user
 
 
@@ -74,7 +74,7 @@ def create_app():
     def thank_you():
         return "Thank you for your message!"
     
-    from flask import session, g
+
 
     @app.before_request
     def ensure_default_restaurant():
