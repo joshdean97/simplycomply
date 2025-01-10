@@ -1,48 +1,44 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Upload File{% endblock %}
+
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-8 col-sm-10">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white text-center">
-                    <h3 class="mb-0">Upload File</h3>
+<div class="upload-container">
+    <div class="card upload-card">
+        <div class="card-header upload-card-header">
+            <h3 class="upload-heading">Upload File</h3>
+        </div>
+
+        <div class="card-body upload-card-body">
+            <form action="" method="POST" enctype="multipart/form-data" class="upload-form">
+                
+                <!-- File Upload Field -->
+                <div class="form-group">
+                    <label for="file" class="form-label">Choose a File</label>
+                    <input type="file" id="file" name="file" class="form-input" required>
                 </div>
 
-                <div class="card-body">
-                    <form action="" method="POST" enctype="multipart/form-data">
-                        
-                        <!-- File Upload Field -->
-                        <div class="mb-4">
-                            <label for="file" class="form-label fw-bold">Choose a File</label>
-                            <input type="file" class="form-control" id="file" name="file" required>
-                        </div>
-
-                        <!-- File Title Field -->
-                        <div class="mb-4">
-                            <label for="title" class="form-label fw-bold">File Title</label>
-                            <input type="text" class="form-control" id="title" name="title" 
-                                   placeholder="Enter a title for the file" required>
-                        </div>
-
-                        <!-- Category Dropdown -->
-                        <div class="mb-4">
-                            <label for="category" class="form-label fw-bold">Category</label>
-                            <select class="form-select" id="category" name="category" required>
-                                <option value="" selected>Select a category</option>
-                                {% for category in categories %}
-                                    <option value="{{ category }}">{{ category }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary fw-bold">Upload</button>
-                        </div>
-                    </form>
+                <!-- File Title Field -->
+                <div class="form-group">
+                    <label for="title" class="form-label">File Title</label>
+                    <input type="text" id="title" name="title" class="form-input" placeholder="Enter a title for the file" required>
                 </div>
-            </div>
+
+                <!-- Category Dropdown -->
+                <div class="form-group">
+                    <label for="category" class="form-label">Category</label>
+                    <select id="category" name="category" class="form-select" required>
+                        <option value="" selected>Select a category</option>
+                        {% for category in categories %}
+                            <option value="{{ category }}">{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
