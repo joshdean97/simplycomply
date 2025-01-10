@@ -1,0 +1,98 @@
+// Create Home
+// Variables for consistency
+$primary-color: #007bff;
+$secondary-color: #6c757d;
+$light-color: #f8f9fa;
+$dark-color: #343a40;
+$white-color: #ffffff;
+$gray-color: #6c757d;
+$font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+// Main container styling
+.create-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+    text-align: center;
+    min-height: calc(100vh - 21rem); // 16rem is the combined height of the header and footer
+}
+
+// Header styling
+.create-header {
+    margin-bottom: 2rem;
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: $dark-color;
+    }
+
+    .subtitle {
+        font-size: 1.25rem;
+        color: $gray-color;
+    }
+}
+
+// Grid layout for the creation cards
+.create-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    padding: 1rem;
+}
+
+// Card styling
+.create-card {
+    background-color: $white-color;
+    border-radius: 10px;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+
+    &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-icon {
+        color: $primary-color;
+        margin-bottom: 1rem;
+    }
+
+    .card-link {
+        text-decoration: none;
+        color: $dark-color;
+
+        h5 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 1rem;
+            color: $gray-color;
+        }
+
+        &:hover h5,
+        &:hover p {
+            color: $primary-color;
+        }
+    }
+}
+
+// Responsive design adjustments
+@media (max-width: 768px) {
+    .create-header .page-title {
+        font-size: 2rem;
+    }
+
+    .create-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .create-grid {
+        grid-template-columns: 1fr;
+    }
+}

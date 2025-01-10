@@ -1690,6 +1690,78 @@ nav ul a.active {
   background-color: rgb(0, 98.4, 204);
 }
 
+.create-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem;
+  text-align: center;
+  min-height: calc(100vh - 21rem);
+}
+
+.create-header {
+  margin-bottom: 2rem;
+}
+.create-header .page-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #343a40;
+}
+.create-header .subtitle {
+  font-size: 1.25rem;
+  color: #6c757d;
+}
+
+.create-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.create-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+.create-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+.create-card .card-icon {
+  color: #007bff;
+  margin-bottom: 1rem;
+}
+.create-card .card-link {
+  text-decoration: none;
+  color: #343a40;
+}
+.create-card .card-link h5 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+.create-card .card-link p {
+  font-size: 1rem;
+  color: #6c757d;
+}
+.create-card .card-link:hover h5, .create-card .card-link:hover p {
+  color: #007bff;
+}
+
+@media (max-width: 768px) {
+  .create-header .page-title {
+    font-size: 2rem;
+  }
+  .create-card {
+    padding: 1.5rem 1rem;
+  }
+  .create-grid {
+    grid-template-columns: 1fr;
+  }
+}
 * {
   box-sizing: border-box;
   margin: 0;
