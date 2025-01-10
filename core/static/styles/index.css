@@ -1762,6 +1762,110 @@ nav ul a.active {
     grid-template-columns: 1fr;
   }
 }
+.create-checklist-container {
+  max-width: 700px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-height: calc(100vh - 21rem);
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #343a40;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+  color: #343a40;
+}
+.form-group .form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #6c757d;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+.form-group .form-input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.checklist-item .checklist-input {
+  flex-grow: 1;
+}
+.checklist-item .remove-item-btn {
+  background-color: #dc3545;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.checklist-item .remove-item-btn:hover {
+  background-color: rgb(189.2151898734, 32.7848101266, 47.7721518987);
+}
+
+.add-item-btn {
+  margin-top: 1rem;
+  background-color: #6c757d;
+  color: #ffffff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.add-item-btn:hover {
+  background-color: rgb(84.3605150215, 91.3905579399, 97.6394849785);
+}
+
+.btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.btn.btn-primary {
+  background-color: #007bff;
+  color: #ffffff;
+}
+.btn.btn-primary:hover {
+  background-color: rgb(0, 98.4, 204);
+}
+.btn.btn-danger {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+.btn.btn-danger:hover {
+  background-color: rgb(189.2151898734, 32.7848101266, 47.7721518987);
+}
+
+.form-actions {
+  text-align: right;
+  margin-top: 1.5rem;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

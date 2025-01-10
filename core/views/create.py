@@ -100,7 +100,7 @@ def create_checklist():
             mimetype="application/pdf",
         )
     context = {"categories": CATEGORIES}
-    return render_template("create.html", **context)
+    return render_template("create/create_checklist.html", **context)
 
 
 @create.route("/alerts/", methods=["GET", "POST"])

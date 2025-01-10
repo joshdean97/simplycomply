@@ -2,6 +2,7 @@
 // Variables for consistency
 $primary-color: #007bff;
 $secondary-color: #6c757d;
+$danger-color: #dc3545;
 $light-color: #f8f9fa;
 $dark-color: #343a40;
 $white-color: #ffffff;
@@ -95,4 +96,137 @@ $font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     .create-grid {
         grid-template-columns: 1fr;
     }
+}
+
+// create checklist
+// Variables
+$primary-color: #007bff;
+$secondary-color: #6c757d;
+$danger-color: #dc3545;
+$light-color: #f8f9fa;
+$dark-color: #343a40;
+$white-color: #ffffff;
+$gray-color: #6c757d;
+$font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+// Container styling
+.create-checklist-container {
+    max-width: 700px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background-color: $white-color;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-height: calc(100vh - 21rem); // 16rem is the combined height of the header and footer
+}
+
+// Title styling
+.page-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: $dark-color;
+}
+
+// Form group styling
+.form-group {
+    margin-bottom: 1.5rem;
+
+    label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: block;
+        color: $dark-color;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid $gray-color;
+        border-radius: 5px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+
+        &:focus {
+            border-color: $primary-color;
+            outline: none;
+        }
+    }
+}
+
+// Checklist items styling
+.checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+
+    .checklist-input {
+        flex-grow: 1;
+    }
+
+    .remove-item-btn {
+        background-color: $danger-color;
+        color: $white-color;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: darken($danger-color, 10%);
+        }
+    }
+}
+
+// Add Item Button styling
+.add-item-btn {
+    margin-top: 1rem;
+    background-color: $secondary-color;
+    color: $white-color;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: darken($secondary-color, 10%);
+    }
+}
+
+// Button styling
+.btn {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &.btn-primary {
+        background-color: $primary-color;
+        color: $white-color;
+
+        &:hover {
+            background-color: darken($primary-color, 10%);
+        }
+    }
+
+    &.btn-danger {
+        background-color: $danger-color;
+        color: $white-color;
+
+        &:hover {
+            background-color: darken($danger-color, 10%);
+        }
+    }
+}
+
+// Form action buttons
+.form-actions {
+    text-align: right;
+    margin-top: 1.5rem;
 }

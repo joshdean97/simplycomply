@@ -1,17 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2>Create Checklist</h2>
-    <form method="POST" action="{{ url_for('create.create_checklist') }}">
-        <div class="mb-3">
-            <label for="name" class="form-label">Checklist Name</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+<div class="create-checklist-container">
+    <h2 class="page-title">Create Checklist</h2>
+    <form method="POST" action="{{ url_for('create.create_checklist') }}" class="checklist-form">
+        
+        <!-- Checklist Name -->
+        <div class="form-group">
+            <label for="name">Checklist Name</label>
+            <input type="text" id="name" name="name" class="form-input" placeholder="Enter checklist name" required>
         </div>
 
-        <div class="mb-3">
-            <label for="category_id" class="form-label">Category</label><br>
-            <select class="form-select" id="category_id" name="category_id">
+        <!-- Category Dropdown -->
+        <div class="form-group">
+            <label for="category_id">Category</label>
+            <select id="category_id" name="category_id" class="form-input">
                 <option value="">Select Category (Optional)</option>
                 {% for category in categories %}
                 <option value="{{ category }}">{{ category }}</option>
@@ -19,15 +22,19 @@
             </select>
         </div>
 
-        <div id="checklist-items" class="mb-3">
-            <label class="form-label">Checklist Items</label>
-            <div class="input-group mb-2">
-                <input type="text" name="items" class="form-control" placeholder="Enter an item" required>
-                <button type="button" class="btn btn-success" id="add-item">Add Another Item</button>
+        <!-- Checklist Items -->
+        <div class="form-group" id="checklist-items">
+            <label>Checklist Items</label>
+            <div class="checklist-item">
+                <input type="text" name="items" class="form-input checklist-input" placeholder="Enter an item" required>
             </div>
+            <button type="button" id="add-item" class="btn btn-secondary add-item-btn">Add Another Item</button>
         </div>
 
-        <button type="submit" class="btn btn-primary">Create Checklist</button>
+        <!-- Submit Button -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create Checklist</button>
+        </div>
     </form>
 </div>
 
@@ -35,19 +42,19 @@
     document.getElementById('add-item').addEventListener('click', function() {
         const container = document.getElementById('checklist-items');
         const inputGroup = document.createElement('div');
-        inputGroup.className = 'input-group mb-2';
+        inputGroup.classList.add('checklist-item');
 
         const input = document.createElement('input');
         input.type = 'text';
         input.name = 'items';
-        input.className = 'form-control';
+        input.className = 'form-input checklist-input';
         input.placeholder = 'Enter an item';
         input.required = true;
 
         const removeButton = document.createElement('button');
         removeButton.type = 'button';
-        removeButton.className = 'btn btn-danger';
         removeButton.textContent = 'Remove';
+        removeButton.className = 'btn btn-danger remove-item-btn';
 
         removeButton.addEventListener('click', function() {
             container.removeChild(inputGroup);
@@ -55,8 +62,7 @@
 
         inputGroup.appendChild(input);
         inputGroup.appendChild(removeButton);
-        container.appendChild(inputGroup);
+        container.insertBefore(inputGroup, document.getElementById('add-item'));
     });
 </script>
-
 {% endblock %}
