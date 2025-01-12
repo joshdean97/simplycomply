@@ -18,21 +18,6 @@ nav.navbar {
     z-index: 1000;
 }
 
-.mobile-nav ul {
-    display: flex;
-    flex-direction: column;
-    padding: 2rem;
-}
-
-.mobile-nav ul a {
-    margin: 1rem 0;
-}
-
-.mobile-nav ul li:hover {
-    background-color: $light-color;
-    border-radius: 10px;
-}
-
 .hidden {
     display: none;
 }
@@ -126,6 +111,14 @@ nav ul a.active {
     }
   }
 
+// Mobile menu
+.mobile-nav-list {
+    display: flex;
+    flex-direction: column;
+}
+.hidden {
+    display: none;
+}
 
 
 /* Hide the close-menu on larger screens */

@@ -99,6 +99,7 @@ function debounce(func, wait) {
 
 // Listen for scroll events with debounce
 window.addEventListener("scroll", debounce(handleScroll, 100));
+const menuToggle = document.getElementById("menu-toggle");
 menuToggle.addEventListener("click", () => {
   if (mobileNav && menuToggleIcon) {
     mobileNav.classList.toggle("hidden");
@@ -111,8 +112,3 @@ const closeMenu = document.getElementById("close-menu");
 const mobileNav = document.querySelector(".mobile-nav");
 const menuToggleIcon = document.getElementById("menu-toggle-icon");
 
-menuToggle.addEventListener("click", () => {
-  mobileNav.classList.toggle("hidden");
-  menuToggleIcon.classList.toggle("fa-bars");
-  menuToggleIcon.classList.toggle("fa-times");
-});
