@@ -1,9 +1,9 @@
 <nav class="navbar">
   <div class="logo">
     <h1>Simply Comply</h1>
-  </div>
-  <div class="menu-toggle" id="menu-toggle">
-    <i class="fas fa-bars" id="menu-toggle-icon"></i>
+    <span class="menu-toggle" id="menu-toggle">
+      <i class="fas fa-bars" id="menu-toggle-icon"></i>
+    </span>  
   </div>
   <ul class="nav-list" id="nav-list">
     {% if current_user.is_authenticated %}
@@ -42,49 +42,52 @@
     <li class="auth-link"><a href="{{ url_for('auth.register') }}">Sign Up</a></li>
     {% endif %}
   </ul>
+  <nav class="mobile-nav" id="mobile-nav">
+    <ul class="mobile-nav-list">
+      <span class="close-icon" id="close-icon">
+        <i class="fas fa-times"></i>
+      </span>
+        {% if current_user.is_authenticated %}
+        <li><a href="{{ url_for('views.index') }}">Home</a></li>
+        <li><a href="{{ url_for('views.templates') }}">Templates</a></li>
+  
+        {% if current_user.role == 'admin' %}
+        <li><a href="{{ url_for('admin.admin_dashboard') }}">Admin</a></li>
+        {% endif %}
+  
+        <li><a href="{{ url_for('views.profile') }}">Profile</a></li>
+        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+        <li><a href="{{ url_for('views.upload') }}">Upload</a></li>
+        <li><a href="{{ url_for('create.create_index') }}">Create</a></li>
+  
+        <!-- Restaurant Selection -->
+        <li>
+            <form method="POST" action="{{ url_for('select_restaurant') }}" class="restaurant-select-form">
+                <div class="dropdown-container">
+                    <select name="restaurant_id" class="restaurant-select" onchange="this.form.submit()">
+                        {% for restaurant in current_user.restaurants %}
+                        <option 
+                            value="{{ restaurant.id }}" 
+                            {% if restaurant.id == session['selected_restaurant_id'] %}selected{% endif %}>
+                            {{ restaurant.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </div>
+            </form>
+        </li>
+  
+        {% else %}
+        <li><a href="{{ url_for('views.index') }}">Home</a></li>
+        <li><a href="#features-section">Features</a></li>
+        <li><a href="#pricing-section">Pricing</a></li>
+        <li><a href="#contact-section">Contact</a></li>
+        <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+        <li><a href="{{ url_for('auth.register') }}">Sign Up</a></li>
+        {% endif %}
+    </ul>
+  </nav>
 </nav>
 <!-- Mobile Navigation -->
-<nav class="mobile-nav hidden" id="mobile-nav">
-  <ul class="mobile-nav-list">
-      {% if current_user.is_authenticated %}
-      <li><a href="{{ url_for('views.index') }}">Home</a></li>
-      <li><a href="{{ url_for('views.templates') }}">Templates</a></li>
-
-      {% if current_user.role == 'admin' %}
-      <li><a href="{{ url_for('admin.admin_dashboard') }}">Admin</a></li>
-      {% endif %}
-
-      <li><a href="{{ url_for('views.profile') }}">Profile</a></li>
-      <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
-      <li><a href="{{ url_for('views.upload') }}">Upload</a></li>
-      <li><a href="{{ url_for('create.create_index') }}">Create</a></li>
-
-      <!-- Restaurant Selection -->
-      <li>
-          <form method="POST" action="{{ url_for('select_restaurant') }}" class="restaurant-select-form">
-              <div class="dropdown-container">
-                  <select name="restaurant_id" class="restaurant-select" onchange="this.form.submit()">
-                      {% for restaurant in current_user.restaurants %}
-                      <option 
-                          value="{{ restaurant.id }}" 
-                          {% if restaurant.id == session['selected_restaurant_id'] %}selected{% endif %}>
-                          {{ restaurant.name }}
-                      </option>
-                      {% endfor %}
-                  </select>
-                  <i class="fas fa-chevron-down dropdown-icon"></i>
-              </div>
-          </form>
-      </li>
-
-      {% else %}
-      <li><a href="{{ url_for('views.index') }}">Home</a></li>
-      <li><a href="#features-section">Features</a></li>
-      <li><a href="#pricing-section">Pricing</a></li>
-      <li><a href="#contact-section">Contact</a></li>
-      <li><a href="{{ url_for('auth.login') }}">Login</a></li>
-      <li><a href="{{ url_for('auth.register') }}">Sign Up</a></li>
-      {% endif %}
-  </ul>
-</nav>
 

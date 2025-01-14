@@ -102,13 +102,17 @@ window.addEventListener("scroll", debounce(handleScroll, 100));
 const menuToggle = document.getElementById("menu-toggle");
 menuToggle.addEventListener("click", () => {
   if (mobileNav && menuToggleIcon) {
-    mobileNav.classList.toggle("hidden");
+    mobileNav.classList.toggle("open");
     menuToggleIcon.classList.toggle("fa-bars");
     menuToggleIcon.classList.toggle("fa-times");
   }
 });
 const navList = document.getElementById("nav-list");
-const closeMenu = document.getElementById("close-menu");
+const closeMenu = document.getElementById("close-icon");
 const mobileNav = document.querySelector(".mobile-nav");
 const menuToggleIcon = document.getElementById("menu-toggle-icon");
-
+closeMenu.addEventListener("click", () => {
+  mobileNav.classList.remove("open");
+  menuToggleIcon.classList.add("fa-bars");
+  menuToggleIcon.classList.remove("fa-times");
+});

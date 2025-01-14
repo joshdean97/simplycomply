@@ -109,13 +109,59 @@ nav ul a.active {
         pointer-events: none; // Prevents icon from blocking select interaction
       }
     }
-  }
+}
 
 // Mobile menu
+.mobile-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $white-color;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+
+    &.open {
+            transform: translateX(0);
+    }
+}
+
 .mobile-nav-list {
     display: flex;
+    .close-icon {
+        position: absolute;
+        top: 1rem;
+        right: 1.5rem;
+        font-size: 2rem;
+        color: $dark-color;
+        cursor: pointer;
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: $primary-color;
+        }
+    }
     flex-direction: column;
+    padding: 2rem;
+    & li {
+            padding: 1rem 0;
+            border-bottom: 1px solid $light-color;
+            text-align: center;
+    }
+    & a {
+            font-size: 1.2rem;
+            color: $dark-color;
+            text-decoration: none;
+            transition: color 0.3s ease;
+    }
+    & a:hover {
+            color: $primary-color;
+    }
 }
+
 .hidden {
     display: none;
 }
@@ -137,6 +183,13 @@ nav ul a.active {
 }
 
 @media (max-width: 769px) {
+    .navbar {
+        flex-direction: column;
+    } .logo {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
     .nav-list {
         display: none;
     }
