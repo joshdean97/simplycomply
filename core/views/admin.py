@@ -66,6 +66,29 @@ def add_user():
     return render_template("admin/add_user.html", admins=admins)
 
 
+@admin.route("/delete-user/<int:user_id>", methods=["POST", "GET"])
+@login_required
+@admin_required
+def delete_user(user_id):
+    if request.method == "POST":
+        user = User.query.get_or_404(user_id)
+
+        try:
+            # Remove all associations with restaurants
+            UserRestaurant.query.filter_by(user_id=user.id).delete()
+
+            db.session.delete(user)
+            db.session.commit()
+            flash("User deleted successfully!", "success")
+        except Exception as e:
+            db.session.rollback()
+            flash(f"An error occurred while deleting the user: {e}", "danger")
+
+        return redirect(url_for("admin.admin_dashboard"))
+    else:
+        return redirect(url_for("admin.admin_dashboard"))
+
+
 # edit user
 
 
@@ -203,8 +226,9 @@ def add_user_to_restaurant():
     return redirect(url_for("admin.admin_dashboard"))
 
 
-@admin.route("edit-restaurant/<int:restaurant_id>", methods=["POST", "GET"])
+@admin.route("/edit-restaurant/<int:restaurant_id>", methods=["POST", "GET"])
 @login_required
+@admin_required
 def edit_restaurant(restaurant_id):
     restaurant = Restaurant.query.get_or_404(restaurant_id)
     if request.method == "POST":
@@ -219,12 +243,45 @@ def edit_restaurant(restaurant_id):
         flash("Restaurant updated successfully!", "success")
         return redirect(url_for("admin.admin_dashboard"))
 
+    # Fetch users associated with the restaurant
+    restaurant_users = (
+        User.query.join(UserRestaurant)
+        .filter(UserRestaurant.restaurant_id == restaurant_id)
+        .all()
+    )
+
     context = {
-        "restaurant": Restaurant.query.filter(Restaurant.id == restaurant_id).first(),
+        "restaurant": restaurant,
         "admins": User.query.filter_by(role="admin").all(),
-        "user": current_user,
+        "restaurant_users": restaurant_users,
     }
     return render_template("admin/edit_restaurant.html", **context)
+
+
+@admin.route(
+    "/remove-user-restaurant/<int:user_id>/<int:restaurant_id>/",
+    methods=["POST", "GET"],
+)
+@login_required
+@admin_required
+def remove_user_restaurant(user_id, restaurant_id):
+    if request.method == "POST":
+        # Find the association
+        association = UserRestaurant.query.filter_by(
+            user_id=user_id, restaurant_id=restaurant_id
+        ).first()
+        if not association:
+            flash("This user is not associated with the selected restaurant.", "danger")
+            return redirect(url_for("admin.admin_dashboard"))
+
+        # Remove the association
+        db.session.delete(association)
+        db.session.commit()
+
+        flash("User removed from restaurant successfully!", "success")
+        return redirect(url_for("admin.admin_dashboard"))
+    else:
+        return redirect(url_for("admin.edit_restaurant", restaurant_id=restaurant_id))
 
 
 @admin.route("/delete-restaurant/<int:restaurant_id>", methods=["POST"])

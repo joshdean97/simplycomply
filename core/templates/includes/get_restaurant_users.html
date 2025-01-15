@@ -1,0 +1,21 @@
+<div class="restaurant-users">
+    <h3>Users for {{ restaurant.name }}</h3>
+    <ul>
+        {% if restaurant_users %}
+            {% for user in restaurant_users %}
+                
+                    <li>
+                        <div class="user-wrapper">
+                        {{ user.name }}
+                        <form action="{{ url_for('admin.remove_user_restaurant', user_id=user.id, restaurant_id=restaurant.id) }}" method="post">
+                            <button type="submit" class="delete-link">Remove</button>
+                        </form>
+                    </div>
+                    </li>
+                
+            {% endfor %}
+        {% else %}
+            <li>No users found.</li>
+        {% endif %}
+    </ul>
+</div>

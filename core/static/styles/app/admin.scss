@@ -47,7 +47,7 @@ $success-color: #28a745;
             margin-bottom: 1rem;
   
             th, td {
-              text-align: left;
+              text-align: center;
               padding: 0.75rem;
               border: 1px solid $gray-color;
             }
@@ -63,6 +63,14 @@ $success-color: #28a745;
   
             .edit-link {
               color: $primary-color;
+              text-decoration: none;
+  
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+            .delete-link {
+              color: $danger-color;
               text-decoration: none;
   
               &:hover {
@@ -362,6 +370,54 @@ $success-color: #28a745;
             }
           }
         }
+      }
+    }
+  }
+
+  .restaurant-users {
+    background-color: $white-color;
+    border-radius: 10px;
+
+    h3 {
+      font-size: 1rem;
+      color: $dark-color;
+    }
+    .user-wrapper {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+
+      li {
+        font-size: 1.2rem;
+        color: $dark-color;
+        border-bottom: 1px solid $gray-color;
+        padding: 1rem 0;
+        width: 100%;
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 5px;
+      text-decoration: none;
+      text-align: center;
+      transition: background-color 0.3s ease;
+      background-color: $danger-color;
+      color: $white-color;
+      border: none;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
       }
     }
   }

@@ -1206,7 +1206,7 @@ nav ul a.active {
   margin-bottom: 1rem;
 }
 .admin-panel-container .admin-sections .admin-card .admin-card-body .admin-table th, .admin-panel-container .admin-sections .admin-card .admin-card-body .admin-table td {
-  text-align: left;
+  text-align: center;
   padding: 0.75rem;
   border: 1px solid #ccc;
 }
@@ -1222,6 +1222,13 @@ nav ul a.active {
   text-decoration: none;
 }
 .admin-panel-container .admin-sections .admin-card .admin-card-body .admin-table .edit-link:hover {
+  text-decoration: underline;
+}
+.admin-panel-container .admin-sections .admin-card .admin-card-body .admin-table .delete-link {
+  color: #dc3545;
+  text-decoration: none;
+}
+.admin-panel-container .admin-sections .admin-card .admin-card-body .admin-table .delete-link:hover {
   text-decoration: underline;
 }
 .admin-panel-container .admin-sections .admin-card .admin-card-body .admin-table .restaurant-link {
@@ -1470,6 +1477,49 @@ nav ul a.active {
 }
 .edit-restaurant-container .form .form-actions .btn.btn-secondary:hover {
   background-color: rgb(178.5, 178.5, 178.5);
+}
+
+.restaurant-users {
+  background-color: #fff;
+  border-radius: 10px;
+}
+.restaurant-users h3 {
+  font-size: 1rem;
+  color: #333;
+}
+.restaurant-users .user-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.restaurant-users ul {
+  list-style-type: none;
+  padding: 0;
+}
+.restaurant-users ul li {
+  font-size: 1.2rem;
+  color: #333;
+  border-bottom: 1px solid #ccc;
+  padding: 1rem 0;
+  width: 100%;
+}
+.restaurant-users ul li:last-child {
+  border-bottom: none;
+}
+.restaurant-users button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+}
+.restaurant-users button:hover {
+  background-color: rgb(0, 98.4, 204);
 }
 
 .edit-user-container {
