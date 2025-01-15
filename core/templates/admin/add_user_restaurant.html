@@ -1,0 +1,28 @@
+<div class="admin-card">
+    <h4 class="admin-card-header">Add User to Restaurant</h4>
+    <div class="admin-card-body">
+        <form method="POST" action="{{ url_for('admin.add_user_to_restaurant') }}" class="form">
+            <div class="form-group">
+                <label for="user_id">Select User</label>
+                <select id="user_id" name="user_id" class="form-select" required>
+                    {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+    
+            <div class="form-group">
+                <label for="restaurant_id">Select Restaurant</label>
+                <select id="restaurant_id" name="restaurant_id" class="form-select" required>
+                    {% for restaurant in restaurants %}
+                    <option value="{{ restaurant.id }}">{{ restaurant.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+    
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Add User to Restaurant</button>
+            </div>
+        </form>
+    </div>
+</div>

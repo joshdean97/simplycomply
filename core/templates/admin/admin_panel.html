@@ -36,7 +36,9 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <a href="{{ url_for('admin.add_user') }}" class="btn btn-primary">Add New User</a>
+                <div class="form-actions">
+                    <a href="{{ url_for('admin.add_user') }}" class="btn btn-primary">Add New User</a>
+                </div>
             </div>
         </div>
 
@@ -68,9 +70,14 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <a href="{{ url_for('admin.add_restaurant') }}" class="btn btn-primary">Add New Restaurant</a>
+                <div class="form-actions">
+                    <a href="{{ url_for('admin.add_restaurant') }}" class="btn btn-primary">Add New Restaurant</a>
+                </div>
             </div>
         </div>
+        {% include 'admin/add_user_restaurant.html' %}
+
     </div>
+    
 </div>
 {% endblock %}

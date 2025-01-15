@@ -1,0 +1,112 @@
+Date : 2025-01-09 10:18:22
+Directory : c:\Users\joshu\OneDrive\Desktop\simplycomply
+Total : 63 files,  5169 codes, 268 comments, 879 blanks, all 6316 lines
+
+Languages
++------------------+------------+------------+------------+------------+------------+
+| language         | files      | code       | comment    | blank      | total      |
++------------------+------------+------------+------------+------------+------------+
+| SCSS             |         13 |      1,381 |         22 |        274 |      1,677 |
+| CSS              |          1 |      1,265 |          9 |         87 |      1,361 |
+| Python           |         19 |      1,251 |        187 |        380 |      1,818 |
+| HTML             |         26 |      1,089 |         40 |        107 |      1,236 |
+| JavaScript       |          1 |         95 |         10 |         14 |        119 |
+| Ini              |          1 |         38 |          0 |         13 |         51 |
+| pip requirements |          1 |         29 |          0 |          1 |         30 |
+| JSON             |          1 |         21 |          0 |          3 |         24 |
++------------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                      | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                         |         63 |      5,169 |        268 |        879 |      6,316 |
+| . (Files)                                                                                 |          3 |         54 |          0 |          5 |         59 |
+| core                                                                                      |         50 |      4,807 |        211 |        744 |      5,762 |
+| core (Files)                                                                              |          5 |        316 |         34 |         78 |        428 |
+| core\static                                                                               |         15 |      2,741 |         41 |        375 |      3,157 |
+| core\static (Files)                                                                       |          1 |         95 |         10 |         14 |        119 |
+| core\static\styles                                                                        |         14 |      2,646 |         31 |        361 |      3,038 |
+| core\static\styles (Files)                                                                |          6 |      1,634 |         21 |        176 |      1,831 |
+| core\static\styles\app                                                                    |          4 |        609 |          4 |        112 |        725 |
+| core\static\styles\landing                                                                |          4 |        403 |          6 |         73 |        482 |
+| core\templates                                                                            |         26 |      1,089 |         40 |        107 |      1,236 |
+| core\templates (Files)                                                                    |         11 |        527 |         26 |         40 |        593 |
+| core\templates\admin                                                                      |          6 |        243 |          2 |         26 |        271 |
+| core\templates\create                                                                     |          5 |        184 |         11 |         34 |        229 |
+| core\templates\includes                                                                   |          4 |        135 |          1 |          7 |        143 |
+| core\views                                                                                |          4 |        661 |         96 |        184 |        941 |
+| migrations                                                                                |         10 |        308 |         57 |        130 |        495 |
+| migrations (Files)                                                                        |          2 |        104 |         17 |         44 |        165 |
+| migrations\versions                                                                       |          8 |        204 |         40 |         86 |        330 |
++-------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| filename                                                                                  | language         | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\app.py                                       | Python           |          4 |          0 |          1 |          5 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\__init__.py                             | Python           |         96 |         24 |         36 |        156 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\const.py                                | Python           |         12 |          0 |          0 |         12 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\extensions.py                           | Python           |          5 |          0 |          2 |          7 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\functions.py                            | Python           |         65 |          3 |         15 |         83 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\models.py                               | Python           |        138 |          7 |         25 |        170 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\static\index.js                         | JavaScript       |         95 |         10 |         14 |        119 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\static\styles\app\admin.scss            | SCSS             |        228 |          2 |         43 |        273 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\static\styles\app\dashboard.scss        | SCSS             |        180 |          0 |         34 |        214 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\static\styles\app\generate-report.scss  | SCSS             |         93 |          2 |         17 |        112 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\static\styles\app\templates.scss        | SCSS             |        108 |          0 |         18 |        126 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\static\styles\auth.scss                 | SCSS             |         98 |          3 |         17 |        118 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\static\styles\footer.scss               | SCSS             |         86 |          1 |         15 |        102 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\static\styles\index.css                 | CSS              |      1,265 |          9 |         87 |      1,361 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\static\styles\index.scss                | SCSS             |         35 |          4 |         30 |         69 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\static\styles\landing\contact.scss      | SCSS             |         84 |          1 |         17 |        102 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\static\styles\landing\features.scss     | SCSS             |         87 |          3 |         15 |        105 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\static\styles\landing\hero.scss         | SCSS             |        104 |          1 |         17 |        122 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\static\styles\landing\pricing.scss      | SCSS             |        128 |          1 |         24 |        153 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\static\styles\navbar.scss               | SCSS             |        132 |          1 |         24 |        157 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\static\styles\variables.scss            | SCSS             |         18 |          3 |          3 |         24 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\admin\add_category.html       | HTML             |         15 |          0 |          3 |         18 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\admin\add_restaurant.html     | HTML             |         30 |          0 |          4 |         34 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\admin\add_user.html           | HTML             |         52 |          0 |          7 |         59 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\admin\admin_panel.html        | HTML             |         71 |          2 |          4 |         77 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\admin\edit_restaurant.html    | HTML             |         29 |          0 |          4 |         33 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\admin\edit_user.html          | HTML             |         46 |          0 |          4 |         50 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\base.html                     | HTML             |         47 |          1 |          2 |         50 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\confirm_mail.html             | HTML             |         15 |          0 |          1 |         16 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\create\create.html            | HTML             |         64 |          4 |         13 |         81 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\create\create_alert.html      | HTML             |         68 |          7 |          8 |         83 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\create\create_checklist.html  | HTML             |         52 |          0 |         11 |         63 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\create\create_docs.html       | HTML             |          0 |          0 |          1 |          1 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\create\create_incident.html   | HTML             |          0 |          0 |          1 |          1 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\create_restaurant.html        | HTML             |         25 |          0 |          1 |         26 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\dashboard.html                | HTML             |         40 |          1 |          4 |         45 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\includes\events.html          | HTML             |         29 |          0 |          1 |         30 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\includes\footer.html          | HTML             |         24 |          0 |          1 |         25 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\includes\generate_report.html | HTML             |         38 |          0 |          4 |         42 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\includes\nav.html             | HTML             |         44 |          1 |          1 |         46 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\index.html                    | HTML             |        100 |          0 |          2 |        102 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\login.html                    | HTML             |         48 |          4 |          4 |         56 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\pricing.html                  | HTML             |         80 |          3 |          5 |         88 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\profile.html                  | HTML             |         38 |          4 |          6 |         48 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\register.html                 | HTML             |         43 |          7 |          7 |         57 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\templates.html                | HTML             |         51 |          2 |          3 |         56 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\templates\upload.html                   | HTML             |         40 |          4 |          5 |         49 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\views\admin.py                          | Python           |        113 |         16 |         33 |        162 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\views\auth.py                           | Python           |         69 |          5 |         16 |         90 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\views\create.py                         | Python           |        218 |         38 |         61 |        317 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\core\views\views.py                          | Python           |        261 |         37 |         74 |        372 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\migrations\alembic.ini                       | Ini              |         38 |          0 |         13 |         51 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\migrations\env.py                            | Python           |         66 |         17 |         31 |        114 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\migrations\versions\0ad873169dec_.py         | Python           |         42 |          5 |         11 |         58 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\migrations\versions\4ef9c22f2f72_.py         | Python           |         17 |          5 |         11 |         33 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\migrations\versions\57b5db34be92_.py         | Python           |         31 |          5 |         11 |         47 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\migrations\versions\76abb0cd4f41_.py         | Python           |         17 |          5 |         11 |         33 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\migrations\versions\7a83f383a863_.py         | Python           |         37 |          5 |         11 |         53 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\migrations\versions\7e8dbd613248_.py         | Python           |         17 |          5 |         11 |         33 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\migrations\versions\bf7f812e67a0_.py         | Python           |         17 |          5 |         11 |         33 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\migrations\versions\d6b90f2b4da0_.py         | Python           |         26 |          5 |          9 |         40 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\package.json                                 | JSON             |         21 |          0 |          3 |         24 |
+| c:\Users\joshu\OneDrive\Desktop\simplycomply\requirements.txt                             | pip requirements |         29 |          0 |          1 |         30 |
+| Total                                                                                     |                  |      5,169 |        268 |        879 |      6,316 |
++-------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+

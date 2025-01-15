@@ -35,9 +35,11 @@
           </li>
     {% else %}
     <li class="nav-item"><a href="{{ url_for('views.index') }}">Home</a></li>
+    {% if request.endpoint == 'views.index' %}
     <li class="nav-item"><a href="#features-section">Features</a></li>
     <li class="nav-item"><a href="#pricing-section">Pricing</a></li>
     <li class="nav-item"><a href="#contact-section">Contact</a></li>
+    {% endif %}
     <li class="auth-link"><a href="{{ url_for('auth.login') }}">Login</a></li>
     <li class="auth-link"><a href="{{ url_for('auth.register') }}">Sign Up</a></li>
     {% endif %}

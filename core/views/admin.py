@@ -18,6 +18,8 @@ def admin_dashboard():
     context = {
         "current_user": current_user,
         "managed_users": User.query.filter(User.manager_id == current_user.id),
+        "restaurants": Restaurant.query.filter(Restaurant.admin_id == current_user.id),
+        "users": User.query.filter_by(manager_id=current_user.id).all(),
     }
     return render_template("admin/admin_panel.html", **context)
 
@@ -67,7 +69,7 @@ def add_user():
 # edit user
 
 
-@admin.route('/edit-user/<int:user_id>', methods=['GET', 'POST'])
+@admin.route("/edit-user/<int:user_id>", methods=["GET", "POST"])
 @login_required
 @admin_required
 def edit_user(user_id):
@@ -78,19 +80,22 @@ def edit_user(user_id):
     all_restaurants = Restaurant.query.all()
 
     # Get the user's current restaurants
-    user_restaurant_ids = [ur.restaurant_id for ur in UserRestaurant.query.filter_by(user_id=user.id).all()]
+    user_restaurant_ids = [
+        ur.restaurant_id for ur in UserRestaurant.query.filter_by(user_id=user.id).all()
+    ]
 
-    if request.method == 'POST':
+    if request.method == "POST":
         # Update user details
-        user.name = request.form['name']
-        user.email = request.form['email']
-        user.role = request.form['role']
+        user.name = request.form["name"]
+        user.email = request.form["email"]
+        user.role = request.form["role"]
 
         # Process restaurant associations
-        new_restaurant_ids = request.form.getlist('restaurant_ids')  # List of selected restaurant IDs
+        new_restaurant_ids = request.form.getlist(
+            "restaurant_ids"
+        )  # List of selected restaurant IDs
         new_restaurant_ids = list(map(int, new_restaurant_ids))
         print(f"Received restaurant IDs: {new_restaurant_ids}")
- 
 
         # Remove associations not in the updated list
         for ur in UserRestaurant.query.filter_by(user_id=user.id).all():
@@ -100,29 +105,35 @@ def edit_user(user_id):
         # Add new associations that are not currently linked
         for restaurant_id in new_restaurant_ids:
             if restaurant_id not in user_restaurant_ids:
-                new_association = UserRestaurant(user_id=user.id, restaurant_id=restaurant_id)
+                new_association = UserRestaurant(
+                    user_id=user.id, restaurant_id=restaurant_id
+                )
                 db.session.add(new_association)
 
         # Commit the changes to the database
         try:
             db.session.commit()
-            flash('User updated successfully!', 'success')
-            return redirect(url_for('admin.admin_dashboard'))
+            flash("User updated successfully!", "success")
+            return redirect(url_for("admin.admin_dashboard"))
         except Exception as e:
             db.session.rollback()
-            flash(f'An error occurred while updating the user: {e}', 'danger')
+            flash(f"An error occurred while updating the user: {e}", "danger")
 
     # Fetch available restaurants for the form
     available_restaurants = [
-        restaurant for restaurant in all_restaurants if restaurant.id not in user_restaurant_ids
+        restaurant
+        for restaurant in all_restaurants
+        if restaurant.id not in user_restaurant_ids
     ]
 
     return render_template(
-        'admin/edit_user.html',
+        "admin/edit_user.html",
         user=user,
         available_restaurants=available_restaurants,
-        user_restaurant_ids=user_restaurant_ids
+        user_restaurant_ids=user_restaurant_ids,
     )
+
+
 #                         Route to add a new restaurant                        #
 # ---------------------------------------------------------------------------- #
 @admin.route("/add-restaurant/", methods=["GET", "POST"])
@@ -144,6 +155,13 @@ def add_restaurant():
         new_restaurant = Restaurant(name=name, address=address, admin_id=admin_id)
         db.session.add(new_restaurant)
         db.session.commit()
+
+        new_user_restaurant = UserRestaurant(
+            user_id=current_user.id, restaurant_id=new_restaurant.id
+        )
+        db.session.add(new_user_restaurant)
+        db.session.commit()
+
         flash("Restaurant added successfully!", "success")
         return redirect(url_for("admin.admin_dashboard"))
 
@@ -151,8 +169,38 @@ def add_restaurant():
     context = {
         "current_user": current_user,
         "admins": User.query.filter_by(role="admin").all(),
+        "users": User.query.filter_by(manager_id=current_user.id).all(),
+        "restaurants": UserRestaurant.query.filter_by(user_id=current_user.id).all(),
     }
     return render_template("admin/add_restaurant.html", **context)
+    # Create association between the new restaurant and the admin user
+
+
+@admin.route("/add-user-restaurant/", methods=["POST"])
+@login_required
+@admin_required
+def add_user_to_restaurant():
+    user_id = request.form.get("user_id")
+    restaurant_id = request.form.get("restaurant_id")
+
+    # Check if the association already exists
+    existing_association = UserRestaurant.query.filter_by(
+        user_id=user_id, restaurant_id=restaurant_id
+    ).first()
+    if existing_association:
+        flash(
+            "This user is already associated with the selected restaurant.",
+            "danger",
+        )
+        return redirect(url_for("admin.admin_dashboard"))
+
+    # Create and save new association
+    new_association = UserRestaurant(user_id=user_id, restaurant_id=restaurant_id)
+    db.session.add(new_association)
+    db.session.commit()
+
+    flash("User added to restaurant successfully!", "success")
+    return redirect(url_for("admin.admin_dashboard"))
 
 
 @admin.route("edit-restaurant/<int:restaurant_id>", methods=["POST", "GET"])

@@ -43,6 +43,7 @@ def index():
         }
         return render_template("index.html", **context)
 
+
 # dashboard route - methods: get; returns user dashboard with compliance document data
 @views.route("/dashboard/", methods=["GET", "POST"])
 @login_required
@@ -73,7 +74,7 @@ def dashboard():
             or current_user.restaurants[0]
         )
         alerts = (
-            Alert.query.filter(Alert.restaurant_id == current_user.id)
+            Alert.query.filter(Alert.restaurant_id == selected_restaurant_id)
             .order_by(Alert.alert_time)
             .all()
         )
@@ -161,7 +162,7 @@ def upload():
         bucket_name = os.environ.get("BUCKET_NAME")
 
         # Build file key and file path
-        restaurant_id = request.form.get("restaurant")
+        restaurant_id = session.get("selected_restaurant_id")
         category = request.form.get("category")
         file_key = f"restaurant_{restaurant_id}/uploads/{category}/{new_filename}"
         file_path = f"https://{bucket_name}.s3.eu-west-1.amazonaws.com/{file_key}"

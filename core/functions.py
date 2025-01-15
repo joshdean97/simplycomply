@@ -63,6 +63,7 @@ def admin_required(f):
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+import urllib3
 
 
 def send_email():
@@ -72,11 +73,22 @@ def send_email():
         subject="Test Email",
         html_content="<strong>This is a test email.</strong>",
     )
+
     try:
+        # Disable SSL Warnings (Development Only)
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+        # Initialize SendGrid client with SSL verification disabled
         sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
+
+        # Disable SSL verification for SendGrid's internal HTTP calls
+        sg.client.verify = False
+        # Send the email
         response = sg.send(message)
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
+
+        print(f"Status Code: {response.status_code}")
+        print(f"Response Body: {response.body}")
+        print(f"Response Headers: {response.headers}")
+
     except Exception as e:
-        print(e)
+        print(f"Error sending email: {e}")
