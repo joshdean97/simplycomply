@@ -92,3 +92,18 @@ def send_email():
 
     except Exception as e:
         print(f"Error sending email: {e}")
+
+
+def convert_bytes(bytes):
+    if bytes < 1024:
+        # return bytes
+        return f"{bytes} bytes"
+    elif bytes < 1024**2:
+        # return KB
+        return f"{bytes / 1024:.2f} KB"
+    elif bytes < 1024**3:
+        # return MB
+        return f"{bytes / 1024 ** 2:.2f} MB"
+    else:
+        # return GB
+        return f"{bytes / 1024 ** 3:.2f} GB"

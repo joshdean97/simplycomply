@@ -226,6 +226,9 @@ def delete_document(document_id):
     return redirect(url_for("views.dashboard"))
 
 
+from ..functions import convert_bytes
+
+
 @views.route("/profile/", methods=["GET", "POST"])
 @login_required
 def profile():
@@ -268,6 +271,7 @@ def profile():
         "usage": usage_value,  # Now a float (e.g., 12.45)
         "usage_display": usage_str,  # Keep the original formatted string
         "usage_limit": user_usage_limit,
+        "convert_bytes": convert_bytes,
     }
 
     return render_template("profile.html", **context)

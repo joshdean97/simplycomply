@@ -68,12 +68,18 @@ class User(db.Model, UserMixin):
             return f"{self.total_usage_bytes / 1024 ** 3:.2f} GB"
 
     def get_usage_limit(self):
+        """
+        Returns the usage limit for the user based on their role and subscription plan.
+        If the user is not an admin, it retrieves the usage limit from their manager.
+        """
+        if self.role != "admin":
+            return self.manager_id.get_usage_limit()
         if self.subscription_plan == "basic":
-            return "1 GB"
+            return 1024**3  # 1 GB in bytes
         elif self.subscription_plan == "standard":
-            return "10 GB"
+            return 1024**3 * 10  # 10 GB in bytes
         else:
-            return "100 GB"
+            return 1024**3 * 100  # 100 GB in bytes
 
     def get_usage_limit_bytes(self):
         if self.subscription_plan == "basic":
