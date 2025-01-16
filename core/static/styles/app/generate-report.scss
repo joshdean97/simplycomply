@@ -16,12 +16,43 @@ $transition-speed: 0.3s;
 
     .form-header {
         margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
 
         .form-title {
             font-size: 1.8rem;
             font-weight: bold;
             color: $dark-color;
             text-align: center;
+            display: inline;
+        }
+        .report-dropdown {
+            #report-dropdown-icon {
+                font-size: 1.5rem;
+                color: $dark-color;
+                cursor: pointer;
+
+                &:hover {
+                    color: $primary-color;
+                }
+            }
+        }
+    }
+    .form-body {
+        display: none;
+    }
+    .show-form {
+        display: block;
+        animation: fadeIn $transition-speed ease;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
         }
     }
 

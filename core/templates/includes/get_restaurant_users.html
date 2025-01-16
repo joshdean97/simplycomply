@@ -8,7 +8,7 @@
                         <div class="user-wrapper">
                         {{ user.name }}
                         <form action="{{ url_for('admin.remove_user_restaurant', user_id=user.id, restaurant_id=restaurant.id) }}" method="post">
-                            <button type="submit" class="delete-link">Remove</button>
+                            <button type="submit" class="delete-link" {% if user.role == "admin"%}disabled{% endif %}>Remove</button>
                         </form>
                     </div>
                     </li>

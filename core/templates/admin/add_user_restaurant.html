@@ -5,6 +5,7 @@
             <div class="form-group">
                 <label for="user_id">Select User</label>
                 <select id="user_id" name="user_id" class="form-select" required>
+                    <option value="{{current_user.id}}">{{ current_user.name }}</option>
                     {% for user in users %}
                     <option value="{{ user.id }}">{{ user.name }}</option>
                     {% endfor %}

@@ -1,8 +1,12 @@
 <form method="POST" action="{{ url_for('views.generate_report') }}" class="report-form">
   <div class="form-header">
+    <div></div>
     <h4 class="form-title">Generate Report</h4>
+    <span class="report-dropdown">
+      <i class="fa-solid fa-circle-chevron-down fa-lg" id="report-dropdown-icon"></i>
+    </span>
   </div>
-
+  <div class="form-body">
   <div class="form-categories-grid">
     {% for category in categories %}
     <div class="form-category-item">
@@ -39,3 +43,14 @@
     <button type="submit" class="btn btn-primary">Generate Report</button>
   </div>
 </form>
+</div>
+<script>
+  const reportDropdown = document.querySelector('#report-dropdown-icon');
+  const formBody = document.querySelector('.form-body');
+
+  reportDropdown.addEventListener('click', () => {
+    formBody.classList.toggle('show-form');
+    reportDropdown.classList.toggle('fa-circle-chevron-down');
+    reportDropdown.classList.toggle('fa-circle-chevron-up');
+  });
+</script>

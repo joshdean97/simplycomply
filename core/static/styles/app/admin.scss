@@ -69,9 +69,13 @@ $success-color: #28a745;
                 text-decoration: underline;
               }
             }
-            .delete-link {
+            .delete-button {
+              background-color: $white-color;
               color: $danger-color;
-              text-decoration: none;
+              border: none;
+              cursor: pointer;
+              font-size: 1rem;
+              
   
               &:hover {
                 text-decoration: underline;
@@ -415,6 +419,11 @@ $success-color: #28a745;
       background-color: $danger-color;
       color: $white-color;
       border: none;
+
+      &:disabled {
+        background-color: $gray-color;
+        color: $white-color;
+      }
 
       &:hover {
         background-color: darken($primary-color, 10%);

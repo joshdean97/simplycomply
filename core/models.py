@@ -8,14 +8,17 @@ from datetime import datetime
 
 # Association Table for Sub-user Assignments
 class UserRestaurant(db.Model):
-    __tablename__ = 'user_restaurant'
+    __tablename__ = "user_restaurant"
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    restaurant_id = db.Column(
+        db.Integer, db.ForeignKey("restaurants.id"), nullable=False
+    )
 
     # Relationships to User and Restaurant
-    user = db.relationship('User', back_populates='user_restaurants')
-    restaurant = db.relationship('Restaurant', back_populates='restaurant_users')
+    user = db.relationship("User", back_populates="user_restaurants")
+    restaurant = db.relationship("Restaurant", back_populates="restaurant_users")
+
 
 # User Model
 class User(db.Model, UserMixin):
@@ -31,7 +34,9 @@ class User(db.Model, UserMixin):
         nullable=False,
     )
 
-    user_restaurants = db.relationship('UserRestaurant', back_populates='user', cascade='all, delete-orphan')
+    user_restaurants = db.relationship(
+        "UserRestaurant", back_populates="user", cascade="all, delete-orphan"
+    )
     restaurants = db.relationship(
         "Restaurant", back_populates="owner", foreign_keys="Restaurant.admin_id"
     )
@@ -43,6 +48,9 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def is_admin(self):
+        return self.role == "admin"
 
 
 # Restaurant Model
@@ -61,7 +69,9 @@ class Restaurant(db.Model):
     owner = db.relationship(
         "User", back_populates="restaurants", foreign_keys=[admin_id]
     )
-    restaurant_users = db.relationship('UserRestaurant', back_populates='restaurant', cascade='all, delete-orphan')
+    restaurant_users = db.relationship(
+        "UserRestaurant", back_populates="restaurant", cascade="all, delete-orphan"
+    )
     documents = db.relationship("Document", backref="restaurant", lazy=True)
 
 
