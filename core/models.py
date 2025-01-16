@@ -83,6 +83,9 @@ class User(db.Model, UserMixin):
         else:
             return 1024**5 * 100
 
+    def update_usage(self, file_size):
+        self.total_usage_bytes += file_size
+
 
 # Restaurant Model
 class Restaurant(db.Model):

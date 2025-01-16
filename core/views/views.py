@@ -91,7 +91,7 @@ def dashboard():
         return render_template("dashboard.html", **context)
     else:
         flash("You haven't assigned a restaurant yet.", "info")
-        return redirect(url_for("views.create_restaurant"))
+        return redirect(url_for("admin.add_restaurant"))
 
 
 @views.route("/create-restaurant/", methods=["GET", "POST"])
@@ -183,7 +183,9 @@ def upload():
 
             db.session.add(new_file)
             db.session.commit()
-            print(new_file.file_size + " bytes")
+            print(f"{new_file.file_size} bytes")
+            current_user.total_usage_bytes += int(new_file.file_size)
+            db.session.commit()
             flash("File uploaded successfully", "success")
             return redirect(url_for("views.dashboard"))
 
@@ -200,6 +202,7 @@ def upload():
 @login_required
 def delete_document(document_id):
     document = Document.query.get_or_404(document_id)
+    file_size = document.file_size
 
     # Delete the file from S3
     try:
@@ -209,6 +212,8 @@ def delete_document(document_id):
             f"https://{bucket_name}.s3.eu-west-1.amazonaws.com/"
         )[1]
         s3.delete_object(Bucket=bucket_name, Key=file_key)
+        current_user.total_usage_bytes -= file_size
+        db.session.commit()
     except Exception as e:
         flash(f"Error deleting file from S3: {str(e)}", "danger")
         return redirect(url_for("views.dashboard"))
