@@ -2266,6 +2266,111 @@ nav ul a.active {
   color: #6c757d;
 }
 
+.plan-page-container {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: #f8f9fa;
+}
+
+.plan-page-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #343a40;
+}
+
+.plan-page-subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 3rem;
+  color: #6c757d;
+}
+
+.plans-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.plan-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  padding: 2rem 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.plan-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+.plan-card .plan-header h3 {
+  font-size: 1.5rem;
+  color: #343a40;
+  margin-bottom: 1rem;
+}
+.plan-card .plan-price h2 {
+  font-size: 2.5rem;
+  color: #007bff;
+}
+.plan-card .plan-price h2 span {
+  font-size: 1rem;
+  color: #6c757d;
+}
+.plan-card .plan-features {
+  text-align: left;
+  margin-top: 1.5rem;
+}
+.plan-card .plan-features li {
+  font-size: 1rem;
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+  list-style-type: none;
+}
+.plan-card .plan-features li:before {
+  content: "\f058";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #28a745;
+  margin-right: 0.5rem;
+}
+.plan-card .btn-select-plan {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.8rem;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.plan-card .btn-select-plan:hover {
+  background-color: rgb(0, 98.4, 204);
+}
+.plan-card.basic .plan-header {
+  background-color: #f8f9fa;
+  color: #343a40;
+}
+.plan-card.standard .plan-header {
+  background-color: #f8f9fa;
+  color: #ffffff;
+}
+.plan-card.premium .plan-header {
+  background-color: #f8f9fa;
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .plans-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .plan-card {
+    width: 90%;
+  }
+}
 * {
   box-sizing: border-box;
   margin: 0;

@@ -21,7 +21,7 @@ from io import BytesIO
 from datetime import datetime
 
 # Local imports
-from ..models import Document, Restaurant, Template, Alert
+from ..models import Document, Restaurant, Template, Alert, User
 from ..extensions import db
 from ..const import CATEGORIES
 
@@ -184,7 +184,13 @@ def upload():
             db.session.add(new_file)
             db.session.commit()
             print(f"{new_file.file_size} bytes")
-            current_user.total_usage_bytes += int(new_file.file_size)
+            # if not admin, add usage to manager usage, else add to user usage
+            if current_user.role == "admin":
+                current_user.total_usage_bytes += int(new_file.file_size)
+            else:
+                manager = User.query.get(current_user.manager_id)
+                if manager:
+                    manager.total_usage_bytes += int(new_file.file_size)
             db.session.commit()
             flash("File uploaded successfully", "success")
             return redirect(url_for("views.dashboard"))
@@ -212,8 +218,16 @@ def delete_document(document_id):
             f"https://{bucket_name}.s3.eu-west-1.amazonaws.com/"
         )[1]
         s3.delete_object(Bucket=bucket_name, Key=file_key)
-        current_user.total_usage_bytes -= file_size
+
+        # if not admin, remove usage from manager usage, else remove from user usage
+        if current_user.role == "admin":
+            current_user.total_usage_bytes -= int(file_size)
+        else:
+            manager = User.query.get(current_user.manager_id)
+            if manager:
+                manager.total_usage_bytes -= int(file_size)
         db.session.commit()
+
     except Exception as e:
         flash(f"Error deleting file from S3: {str(e)}", "danger")
         return redirect(url_for("views.dashboard"))
@@ -402,3 +416,33 @@ def get_usage_in_gb():
     }
 
     return render_template("includes/usage.html", **context)
+
+
+@views.route("/choose-plan/<int:user_id>/", methods=["GET"])
+@login_required
+def choose_plan(user_id):
+    user = User.query.get_or_404(user_id)
+    context = {
+        "user": user,
+    }
+    return render_template("choose_plan.html", **context)
+
+
+@views.route("/upgrade-plan/<int:user_id>/", methods=["POST"])
+@login_required
+def upgrade_plan(user_id):
+    user = User.query.get_or_404(user_id)
+    plan = request.form.get("plan")
+
+    if plan == "basic":
+        user.subscription_plan = "basic"
+    elif plan == "standard":
+        user.subscription_plan = "standard"
+    else:
+        user.subscription_plan = "premium"
+
+    print(plan)
+
+    db.session.commit()
+    flash("Plan upgraded successfully!", "success")
+    return redirect(url_for("views.dashboard"))

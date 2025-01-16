@@ -27,7 +27,7 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
-    subscription_plan = db.Column(db.String(255), default="basic", nullable=False)
+    subscription_plan = db.Column(db.String(255))
     total_usage_bytes = db.Column(db.Integer, default=0, nullable=False)
 
     role = db.Column(

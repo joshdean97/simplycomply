@@ -5,7 +5,7 @@
     <div class="usage-content">
         <p class="usage-amount">{{ usage_display }}</p>  <!-- Display formatted text -->
         <div class="usage-bar-container">
-            <div class="usage-bar" style="width: {{ (usage / 100) * 100 | round(0) }}%;"></div>
+            <div class="usage-bar" style="width: {{ (usage / usage_limit) * 100 | round(0) }}%;"></div>
         </div>
         <p class="usage-note">Out of {{ convert_bytes(usage_limit) }}</p>
     </div>

@@ -1,0 +1,134 @@
+// Variables for consistent theming
+$primary-color: #007bff;
+$secondary-color: #6c757d;
+$success-color: #28a745;
+$warning-color: #ffc107;
+$danger-color: #dc3545;
+$light-color: #f8f9fa;
+$dark-color: #343a40;
+$white-color: #ffffff;
+$gray-color: #6c757d;
+
+// Plan Page Container
+.plan-page-container {
+    text-align: center;
+    padding: 4rem 2rem;
+    background-color: $light-color;
+}
+
+.plan-page-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: $dark-color;
+}
+
+.plan-page-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+    color: $gray-color;
+}
+
+// Plans Grid
+.plans-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+// Plan Card
+.plan-card {
+    background-color: $white-color;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    padding: 2rem 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .plan-header h3 {
+        font-size: 1.5rem;
+        color: $dark-color;
+        margin-bottom: 1rem;
+    }
+
+    .plan-price h2 {
+        font-size: 2.5rem;
+        color: $primary-color;
+
+        span {
+            font-size: 1rem;
+            color: $gray-color;
+        }
+    }
+
+    .plan-features {
+        text-align: left;
+        margin-top: 1.5rem;
+
+        li {
+            font-size: 1rem;
+            color: $gray-color;
+            margin-bottom: 0.5rem;
+            list-style-type: none;
+
+            &:before {
+                content: "\f058"; // FontAwesome check icon
+                font-family: "Font Awesome 5 Free";
+                font-weight: 900;
+                color: $success-color;
+                margin-right: 0.5rem;
+            }
+        }
+    }
+
+    .btn-select-plan {
+        width: 100%;
+        margin-top: 1.5rem;
+        padding: 0.8rem;
+        background-color: $primary-color;
+        color: $white-color;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: darken($primary-color, 10%);
+        }
+    }
+
+    // Plan Color Variants
+    &.basic .plan-header {
+        background-color: $light-color;
+        color: $dark-color;
+    }
+
+    &.standard .plan-header {
+        background-color: $light-color;
+        color: $white-color;
+    }
+
+    &.premium .plan-header {
+        background-color: $light-color;
+        color: $white-color;
+    }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+    .plans-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .plan-card {
+        width: 90%;
+    }
+}

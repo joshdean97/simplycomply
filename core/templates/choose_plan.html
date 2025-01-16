@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Choose Your Plan{% endblock %}
+
+{% block content %}
+<div class="plan-page-container">
+    <h1 class="plan-page-title">Choose Your Plan</h1>
+    <p class="plan-page-subtitle">Pick the plan that best fits your business. Cancel anytime.</p>
+
+    <form action="{{ url_for('views.upgrade_plan', user_id=user.id) }}" method="POST">
+        <div class="plans-container">
+
+            <!-- Basic Plan -->
+            <div class="plan-card basic">
+                <div class="plan-header">
+                    <h3>Basic</h3>
+                </div>
+                <div class="plan-price">
+                    <h2>£30<span>/month</span></h2>
+                </div>
+                <ul class="plan-features">
+                    <li>Up to 1 Restaurant</li>
+                    <li>50 Document Uploads</li>
+                    <li>Email Notifications</li>
+                    <li>Basic Support</li>
+                </ul>
+                <button type="submit" name="plan" value="basic" class="btn-select-plan">
+                    Choose Plan
+                </button>
+            </div>
+
+            <!-- Standard Plan -->
+            <div class="plan-card standard">
+                <div class="plan-header">
+                    <h3>Standard</h3>
+                </div>
+                <div class="plan-price">
+                    <h2>£75<span>/month</span></h2>
+                </div>
+                <ul class="plan-features">
+                    <li>Up to 3 Restaurants</li>
+                    <li>Unlimited Document Uploads</li>
+                    <li>Customizable Categories</li>
+                    <li>Priority Support</li>
+                </ul>
+                <button type="submit" name="plan" value="standard" class="btn-select-plan">
+                    Choose Plan
+                </button>
+            </div>
+
+            <!-- Premium Plan -->
+            <div class="plan-card premium">
+                <div class="plan-header">
+                    <h3>Premium</h3>
+                </div>
+                <div class="plan-price">
+                    <h2>£300<span>/month</span></h2>
+                </div>
+                <ul class="plan-features">
+                    <li>Unlimited Restaurants</li>
+                    <li>Unlimited Document Uploads</li>
+                    <li>Advanced Reporting</li>
+                    <li>24/7 Support</li>
+                </ul>
+                <button type="submit" name="plan" value="premium" class="btn-select-plan">
+                    Choose Plan
+                </button>
+            </div>
+
+        </div>
+    </form>
+</div>
+{% endblock %}
