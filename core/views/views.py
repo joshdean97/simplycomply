@@ -251,7 +251,21 @@ def profile():
 
         return redirect(url_for("views.profile"))
 
-    return render_template("profile.html")
+    usage_str = current_user.get_usage()  # Example: "12.45 GB"
+
+    # Extract the numeric part from the string
+    usage_value = float(usage_str.split()[0])  # This gets the number before the unit
+
+    user_usage_limit = current_user.get_usage_limit()
+    print(user_usage_limit)
+
+    context = {
+        "usage": usage_value,  # Now a float (e.g., 12.45)
+        "usage_display": usage_str,  # Keep the original formatted string
+        "usage_limit": user_usage_limit,
+    }
+
+    return render_template("profile.html", **context)
 
 
 @views.route("/generate-report/", methods=["POST", "GET"])
@@ -325,13 +339,6 @@ def generate_report():
         mimetype="application/pdf",
     )
 
-    categories = CATEGORIES
-    context = {
-        "current_user": current_user,
-        "categories": categories,
-    }
-    return redirect(url_for("views.dashboard"))
-
 
 @views.route("/templates/")
 @login_required
@@ -370,3 +377,19 @@ def templates():
         "templates": Template.query.all(),
     }
     return render_template("templates.html", **context)
+
+
+@views.route("/get-usage/")
+@login_required
+def get_usage_in_gb():
+    usage_str = current_user.get_usage()  # Example: "12.45 GB"
+
+    # Extract the numeric part from the string
+    usage_value = float(usage_str.split()[0])  # This gets the number before the unit
+
+    context = {
+        "usage": usage_value,  # Now a float (e.g., 12.45)
+        "usage_display": usage_str,  # Keep the original formatted string
+    }
+
+    return render_template("includes/usage.html", **context)

@@ -1,0 +1,12 @@
+<div class="usage-card">
+    <div class="usage-header">
+        <h3>Storage Usage</h3>
+    </div>
+    <div class="usage-content">
+        <p class="usage-amount">{{ usage_display }}</p>  <!-- Display formatted text -->
+        <div class="usage-bar-container">
+            <div class="usage-bar" style="width: {{ (usage / 100) * 100 | round(0) }}%;"></div>
+        </div>
+        <p class="usage-note">Out of {{ usage_limit }}</p>
+    </div>
+</div>

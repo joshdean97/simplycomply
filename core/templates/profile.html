@@ -8,6 +8,7 @@
         </div>
 
         <div class="card-body">
+            {% include 'includes/usage.html' %}
             <form method="POST" action="{{ url_for('views.profile') }}" class="form">
                 <!-- Full Name Field -->
                 <div class="form-group">
@@ -34,6 +35,7 @@
                     <button type="submit" class="btn btn-primary">Update Profile</button>
                 </div>
             </form>
+            
         </div>
     </div>
 </div>

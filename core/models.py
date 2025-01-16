@@ -53,6 +53,36 @@ class User(db.Model, UserMixin):
     def is_admin(self):
         return self.role == "admin"
 
+    def get_usage(self):
+        if self.total_usage_bytes < 1024:
+            # return bytes
+            return f"{self.total_usage_bytes} bytes"
+        elif self.total_usage_bytes < 1024**2:
+            # return KB
+            return f"{self.total_usage_bytes / 1024:.2f} KB"
+        elif self.total_usage_bytes < 1024**3:
+            # return MB
+            return f"{self.total_usage_bytes / 1024 ** 2:.2f} MB"
+        else:
+            # return GB
+            return f"{self.total_usage_bytes / 1024 ** 3:.2f} GB"
+
+    def get_usage_limit(self):
+        if self.subscription_plan == "basic":
+            return "1 GB"
+        elif self.subscription_plan == "standard":
+            return "10 GB"
+        else:
+            return "100 GB"
+
+    def get_usage_limit_bytes(self):
+        if self.subscription_plan == "basic":
+            return 1024**5
+        elif self.subscription_plan == "standard":
+            return 1024**5 * 10
+        else:
+            return 1024**5 * 100
+
 
 # Restaurant Model
 class Restaurant(db.Model):
