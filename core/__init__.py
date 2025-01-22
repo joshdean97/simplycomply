@@ -2,6 +2,7 @@
 from flask import Flask, request, redirect, url_for, render_template, flash, session, g
 from flask_login import LoginManager, login_required, current_user
 
+import stripe
 
 # filesystem imports
 from dotenv import load_dotenv, find_dotenv
@@ -36,6 +37,10 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     app.config["SQLALCHEMY_POOL_RECYCLE"] = 3600
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["STRIPE_PUBLIC_KEY"] = os.environ.get("STRIPE_TEST_PUBLIC")
+    app.config["STRIPE_SECRET_KEY"] = os.environ.get("STRIPE_TEST_SECRET")
+
+    stripe.api_key = app.config["STRIPE_SECRET_KEY"]
 
     # Initialize database
     db.init_app(app)
@@ -73,43 +78,45 @@ def create_app():
     @app.route("/thank-you")
     def thank_you():
         return "Thank you for your message!"
-    
-
 
     @app.before_request
     def ensure_default_restaurant():
         # Ensure user is authenticated
         if current_user.is_authenticated:
             # Check if a restaurant is already in session
-            if 'selected_restaurant_id' not in session:
+            if "selected_restaurant_id" not in session:
                 # Set default to the first restaurant in user's list
                 if current_user.restaurants:
-                    session['selected_restaurant_id'] = current_user.restaurants[0].id
+                    session["selected_restaurant_id"] = current_user.restaurants[0].id
                     g.selected_restaurant = current_user.restaurants[0]
                 else:
                     g.selected_restaurant = None  # No restaurants available
             else:
                 # Fetch the selected restaurant for use in the request context
                 g.selected_restaurant = next(
-                    (r for r in current_user.restaurants if r.id == session['selected_restaurant_id']),
-                    None
+                    (
+                        r
+                        for r in current_user.restaurants
+                        if r.id == session["selected_restaurant_id"]
+                    ),
+                    None,
                 )
 
-
-    @app.route('/select-restaurant', methods=['POST'])
+    @app.route("/select-restaurant", methods=["POST"])
     @login_required
     def select_restaurant():
-        selected_restaurant_id = request.form.get('restaurant_id')
+        selected_restaurant_id = request.form.get("restaurant_id")
         if selected_restaurant_id:
             # Validate the restaurant ID belongs to the current user
-            if any(r.id == int(selected_restaurant_id) for r in current_user.restaurants):
-                session['selected_restaurant_id'] = int(selected_restaurant_id)
-                flash('Restaurant selection updated.', 'success')
+            if any(
+                r.id == int(selected_restaurant_id) for r in current_user.restaurants
+            ):
+                session["selected_restaurant_id"] = int(selected_restaurant_id)
+                flash("Restaurant selection updated.", "success")
             else:
-                flash('Invalid restaurant selected.', 'danger')
-        return redirect(request.referrer or url_for('views.dashboard'))
+                flash("Invalid restaurant selected.", "danger")
+        return redirect(request.referrer or url_for("views.dashboard"))
 
-    
     @app.route("/test-email")
     def test_email():
         send_email()

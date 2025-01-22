@@ -3,6 +3,8 @@ from functools import wraps
 from flask_login import current_user
 from flask import flash, redirect, url_for
 
+from .const import ALLOWED_EXTENSIONS
+
 
 def check_password_strength(password):
     """
@@ -107,3 +109,7 @@ def convert_bytes(bytes):
     else:
         # return GB
         return f"{bytes / 1024 ** 3:.2f} GB"
+
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS

@@ -1,42 +1,75 @@
-{% extends 'base.html' %}
-{% block title %}Profile{% endblock %}
-{% block content %}
+{% extends 'base.html' %} {% block title %}Profile{% endblock %} {% block
+content %}
 <div class="profile-container">
-    <div class="card">
-        <div class="card-header">
-            <h3 class="profile-heading">Profile</h3>
-        </div>
-
-        <div class="card-body">
-            {% include 'includes/usage.html' %}
-            <form method="POST" action="{{ url_for('views.profile') }}" class="form">
-                <!-- Full Name Field -->
-                <div class="form-group">
-                    <label for="name" class="form-label">Full Name</label>
-                    <input type="text" id="name" name="name" class="form-input" value="{{ current_user.name }}" required>
-                </div>
-
-                <!-- Email Field -->
-                <div class="form-group">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" id="email" name="email" class="form-input" value="{{ current_user.email }}" required>
-                </div>
-
-                <!-- Password Field -->
-                <div class="form-group">
-                    <label for="password" class="form-label">New Password 
-                        <small class="form-helper">(Leave blank to keep current)</small>
-                    </label>
-                    <input type="password" id="password" name="password" class="form-input" placeholder="********">
-                </div>
-
-                <!-- Submit Button -->
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Update Profile</button>
-                </div>
-            </form>
-            
-        </div>
+  <div class="card">
+    <div class="card-header">
+      <h3 class="profile-heading">Profile</h3>
     </div>
+
+    <div class="card-body">
+      {% include 'includes/usage.html' %}
+      <form method="POST" action="{{ url_for('views.profile') }}" class="form">
+        <!-- Full Name Field -->
+        <div class="form-group">
+          <label for="name" class="form-label">Full Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="form-input"
+            value="{{ current_user.name }}"
+            required
+          />
+        </div>
+
+        <!-- Email Field -->
+        <div class="form-group">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-input"
+            value="{{ current_user.email }}"
+            required
+          />
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+          <label for="password" class="form-label"
+            >New Password
+            <small class="form-helper">(Leave blank to keep current)</small>
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-input"
+            placeholder="********"
+          />
+        </div>
+        <!-- Subscription Plan Field -->
+        <div class="form-group subscription-group">
+          <label for="subscription" class="form-label">Subscription Plan</label>
+          <div class="subscription-info">
+            <span class="subscription-plan"
+              >{{ current_user.subscription_plan.title() }}</span
+            >
+            <a
+              href="{{ url_for('views.choose_plan', user_id=current_user.id) }}"
+              class="btn btn-change-plan"
+              >Change Plan</a
+            >
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Update Profile</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}

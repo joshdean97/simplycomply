@@ -1814,6 +1814,56 @@ nav ul a.active {
   background-color: rgb(0, 98.4, 204);
 }
 
+.subscription-group {
+  margin-top: 1.5rem;
+}
+.subscription-group .form-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.subscription-group .subscription-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f8f9fa;
+  padding: 0.8rem 1rem;
+  border-radius: 5px;
+  border: 1px solid white;
+}
+.subscription-group .subscription-plan {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+.subscription-group .btn-change-plan {
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+.subscription-group .btn-change-plan:hover {
+  background-color: rgb(0, 98.4, 204);
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .subscription-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .subscription-info .btn-change-plan {
+    margin-top: 0.5rem;
+    width: 100%;
+    text-align: center;
+  }
+}
 .upload-container {
   max-width: 600px;
   margin: 2rem auto;
