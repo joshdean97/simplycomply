@@ -50,6 +50,7 @@ content %}
           />
         </div>
         <!-- Subscription Plan Field -->
+         {% if current_user.role == 'admin' %}
         <div class="form-group subscription-group">
           <label for="subscription" class="form-label">Subscription Plan</label>
           <div class="subscription-info">
@@ -63,6 +64,7 @@ content %}
             >
           </div>
         </div>
+        {% endif %}
 
         <!-- Submit Button -->
         <div class="form-actions">
