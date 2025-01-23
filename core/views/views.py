@@ -9,6 +9,8 @@ from flask import (
     session,
     send_file,
     jsonify,
+    abort,
+    Response,
 )
 from flask_login import current_user, login_required
 from werkzeug.security import generate_password_hash
@@ -27,7 +29,7 @@ import json
 from ..models import Document, Restaurant, Template, Alert, User
 from ..extensions import db
 from ..const import CATEGORIES
-from ..functions import allowed_file
+from ..functions import allowed_file, admin_required
 
 from PyPDF2 import PdfMerger
 
@@ -422,99 +424,3 @@ def choose_plan(user_id):
         "user": user,
     }
     return render_template("choose_plan.html", **context)
-
-
-@views.route("/upgrade-plan/<int:user_id>/", methods=["POST"])
-@login_required
-def upgrade_plan(user_id):
-    user = User.query.get_or_404(user_id)
-    plan = request.form.get("plan")
-
-    if plan == "basic":
-        user.subscription_plan = "basic"
-    elif plan == "standard":
-        user.subscription_plan = "standard"
-    else:
-        user.subscription_plan = "premium"
-
-    print(plan)
-
-    db.session.commit()
-    flash("Plan upgraded successfully!", "success")
-    return redirect(url_for("views.dashboard"))
-
-
-# stripe
-@views.route("/create-checkout-session", methods=["POST"])
-@login_required
-def create_checkout_session():
-    plan = request.form.get("plan")  # Get the selected plan (basic, standard, premium)
-
-    # Define the Stripe price IDs (from your Stripe Dashboard)
-    plan_prices = {
-        "basic": "price_1Qk1QX2M7cCdaKqq3Ck5Smy2",  # Replace with your Stripe Price ID
-        "standard": "price_1Qk1gV2M7cCdaKqqh1g2AZNq",
-        "enterprise": "price_1Qk1gy2M7cCdaKqqNC4SnWPM",
-    }
-
-    try:
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types=["card"],
-            line_items=[
-                {
-                    "price": plan_prices[plan],
-                    "quantity": 1,
-                }
-            ],
-            mode="subscription",
-            success_url=url_for("views.payment_success", _external=True),
-            cancel_url=url_for("views.payment_cancel", _external=True),
-            customer_email=current_user.email,  # Link the payment to the logged-in user
-        )
-
-        # Update the user's subscription plan in the database
-        current_user.subscription_plan = plan
-        db.session.commit()
-
-        return redirect(checkout_session.url)
-    except Exception as e:
-        return jsonify(error=str(e)), 400
-
-
-@views.route("/payment-success")
-@login_required
-def payment_success():
-    # Update user subscription in the database if needed
-    flash("Payment successful! Your subscription has been activated.", "success")
-    return redirect(url_for("views.profile"))
-
-
-@views.route("/payment-cancel")
-@login_required
-def payment_cancel():
-    flash("Payment was cancelled. Please try again.", "warning")
-    return redirect(url_for("views.choose_plan", user_id=current_user.id))
-
-
-@views.route("/webhook", methods=["POST"])
-def stripe_webhook():
-    payload = request.data
-    event = None
-
-    try:
-        event = stripe.Event.construct_from(json.loads(payload), stripe.api_key)
-    except ValueError as e:
-        return "Invalid payload", 400
-
-    # Handle successful payment
-    if event["type"] == "checkout.session.completed":
-        session = event["data"]["object"]
-        customer_email = session["customer_email"]
-
-        # Update the user's subscription in the database
-        user = User.query.filter_by(email=customer_email).first()
-        if user:
-            user.subscription_plan = session["display_items"][0]["plan"]["nickname"]
-            db.session.commit()
-
-    return "", 200

@@ -28,6 +28,8 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
     subscription_plan = db.Column(db.String(255))
+    stripe_customer_id = db.Column(db.String(255))
+    stripe_subscription_id = db.Column(db.String(255))
     total_usage_bytes = db.Column(db.Integer, default=0, nullable=False)
 
     role = db.Column(

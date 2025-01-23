@@ -51,12 +51,14 @@ def create_app():
     from .views.auth import auth
     from .views.admin import admin
     from .views.create import create
+    from .views.stripe import payments
 
     # Register routes
     app.register_blueprint(views)
     app.register_blueprint(auth)
     app.register_blueprint(admin)
     app.register_blueprint(create)
+    app.register_blueprint(payments)
 
     # contact form post route
     @app.route("/contact", methods=["GET", "POST"])
