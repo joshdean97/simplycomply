@@ -6,7 +6,11 @@
     <h1 class="plan-page-title">Choose Your Plan</h1>
     <p class="plan-page-subtitle">Pick the plan that best fits your business. Cancel anytime.</p>
 
+    {% if not user.stripe_subscription_id %}
     <form action="{{ url_for('payments.create_checkout_session') }}" method="POST">
+    {% else %}
+    <form action="{{ url_for('payments.update_plan') }}" method="POST">
+    {% endif %}
         <div class="plans-container">
 
             <!-- Basic Plan -->

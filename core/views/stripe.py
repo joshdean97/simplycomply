@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 
 from ..extensions import db
 from ..models import User
+from ..const import plan_prices
 
 import stripe
 import json
@@ -20,13 +21,6 @@ payments = Blueprint("payments", __name__)
 @login_required
 def create_checkout_session():
     plan = request.form.get("plan")  # Get the selected plan (basic, standard, premium)
-
-    # Define the Stripe price IDs
-    plan_prices = {
-        "basic": "price_1Qk1QX2M7cCdaKqq3Ck5Smy2",
-        "standard": "price_1Qk1gV2M7cCdaKqqh1g2AZNq",
-        "premium": "price_1Qk1gy2M7cCdaKqqNC4SnWPM",
-    }
 
     # Cancel the user's existing subscription if it exists
     if current_user.stripe_subscription_id:
@@ -125,27 +119,21 @@ def stripe_webhook():
         plan_nickname = data_object.get("plan").get("nickname")
 
         user = User.query.filter_by(email=customer_email).first()
-        print(f"User: {user}")
-        print(f"Customer ID: {customer_id}")
-        print(f"Subscription ID: {subscription_id}")
-        print(f"Plan: {plan_nickname}")
-
-        user.stripe_customer_id = customer_id
-        user.stripe_subscription_id = subscription_id
-        user.subscription_plan = plan_nickname
-        db.session.commit()
 
         if user:
-            print(
-                f"User: {user}, Subscription ID: {subscription_id}, Customer ID: {customer_id}"
-            )
-            # user.stripe_subscription_id = subscription_id
-            # user.subscription_plan = plan_nickname
-            # db.session.commit()
-            logging.info(f"Updated subscription for user {user.email}")
-        else:
-            logging.warning(f"No user found for customer ID: {customer_id}")
+            logging.info(f"User: {user}")
+            logging.info(f"Customer ID: {customer_id}")
+            logging.info(f"Subscription ID: {subscription_id}")
+            logging.info(f"Plan: {plan_nickname}")
 
+            # Update the user's subscription details
+            if not user.stripe_customer_id:
+                user.stripe_customer_id = customer_id
+            user.stripe_subscription_id = subscription_id
+            user.subscription_plan = plan_nickname
+            db.session.commit()
+
+        logging.info(f"Updated subscription for user {user.email}")
     elif event_type == "customer.subscription.deleted":
         # Subscription was canceled
         customer_id = data_object.get("customer")
@@ -159,8 +147,74 @@ def stripe_webhook():
             logging.info(f"Canceled subscription for user {user.email}")
         else:
             logging.warning(f"No user found for customer ID: {customer_id}")
+    elif event_type == "customer.deleted":
+        # Customer was deleted
+        customer_id = data_object.get("id")
+        user = User.query.filter_by(stripe_customer_id=customer_id).first()
 
+        if user:
+            # Clear the user's subscription details
+            user.stripe_customer_id = None
+            user.stripe_subscription_id = None
+            user.subscription_plan = None
+            db.session.commit()
+            logging.info(
+                f"Deleted customer {customer_id} and subscription for user {user.email}"
+            )
+        else:
+            logging.warning(f"No user found for customer ID: {customer_id}")
     else:
         logging.info(f"Unhandled event type: {event_type}")
 
     return jsonify({"status": "success"})
+
+
+@payments.route("/update-plan", methods=["POST"])
+@login_required
+def update_plan():
+    plan = request.form.get(
+        "plan"
+    )  # Get the selected plan (e.g., basic, standard, premium)
+
+    # Define the Stripe price IDs (replace with your actual price IDs)
+    plan_prices = {
+        "basic": "price_1Qk1QX2M7cCdaKqq3Ck5Smy2",
+        "standard": "price_1Qk1gV2M7cCdaKqqh1g2AZNq",
+        "premium": "price_1Qk1gy2M7cCdaKqqNC4SnWPM",
+    }
+
+    if current_user.stripe_subscription_id:
+        try:
+            # Retrieve the current subscription
+            subscription = stripe.Subscription.retrieve(
+                current_user.stripe_subscription_id
+            )
+
+            # Retrieve the subscription item's ID
+            subscription_item_id = subscription["items"]["data"][0]["id"]
+
+            # Update the subscription on Stripe
+            stripe.Subscription.modify(
+                current_user.stripe_subscription_id,
+                items=[
+                    {
+                        "id": subscription_item_id,  # Use the correct subscription item ID
+                        "price": plan_prices[plan],
+                    }
+                ],
+                proration_behavior="create_prorations",  # Ensure no extra charge for overlapping periods
+            )
+
+            # Update the user's subscription in the database
+            current_user.subscription_plan = plan
+            db.session.commit()
+
+            flash("Your subscription has been updated successfully!", "success")
+            return redirect(url_for("views.profile"))
+
+        except Exception as e:
+            flash(f"Error updating your subscription: {e}", "danger")
+            return redirect(url_for("views.profile"))
+    else:
+        flash("You don't have an active subscription to update.", "danger")
+        return redirect(url_for("views.profile"))
