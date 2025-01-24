@@ -3,10 +3,14 @@ from flask import Blueprint, request, flash, redirect, url_for, jsonify
 from flask_login import login_required, current_user
 
 from ..extensions import db
+from ..models import User
 
 import stripe
 import json
 import os
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 payments = Blueprint("payments", __name__)
 
@@ -46,12 +50,6 @@ def create_checkout_session():
             cancel_url=url_for("payments.payment_cancel", _external=True),
             customer_email=current_user.email,
         )
-        current_user.subscription_plan = plan
-        db.session.commit()
-        current_user.stripe_customer_id = checkout_session.customer
-        db.session.commit()
-        current_user.stripe_subscription_id = checkout_session.subscription
-
         return redirect(checkout_session.url)
     except Exception as e:
         flash(f"Error creating checkout session: {e}", "danger")
@@ -75,47 +73,94 @@ def payment_cancel():
 
 @payments.route("/stripe-webhook", methods=["POST"])
 def stripe_webhook():
-    # Replace this endpoint secret with your endpoint's unique secret
-    # If you are testing with the CLI, find the secret by running 'stripe listen'
-    # If you are using an endpoint defined with the API or dashboard, look in your webhook settings
-    # at https://dashboard.stripe.com/webhooks
     webhook_secret = os.environ.get("STRIPE_ENDPOINT_SECRET")
     request_data = json.loads(request.data)
 
+    event = None
     if webhook_secret:
-        # Retrieve the event by verifying the signature using the raw body and secret if webhook signing is configured.
+        # Verify the signature using the raw body and secret
         signature = request.headers.get("stripe-signature")
         try:
             event = stripe.Webhook.construct_event(
                 payload=request.data, sig_header=signature, secret=webhook_secret
             )
-            data = event["data"]
         except Exception as e:
-            return e
-        # Get the type of webhook event sent - used to check the status of PaymentIntents.
-        event_type = event["type"]
+            logging.error(f"Webhook signature verification failed: {e}")
+            return jsonify({"status": "error", "message": "Invalid signature"}), 400
     else:
-        data = request_data["data"]
-        event_type = request_data["type"]
-    data_object = data["object"]
+        event = request_data
 
-    print("event " + event_type)
+    # Get event type and event data
+    event_type = event["type"]
+    data_object = event["data"]["object"]
 
+    # Log the received event type
+    logging.info(f"Received event: {event_type}")
+
+    # Handle different event types
     if event_type == "checkout.session.completed":
-        print("🔔 Payment succeeded!")
-    elif event_type == "customer.subscription.trial_will_end":
-        print("Subscription trial will end")
-    elif event_type == "customer.subscription.created":
-        print("Subscription created %s", event.id)
-        print(f"Customer ID: {data_object.customer}")
+        # A new subscription was created via checkout
+        customer_id = data_object.get("customer")
+        subscription_id = data_object.get("subscription")
+
+        # Fetch user by Stripe customer ID
+        customer_email = data_object.get("customer_email")
+        user = User.query.filter_by(email=customer_email).first()
+        print(f"User: {user}")
+
+        if user:
+            # Update the user's subscription details
+            logging.info(f"Updated subscription for user {user.email}")
+        else:
+            logging.warning(f"No user found for customer ID: {customer_id}")
+
     elif event_type == "customer.subscription.updated":
-        print("Subscription created %s", event.id)
+        # A subscription was updated
+        customer_id = data_object.get("customer")
+        subscription_id = data_object.get("id")
+
+        customer_id = data_object.get("customer")  # Get the Stripe Customer ID
+        customer = stripe.Customer.retrieve(customer_id)  # Fetch customer details
+        customer_email = customer.get("email")  # Access the customer's email
+        plan_nickname = data_object.get("plan").get("nickname")
+
+        user = User.query.filter_by(email=customer_email).first()
+        print(f"User: {user}")
+        print(f"Customer ID: {customer_id}")
+        print(f"Subscription ID: {subscription_id}")
+        print(f"Plan: {plan_nickname}")
+
+        user.stripe_customer_id = customer_id
+        user.stripe_subscription_id = subscription_id
+        user.subscription_plan = plan_nickname
+        db.session.commit()
+
+        if user:
+            print(
+                f"User: {user}, Subscription ID: {subscription_id}, Customer ID: {customer_id}"
+            )
+            # user.stripe_subscription_id = subscription_id
+            # user.subscription_plan = plan_nickname
+            # db.session.commit()
+            logging.info(f"Updated subscription for user {user.email}")
+        else:
+            logging.warning(f"No user found for customer ID: {customer_id}")
+
     elif event_type == "customer.subscription.deleted":
-        # handle subscription canceled automatically based
-        # upon your subscription settings. Or if the user cancels it.
-        print("Subscription canceled: %s", event.id)
-    elif event_type == "entitlements.active_entitlement_summary.updated":
-        # handle active entitlement summary updated
-        print("Active entitlement summary updated: %s", event.id)
+        # Subscription was canceled
+        customer_id = data_object.get("customer")
+        user = User.query.filter_by(stripe_customer_id=customer_id).first()
+
+        if user:
+            # Clear the user's subscription details
+            user.stripe_subscription_id = None
+            user.subscription_plan = None
+            db.session.commit()
+            logging.info(f"Canceled subscription for user {user.email}")
+        else:
+            logging.warning(f"No user found for customer ID: {customer_id}")
+
+    else:
+        logging.info(f"Unhandled event type: {event_type}")
 
     return jsonify({"status": "success"})

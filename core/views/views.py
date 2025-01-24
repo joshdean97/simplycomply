@@ -284,6 +284,7 @@ def profile():
         "usage_display": usage_str,  # Keep the original formatted string
         "usage_limit": user_usage_limit,
         "convert_bytes": convert_bytes,
+        "user": current_user,
     }
 
     return render_template("profile.html", **context)
