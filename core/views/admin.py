@@ -7,6 +7,8 @@ from ..extensions import db
 from ..models import User, Restaurant, UserRestaurant
 from ..functions import admin_required
 
+import stripe
+
 # Blueprint initialization
 admin = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -155,6 +157,40 @@ def edit_user(user_id):
         available_restaurants=available_restaurants,
         user_restaurant_ids=user_restaurant_ids,
     )
+
+
+@admin.route("/delete-account", methods=["POST"])
+@login_required
+@admin_required
+def delete_account():
+    user = current_user  # Get the currently logged-in user
+
+    try:
+        # Delete user-related associations (e.g., restaurants, documents, etc.)
+        UserRestaurant.query.filter_by(user_id=user.id).delete()
+
+        # Cancel the user's Stripe subscription if it exists
+        if user.stripe_subscription_id:
+            try:
+                stripe.Subscription.delete(user.stripe_subscription_id)
+                flash("Your subscription has been canceled.", "success")
+            except Exception as e:
+                flash(f"Error canceling your subscription: {e}", "danger")
+                return redirect(url_for("views.profile"))
+
+        # Delete the user account
+        db.session.delete(user)
+        db.session.commit()
+
+        flash("Your account has been deleted successfully.", "success")
+        return redirect(
+            url_for("auth.login")
+        )  # Redirect to login or home page after deletion
+
+    except Exception as e:
+        db.session.rollback()
+        flash(f"An error occurred while deleting your account: {e}", "danger")
+        return redirect(url_for("views.profile"))
 
 
 #                         Route to add a new restaurant                        #
