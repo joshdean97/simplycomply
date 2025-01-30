@@ -362,43 +362,106 @@ def generate_report():
     )
 
 
-@views.route("/templates/")
+@views.route("/templates/", methods=["GET", "POST"])
 @login_required
 def templates():
     if request.method == "POST":
-        template_file = request.form.get("template_file")
-        template_name = request.form.get("template_name")
-        restaurant_id = request.form.get("restaurant_id")
-        category = request.form.get("category")
+        # Get form data
+        template_name = request.form.get("template_name", "").strip()
+        restaurant_id = session.get("selected_restaurant_id")
+        category = request.form.get("category", "").strip()
+        file_obj = request.files.get("template_file")
 
-        s3 = boto3.client("s3")
+        # Validate required fields
+        if not template_name or not restaurant_id or not category or not file_obj:
+            flash("All fields are required, including the file upload.", "error")
+            return redirect(url_for("views.templates"))
+
+        # Ensure restaurant_id is an integer
+        try:
+            restaurant_id = int(restaurant_id)
+        except ValueError:
+            flash("Invalid restaurant selection.", "error")
+            return redirect(url_for("views.templates"))
+
+        # Sanitize the file name
+        file_extension = os.path.splitext(file_obj.filename)[
+            1
+        ]  # Extract file extension
+        file_name = f"{uuid.uuid4().hex}{file_extension}"  # Generate a unique file name
+
+        # Get the S3 bucket name
         bucket_name = os.environ.get("BUCKET_NAME")
+        if not bucket_name:
+            flash("S3 bucket is not configured properly.", "error")
+            return redirect(url_for("views.templates"))
 
-        # Upload the template file to S3
-        file_key = f"restaurant_{restaurant_id}/templates/{template_file}"
-        s3.upload_fileobj(template_file, bucket_name, file_key)
+        # Set up S3
+        s3 = boto3.client("s3")
+        file_key = f"restaurant_{restaurant_id}/templates/{file_name}"
 
-        # Save the template record in the database
-        new_template = Template(
-            name=template_name,
-            file_path=f"https://{bucket_name}.s3.eu-west-1.amazonaws.com/{file_key}",
-            restaurant_id=restaurant_id,
-            category=category,
-            created_by=current_user.name,
-            uploaded_at=datetime.now(),
-        )
-        db.session.add(new_template)
-        db.session.commit()
-        flash("Successfully created", "success")
+        try:
+            # Upload file to S3
+            s3.upload_fileobj(file_obj, bucket_name, file_key)
+            print(f"Uploaded file to S3: {file_key}")
+
+            # Generate the S3 URL
+            file_url = f"https://{bucket_name}.s3.eu-west-1.amazonaws.com/{file_key}"
+
+            # Save the template record in the database
+            new_template = Template(
+                name=template_name,
+                template_path=file_url,
+                restaurant_id=restaurant_id,
+                category=category,
+                created_by=current_user.name,
+                uploaded_at=datetime.utcnow(),
+            )
+            db.session.add(new_template)
+            db.session.commit()
+
+            flash("Template successfully uploaded.", "success")
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Failed to upload the template: {str(e)}", "error")
+            return redirect(url_for("views.templates"))
 
         return redirect(url_for("views.templates"))
 
-    context = {
-        "categories": CATEGORIES,
-        "current_user": current_user,
-        "templates": Template.query.all(),
-    }
-    return render_template("templates.html", **context)
+    # Handle GET request (fetching templates)
+    templates = Template.query.order_by(Template.uploaded_at.desc()).all()
+
+    return render_template(
+        "templates.html",
+        categories=CATEGORIES,
+        current_user=current_user,
+        templates=templates,
+    )
+
+
+@views.route("/delete_template/<int:template_id>", methods=["POST"])
+@login_required
+def delete_template(template_id):
+    template = Template.query.get_or_404(template_id)
+
+    # Delete the file from S3
+    try:
+        s3 = boto3.client("s3")
+        bucket_name = os.environ.get("BUCKET_NAME")
+        file_key = template.template_path.split(
+            f"https://{bucket_name}.s3.eu-west-1.amazonaws.com/"
+        )[1]
+        s3.delete_object(Bucket=bucket_name, Key=file_key)
+    except Exception as e:
+        flash(f"Error deleting file from S3: {str(e)}", "danger")
+        return redirect(url_for("views.templates"))
+
+    # Delete the template from the database
+    db.session.delete(template)
+    db.session.commit()
+
+    flash("Template deleted successfully.", "success")
+    return redirect(url_for("views.templates"))
 
 
 @views.route("/get-usage/")

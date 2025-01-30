@@ -4,7 +4,7 @@
 {% block content %}
 <div class="templates-container">
   <!-- Form to upload template file -->
-  <form method="POST" class="upload-form">
+  <form method="POST" class="upload-form" action="{{ url_for('views.templates') }}" enctype="multipart/form-data">
     <h3 class="form-heading">Upload New Template</h3>
     <div class="form-group">
       <label for="template_file">Template File</label>
@@ -13,14 +13,6 @@
     <div class="form-group">
       <label for="template_name">Template Name</label>
       <input type="text" id="template_name" name="template_name" class="form-input" required>
-    </div>
-    <div class="form-group">
-      <label for="restaurant">Restaurant</label>
-      <select id="restaurant" name="restaurant" class="form-select" required>
-        {% for restaurant in current_user.restaurants %}
-        <option value="{{ restaurant.id }}">{{ restaurant.name }}</option>
-        {% endfor %}
-      </select>
     </div>
     <div class="form-group">
       <label for="category">Category</label>
@@ -34,22 +26,33 @@
     <button type="submit" class="btn btn-primary">Upload</button>
   </form>
 
-  <!-- Templates List -->
-  <h3 class="templates-heading">Templates</h3>
-  {% if not templates %}
-  <div class="no-templates">No documents found for this restaurant.</div>
-  {% else %}
-  <div class="templates-list">
-    {% for template in templates %}
-    <div class="template-card">
-      <div class="template-info">
-        <h5 class="template-name">{{ template.name }}</h5>
-        <p class="template-author">Created by: {{ template.author }}</p>
-        <a href="{{ url_for('templates.view_template', template_id=template.id) }}" class="btn btn-secondary">View</a>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
+<!-- Templates List -->
+<h3 class="templates-heading">Templates</h3>
+
+{% if not templates %}
+<div class="no-templates">
+  <p>No documents found for this restaurant.</p>
 </div>
+{% else %}
+<div class="templates-grid">
+  {% for template in templates %}
+  <div class="template-card">
+    <div class="template-card-header">
+      <h5 class="template-name">{{ template.name }}</h5>
+      <p class="template-author">Created by: {{ template.created_by }}</p>
+    </div>
+    <div class="template-card-footer">
+      <a href="{{ template.file_path }}" target="_blank" class="btn-view">
+        <i class="fa-solid fa-eye"></i> View
+      </a>
+      <form method="POST" action="{{ url_for('views.delete_template', template_id=template.id) }}" onsubmit="return confirm('Are you sure you want to delete this template?');">
+        <button type="submit" class="btn-delete">
+          <i class="fa-solid fa-trash"></i> Delete
+        </button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
 {% endblock %}

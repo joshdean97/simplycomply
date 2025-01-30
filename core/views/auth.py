@@ -6,6 +6,8 @@ from ..models import User
 from ..extensions import db
 from ..functions import check_password_strength
 
+from datetime import datetime
+
 # auth blueprint
 auth = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -27,13 +29,16 @@ def login():
                 login_user(user, remember=True)
                 flash(f"Welcome back, {user.name}!", "success")
                 if user.subscription_plan == None:
-                    return redirect(url_for("views.choose_plan"))
+                    return redirect(url_for("views.choose_plan", user_id=user.id))
                 else:
                     return redirect(
                         url_for("views.dashboard")
                     )  # Redirect to a protected page (adjust URL as needed)
             else:
                 flash("Incorrect password.", "error")
+
+    current_user.last_login = datetime.now()
+    db.session.commit()
 
     context = {"current_user": current_user}
 

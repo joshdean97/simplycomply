@@ -31,6 +31,7 @@ class User(db.Model, UserMixin):
     stripe_customer_id = db.Column(db.String(255))
     stripe_subscription_id = db.Column(db.String(255))
     total_usage_bytes = db.Column(db.Integer, default=0, nullable=False)
+    last_login = db.Column(db.DateTime, default=datetime.now())
 
     role = db.Column(
         db.Enum("admin", "sub-user", "viewer", "editor", name="user_roles"),
@@ -172,8 +173,9 @@ class Template(db.Model):
         nullable=False,
     )
     created_at = db.Column(db.DateTime, default=datetime.now())
-    created_by = db.Column(db.String(255))
+    uploaded_at = db.Column(db.String(255))
     restaurant_id = db.Column(db.Integer)
+    created_by = db.Column(db.String(255))
 
 
 alert_recipients = db.Table(

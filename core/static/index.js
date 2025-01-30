@@ -148,3 +148,13 @@ const countdownfunction = setInterval(() => {
         document.querySelector(".countdown").innerHTML = "We have launched!";
     }
 }, 1000);
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const features = document.querySelectorAll(".feature-card");
+  features.forEach((feature, index) => {
+      setTimeout(() => {
+          feature.classList.add("fade-in");
+      }, index * 200);
+  });
+});
