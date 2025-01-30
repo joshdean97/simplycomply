@@ -26,19 +26,27 @@ DB_NAME = "database.db"
 # ---------------------------------------------------------------------------- #
 
 
-def create_app():
+def create_app(phase):
     app = Flask(__name__)
 
     # app configuration
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
-    db_uri = os.environ.get("DB_URI")
+    if phase == "development":
+        db_uri = os.environ.get("DB_URI_DEV")
+    elif phase == "production":
+        db_uri = os.environ.get("DB_URI_PROD")
     if not db_uri:
         raise ValueError("No DB_URI environment variable set")
     app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     app.config["SQLALCHEMY_POOL_RECYCLE"] = 3600
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["STRIPE_PUBLIC_KEY"] = os.environ.get("STRIPE_TEST_PUBLIC")
-    app.config["STRIPE_SECRET_KEY"] = os.environ.get("STRIPE_TEST_SECRET")
+    if phase == "production":
+        app.config["STRIPE_PUBLIC_KEY"] = os.environ.get("STRIPE_TEST_PUBLIC")
+        app.config["STRIPE_SECRET_KEY"] = os.environ.get("STRIPE_TEST_SECRET")
+
+    if phase == "development":
+        app.config["STRIPE_PUBLIC_KEY"] = os.environ.get("STRIPE_PUBLIC_KEY")
+        app.config["STRIPE_SECRET_KEY"] = os.environ.get("STRIPE_SECRET_KEY")
 
     stripe.api_key = app.config["STRIPE_SECRET_KEY"]
 
