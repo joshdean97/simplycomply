@@ -148,9 +148,6 @@ def create_app(phase):
     def inject_year():
         return {"current_year": datetime.now().year}
 
-    # create database if one doesn't exist
-    create_database(app)
-
     # login manager
     login_manager = LoginManager()
     login_manager.init_app(app)
@@ -163,10 +160,3 @@ def create_app(phase):
         return User.query.get(int(user_id))
 
     return app
-
-
-def create_database(app):
-    if not path.exists("core/database.db"):
-        with app.app_context():
-            db.create_all()
-        print("Database created successfully")

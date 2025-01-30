@@ -3,7 +3,17 @@ from functools import wraps
 from flask_login import current_user
 from flask import flash, redirect, url_for
 
+from .extensions import db
+from os import path
+
 from .const import ALLOWED_EXTENSIONS
+
+
+def create_database(app):
+    if not path.exists("core/database.db"):
+        with app.app_context():
+            db.create_all()
+        print("Database created successfully")
 
 
 def check_password_strength(password):
