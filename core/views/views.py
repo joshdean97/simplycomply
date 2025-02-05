@@ -286,8 +286,10 @@ def profile():
         "convert_bytes": convert_bytes,
         "user": current_user,
     }
-
-    return render_template("profile.html", **context)
+    try:
+        return render_template("profile.html", **context)
+    except Exception as e:
+        return str(e)
 
 
 @views.route("/generate-report/", methods=["POST", "GET"])
