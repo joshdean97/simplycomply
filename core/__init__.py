@@ -37,7 +37,7 @@ def create_app(phase):
         db_uri = os.environ.get("DB_URI_PROD")
     if not db_uri:
         raise ValueError("No DB_URI environment variable set")
-    app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DB_URI_DEV")
     app.config["SQLALCHEMY_POOL_RECYCLE"] = 3600
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     if phase == "production":
