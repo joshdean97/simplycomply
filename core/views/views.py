@@ -289,7 +289,7 @@ def profile():
     try:
         return render_template("profile.html", **context)
     except Exception as e:
-        return str(e)
+        return f"Error: {str(e)}"
 
 
 @views.route("/generate-report/", methods=["POST", "GET"])
