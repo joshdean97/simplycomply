@@ -38,12 +38,8 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DB_URI")
     app.config["SQLALCHEMY_POOL_RECYCLE"] = 3600
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["STRIPE_PUBLIC_KEY"] = (
-        "pk_test_51Qk0o72M7cCdaKqqNnQJSoaX1WyGZwszdBKfKwBwkPvISb10FTw2o8BOXNVwPYSUrgUKalAJrcVVLp4GV52euU5E00owSPKT17"
-    )
-    app.config["STRIPE_SECRET_KEY"] = (
-        "sk_test_51Qk0o72M7cCdaKqqmt0cadVKi89EsND8Op4L3azi4EbrNlJrOJOLRej6wngQxawnym6jd8m9FLjt416AUw1iojPq00MjR1IAJS"
-    )
+    app.config["STRIPE_PUBLIC_KEY"] = os.environ.get("STRIPE_TEST_PUBLIC")
+    app.config["STRIPE_SECRET_KEY"] = os.environ.get("STRIPE_SECRET_KEY")
 
     stripe.api_key = app.config["STRIPE_SECRET_KEY"]
 
