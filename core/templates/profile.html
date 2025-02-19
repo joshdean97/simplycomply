@@ -55,7 +55,7 @@ content %}
           <label for="subscription" class="form-label">Subscription Plan</label>
           <div class="subscription-info">
             <span class="subscription-plan"
-              >{{ user.subscription_plan.title() }}</span
+              >{{ user.subscription_plan }}</span
             >
             <a
               href="{{ url_for('views.choose_plan', user_id=current_user.id) }}"

@@ -31,8 +31,7 @@ def create_app():
 
     # app configuration
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
-    db_uri = os.environ.get("DB_URI_DEV")
-    db_uri = os.environ.get("DB_URI_PROD")
+    db_uri = os.environ.get("DB_URI")
     if not db_uri:
         raise ValueError("No DB_URI environment variable set")
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DB_URI")
