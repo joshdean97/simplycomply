@@ -73,6 +73,8 @@ def stripe_webhook():
         return jsonify({"status": "error", "message": "Webhook secret not found"}), 400
 
     signature = request.headers.get("stripe-signature")
+    logging.info(f"Received signature: {signature}")
+
     try:
         # Verify the signature using the raw body and secret
         event = stripe.Webhook.construct_event(
@@ -80,6 +82,8 @@ def stripe_webhook():
         )
     except stripe.error.SignatureVerificationError as e:
         logging.error(f"Signature verification failed: {e}")
+        logging.error(f"Request data: {request.data}")
+        logging.error(f"Webhook secret: {webhook_secret}")
         return jsonify({"status": "error", "message": "Invalid signature"}), 400
     except Exception as e:
         logging.error(f"Error processing webhook: {e}")
@@ -92,6 +96,8 @@ def stripe_webhook():
     logging.info(f"Received event: {event_type}")
     logging.info(f"Event data: {data_object}")
 
+    # Event processing logic goes here...
+    # For example:
     if event_type == "checkout.session.completed":
         # Handle checkout.session.completed event
         pass
@@ -100,9 +106,6 @@ def stripe_webhook():
         pass
     elif event_type == "customer.subscription.deleted":
         # Handle customer.subscription.deleted event
-        pass
-    elif event_type == "customer.deleted":
-        # Handle customer.deleted event
         pass
     else:
         logging.info(f"Unhandled event type: {event_type}")
