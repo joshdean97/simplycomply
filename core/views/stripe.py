@@ -68,103 +68,42 @@ def payment_cancel():
 @payments.route("/stripe-webhook", methods=["POST"])
 def stripe_webhook():
     webhook_secret = os.environ.get("STRIPE_WEBHOOK_SECRET")
-    request_data = json.loads(request.data)
+    if not webhook_secret:
+        logging.error("Missing STRIPE_WEBHOOK_SECRET environment variable")
+        return jsonify({"status": "error", "message": "Webhook secret not found"}), 400
 
-    event = None
-    if webhook_secret:
+    signature = request.headers.get("stripe-signature")
+    try:
         # Verify the signature using the raw body and secret
-        signature = request.headers.get("stripe-signature")
-        try:
-            event = stripe.Webhook.construct_event(
-                payload=request.data, sig_header=signature, secret=webhook_secret
-            )
-        except Exception as e:
-            logging.error(
-                f"{signature} {request.data} {webhook_secret} Error verifying webhook signature: {e}"
-            )
-            return jsonify({"status": "error", "message": "Invalid signature"}), 400
-    else:
-        event = request_data
+        event = stripe.Webhook.construct_event(
+            payload=request.data, sig_header=signature, secret=webhook_secret
+        )
+    except stripe.error.SignatureVerificationError as e:
+        logging.error(f"Signature verification failed: {e}")
+        return jsonify({"status": "error", "message": "Invalid signature"}), 400
+    except Exception as e:
+        logging.error(f"Error processing webhook: {e}")
+        return jsonify({"status": "error", "message": "Internal server error"}), 500
 
-    # Get event type and event data
+    # Handle different event types
     event_type = event["type"]
     data_object = event["data"]["object"]
 
-    # Log the received event type
     logging.info(f"Received event: {event_type}")
+    logging.info(f"Event data: {data_object}")
 
-    # Handle different event types
     if event_type == "checkout.session.completed":
-        # A new subscription was created via checkout
-        customer_id = data_object.get("customer")
-        subscription_id = data_object.get("subscription")
-
-        # Fetch user by Stripe customer ID
-        customer_email = data_object.get("customer_email")
-        user = User.query.filter_by(email=customer_email).first()
-        print(f"User: {user}")
-
-        if user:
-            # Update the user's subscription details
-            logging.info(f"Updated subscription for user {user.email}")
-        else:
-            logging.warning(f"No user found for customer ID: {customer_id}")
-
+        # Handle checkout.session.completed event
+        pass
     elif event_type == "customer.subscription.updated":
-        # A subscription was updated
-        customer_id = data_object.get("customer")
-        subscription_id = data_object.get("id")
-
-        customer_id = data_object.get("customer")  # Get the Stripe Customer ID
-        customer = stripe.Customer.retrieve(customer_id)  # Fetch customer details
-        customer_email = customer.get("email")  # Access the customer's email
-        plan_nickname = data_object.get("plan").get("nickname")
-
-        user = User.query.filter_by(email=customer_email).first()
-
-        if user:
-            logging.info(f"User: {user}")
-            logging.info(f"Customer ID: {customer_id}")
-            logging.info(f"Subscription ID: {subscription_id}")
-            logging.info(f"Plan: {plan_nickname}")
-
-            # Update the user's subscription details
-            if not user.stripe_customer_id:
-                user.stripe_customer_id = customer_id
-            user.stripe_subscription_id = subscription_id
-            user.subscription_plan = plan_nickname
-            db.session.commit()
-
-        logging.info(f"Updated subscription for user {user.email}")
+        # Handle customer.subscription.updated event
+        pass
     elif event_type == "customer.subscription.deleted":
-        # Subscription was canceled
-        customer_id = data_object.get("customer")
-        user = User.query.filter_by(stripe_customer_id=customer_id).first()
-
-        if user:
-            # Clear the user's subscription details
-            user.stripe_subscription_id = None
-            user.subscription_plan = None
-            db.session.commit()
-            logging.info(f"Canceled subscription for user {user.email}")
-        else:
-            logging.warning(f"No user found for customer ID: {customer_id}")
+        # Handle customer.subscription.deleted event
+        pass
     elif event_type == "customer.deleted":
-        # Customer was deleted
-        customer_id = data_object.get("id")
-        user = User.query.filter_by(stripe_customer_id=customer_id).first()
-
-        if user:
-            # Clear the user's subscription details
-            user.stripe_customer_id = None
-            user.stripe_subscription_id = None
-            user.subscription_plan = None
-            db.session.commit()
-            logging.info(
-                f"Deleted customer {customer_id} and subscription for user {user.email}"
-            )
-        else:
-            logging.warning(f"No user found for customer ID: {customer_id}")
+        # Handle customer.deleted event
+        pass
     else:
         logging.info(f"Unhandled event type: {event_type}")
 
