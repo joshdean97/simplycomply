@@ -73,6 +73,7 @@ def stripe_webhook():
     sig_header = request.headers.get("Stripe-Signature")
 
     print("Received Stripe-Signature Header:", sig_header)
+    logging.info(f"Received Stripe-Signature Header: {sig_header}")
 
     event = None
     if webhook_secret:
