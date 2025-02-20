@@ -67,7 +67,7 @@ def payment_cancel():
 
 @payments.route("/stripe-webhook", methods=["POST"])
 def stripe_webhook():
-    webhook_secret = os.environ.get("STRIPE_ENDPOINT_SECRET")
+    webhook_secret = os.environ.get("STRIPE_WEBHOOK_SECRET")
     request_data = json.loads(request.data)
 
     event = None
