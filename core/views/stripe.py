@@ -70,11 +70,6 @@ def stripe_webhook():
     webhook_secret = os.environ.get("STRIPE_ENDPOINT_SECRET")
     request_data = json.loads(request.data)
 
-    sig_header = request.headers.get("Stripe-Signature")
-
-    print("Received Stripe-Signature Header:", sig_header)
-    logging.info(f"Received Stripe-Signature Header: {sig_header}")
-
     event = None
     if webhook_secret:
         # Verify the signature using the raw body and secret
@@ -84,7 +79,7 @@ def stripe_webhook():
                 payload=request.data, sig_header=signature, secret=webhook_secret
             )
         except Exception as e:
-            logging.error(f"Webhook signature verification failed: {e}")
+            logging.error(f"Webhook signature verification failed: {e} {signature}")
             return jsonify({"status": "error", "message": "Invalid signature"}), 400
     else:
         event = request_data
