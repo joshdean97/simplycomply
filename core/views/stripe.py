@@ -80,7 +80,7 @@ def stripe_webhook():
             )
         except Exception as e:
             logging.error(
-                f"Webhook signature verification failed: {e} signature: {signature}"
+                f"{signature} {request.data} {webhook_secret} Error verifying webhook signature: {e}"
             )
             return jsonify({"status": "error", "message": "Invalid signature"}), 400
     else:
