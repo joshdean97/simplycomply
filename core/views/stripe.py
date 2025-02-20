@@ -79,7 +79,9 @@ def stripe_webhook():
                 payload=request.data, sig_header=signature, secret=webhook_secret
             )
         except Exception as e:
-            logging.error(f"Webhook signature verification failed: {e} {signature}")
+            logging.error(
+                f"Webhook signature verification failed: {e} signature: {signature}"
+            )
             return jsonify({"status": "error", "message": "Invalid signature"}), 400
     else:
         event = request_data
